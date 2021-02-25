@@ -1,0 +1,78 @@
+<?php
+
+namespace App\Controller\Admin;
+
+use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\Security;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
+class UserCrudController extends AbstractCrudController
+{
+    public static function getEntityFqcn(): string
+    {
+        return User::class;
+    }
+
+    /**
+     * @var UserPasswordEncoderInterface
+     */
+    private $passwordEncoder;
+    /**
+     * @var Security
+     */
+    private $security;
+
+    public function __construct(
+        UserPasswordEncoderInterface $passwordEncoder,
+        Security $security
+    ) {
+        $this->passwordEncoder = $passwordEncoder;
+        $this->security = $security;
+
+        // get the user id from the logged in user
+        if (null !== $this->security->getUser()) {
+            $this->password = $this->security->getUser()->getPassword();
+        }
+    }
+
+    public function configureFields(string $pageName): iterable
+    {
+        return [
+            TextField::new('username'),
+            TextField::new('password')
+                ->setFormType(PasswordType::class)
+                ->onlyOnForms(),
+        ];
+    }
+
+    /**
+     *
+     * @param EntityManagerInterface $entityManager
+     * @param $entityInstance
+     */
+    public function updateEntity(
+        EntityManagerInterface $entityManager,
+        $entityInstance
+    ): void {
+
+
+        // set new password with encoder interface
+        if (method_exists($entityInstance, 'setPassword')) {
+            $clearPassword = trim($this->get('request_stack')->getCurrentRequest()->request->all('User')['password']);
+
+            // if user password not change save the old one
+            if (isset($clearPassword) === true && $clearPassword === '') {
+                $entityInstance->setPassword($this->password);
+            } else {
+                $encodedPassword = $this->passwordEncoder->encodePassword($this->getUser(), $clearPassword);
+                $entityInstance->setPassword($encodedPassword);
+            }
+        }
+
+        parent::updateEntity($entityManager, $entityInstance);
+    }
+}

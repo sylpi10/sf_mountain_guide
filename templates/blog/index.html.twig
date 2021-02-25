@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Blog!
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<h1>Blog</h1>
+		<div class="mt-5 p-5 article-wrapper">
+			{% for article in articles %}
+				<div class="article">
+					{% for locale in locales %}
+						{% if locale == app.request.locale %}
+							{% if locale == 'fr' %}
+								<h2>{{article.title|title}}</h2>
+							{% else %}
+								<h2>{{article.englishTitle|title}}</h2>
+							{% endif %}
+							<h3 class="text-secondary">
+								<i class="fas fa-calendar-alt"></i>
+								{{ article.createdAt|date("m/d/Y", "Europe/Paris")}},
+								<i class="fas fa-map-marker-alt"></i>
+								{{article.location}}</h3>
+							{% if locale == 'fr' %}
+								<p>{{article.content|raw}}</p>
+							{% else %}
+								<p>{{article.englishContent|raw}}</p>
+							{% endif %}
+						{% endif %}
+					{% endfor %}
+
+					<img src="{{asset('uploads/' ~ article.image)}}" class="d-block img-fluid" width="500" height="400">
+				</div>
+				<hr class="bg-dark">
+			{% endfor %}
+
+			<div class="navigation shadow">
+				{{ knp_pagination_render(articles) }}
+			</div>
+		</div>
+
+
+	</div>
+{% endblock %}

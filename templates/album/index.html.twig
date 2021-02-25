@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Album index{% endblock %}
+
+{% block body %}
+    <div class="container mt-5 pt-4">
+
+    <h1 class="mt-5">Welcome Yoann <i class="fas fa-skiing"></i></h1>
+
+    <hr>
+
+    <h3>Mes Albums</h3>
+    <table class="table mt-4 table-striped shadow">
+        <thead class="thead-dark">
+            <tr>
+                <th>Id</th>
+                <th>Titre</th>
+                <th>Titre en</th>
+                <th>Date</th>
+                <th>Lieu</th>
+                <th>Description</th>
+                <th>Description en</th>
+                <th>Photos</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for album in albums %}
+            <tr>
+                <td>{{ album.id }}</td>
+                <td>{{ album.title }}</td>
+                <td>{{ album.englishTitle }}</td>
+                <td>{{ album.date|date("m/d/Y", "Europe/Paris")}}</td>
+                <td>{{ album.location }}</td>
+                <td>{{ album.content }}</td>    
+                <td>{{ album.englishContent }}</td>    
+                <td class="text-center">
+                    {% for pic in album.images|slice(0, 2) %}
+                   <img src="{{asset("uploads/")~ pic.name}}" alt="album picture" width="80" class="mb-1">
+                    {% endfor %}
+                    <br>
+                    <span>...</span>
+                    </td>    
+                <td>
+                    <a href="{{ path('album_show', {'id': album.id}) }}" class="btn btn-primary">Détail</a>
+                    <a href="{{ path('album_edit', {'id': album.id}) }}" class="btn btn-success mt-3">Modifier</a>
+                    {{ include('album/_delete_form.html.twig',  {'button_label': 'Supprimer'}) }}
+                </td>
+            </tr>
+            {# // if no album yet#}
+        {% else %}
+            <tr>
+                <td colspan="4">Il n'y a pas encore d'albums <i class="far fa-times-circle"></i></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('album_new') }}" class="btn btn-success mt-3"><i class="fas fa-plus-circle mr-2"></i>Créer un nouvel Album</a>
+</div>
+{% endblock %}

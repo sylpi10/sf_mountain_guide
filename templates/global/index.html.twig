@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{% trans %}
+	Mountain guide
+	{% endtrans %}
+{% endblock %}
+
+
+{% block body %}
+
+	<h1 class="main-title">{% trans %}
+		Alpinism, Ski, Climbing
+		{% endtrans %}
+	</h1>
+
+	<a href="{{path('home', {'_fragment':'main-section'})}}" class="btn more-link button-link" title="Plus">
+		<i class="fas fa-angle-down"></i>
+	</a>
+
+	<div class="slider-wrapper">
+		<div id="carouselExampleControls" class="carousel carousel-fade slide" data-ride="carousel">
+			<div class="carousel-inner">
+				<div class="carousel-item active carousel1"></div>
+				<div class="carousel-item carousel2"></div>
+				<div class="carousel-item carousel3"></div>
+			</div>
+			{# <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+																<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+																<span class="sr-only">{% trans %}
+																	Previous
+																	{% endtrans %}</span>
+															</a>
+															<a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+																<span class="carousel-control-next-icon" aria-hidden="true"></span>
+																<span class="sr-only">{% trans %}
+																	Next
+																	{% endtrans %}</span>
+															</a> #}
+		</div>
+	</div>
+	{# end hero #}
+
+	<!-- // anchor for more link -->
+	<div id="main-section"></div>
+
+
+	<hr class="bg-white my-5 home-hr" id="">
+
+	{# <main class="container mt-3"> #}
+
+	{# // disciplines section #}
+		<div class="disciplines-list container"> {% for disci in disciplines %}
+			<a href="{{ path('detail', {id: disci.id, slug: disci.slug}) }}" class="discipline" title="details">
+				<div class="text" style="background:url('/images/{{disci.slug}}.jpg') center no-repeat;background-size:cover;">
+					{% for locale in locales %}
+						{% if locale == app.request.locale %}
+							{% if locale =='fr' %}
+								<h3>{{disci.title}}</h3>
+							{% else %}
+								<h3>{{disci.englishTitle}}</h3>
+							{% endif %}
+						{% endif %}
+					{% endfor %}
+				</div>
+			</a>
+		{% endfor %}
+	</div>
+
+	{# </main> #}
+
+	<hr>
+
+	<div class="contact" id="contact-form">
+		{% include "contact.html.twig" %}
+
+
+	</div>
+
+
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{discipline}}
+{% endblock %}
+
+{% block body %}
+	<main class="details">
+		{% for locale in locales %}
+			{% if locale == app.request.locale %}
+				{# <div class="disciplines {{discipline|replace({" ":" -"})|lower|trim}}" id=""> #}
+				<div class="disciplines {{discipline.slug|lower}}" id="">
+					<div class="container-fluid">
+						<div class="text-wrapper">
+							<div class="text">
+
+								{% if locale =='fr' %}
+									<h1>{{discipline.title}}</h1>
+								{% endif %}
+								{% if locale =='en' %}
+									<h1>{{discipline.englishTitle}}</h1>
+								{% endif %}
+
+								<hr class="under-title">
+
+								{% if locale =='fr' %}
+									<div>{{discipline.content|raw}}</div>
+								{% endif %}
+								{% if locale =='en' %}
+									<div>{{discipline.englishContent|raw}}</div>
+								{% endif %}
+
+
+								<div class="contact-btn">
+									<a href="#contact" class="goto-contact">Réserver</a>
+								</div>
+							</div>
+
+							<div class="info-details">
+								<div class="nb-persons">
+									<i class="fas fa-users"></i>
+									{% if locale == 'fr' %}
+										<span>{{discipline.persNumber|raw}}</span>
+									{% else %}
+										<span>{{discipline.englishNbPers|raw}}</span>
+									{% endif %}
+								</div>
+								<hr>
+								<div class="duration">
+									<i class="far fa-clock"></i>
+									{% if locale == 'fr' %}
+										<span>{{discipline.duration|raw}}</span>
+									{% else %}
+										<span>{{discipline.englishDuration|raw}}</span>
+									{% endif %}
+								</div>
+								<hr>
+								{% if discipline.location %}
+									<div class="place">
+										<i class="fas fa-map-marked-alt"></i>
+										{% if locale == 'fr' %}
+											<span>{{discipline.location|raw}}</span>
+										{% else %}
+											<span>{{discipline.englishLocation|raw}}</span>
+										{% endif %}
+									</div>
+								{% endif %}
+								<hr>
+								<div class="price">
+									<i class="fas fa-tag"></i>
+									{% if locale == 'fr' %}
+										<span>{{discipline.price|raw}}</span>
+									{% else %}
+										<span>{{discipline.englishPrice|raw}}</span>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			{% endif %}
+		{% endfor %}
+	</main>
+	<div class="list-details">
+
+		<div class="disciplines-list">
+
+			{% for disci in disciplines %}
+				{% if disci.id != discipline.id %}
+					<a href="{{ path('detail', {'id': disci.id, slug: disci.slug}) }}" title="details" class="discipline">
+						<div class="text" style="background:url('/images/{{disci.slug}}.jpg') center no-repeat;background-size:cover;">
+							{% for locale in locales %}
+								{% if locale == app.request.locale %}
+									{% if locale =='fr' %}
+										<h3>{{disci.title}}</h3>
+									{% else %}
+										<h3>{{disci.englishTitle}}</h3>
+									{% endif %}
+								{% endif %}
+							{% endfor %}
+						</div>
+					</a>
+				{% endif %}
+			{% endfor %}
+
+		</div>
+	</div>
+
+	<div class="contact" id="contact">
+		{% include "contact.html.twig" %}
+	</div>
+{% endblock %}

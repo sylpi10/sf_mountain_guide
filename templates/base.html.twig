@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="Votre guide de montagne basé à Briançon pour vos meilleures aventures autour de l'escalade, de l'alpinisme, du ski ou de la cascade de glace">
+		<meta name="keywords" content="directicimes, guide de montagne, ski, aplinisme, escalade, aventure, ski, ski hors-piste, ski alpin, ski de randonnée, Briançon">
+		<link rel="icon" type="image/x-icon" href="{{asset('images/favicon.ico')}}">
+		<title>
+			{% block title %}Moutain guide!
+			{% endblock %}
+		</title>
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+		<link rel="stylesheet" href="{{asset('css/style.css')}}"> {% block stylesheets %}{% endblock %}
+		</head>
+		<body>
+			<header id="top">
+				<nav class="navbar navbar-expand-md navbar-dark fixed-top menu">
+					<div class="container">
+
+						<a class="navbar-brand" href="{{path('home')}}">
+							<img src="{{asset('images/logo.png')}}" alt="site logo" title="{% trans %} Home {% endtrans %}" width="110">
+						</a>
+						<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+							<span class="navbar-toggler-icon"></span>
+						</button>
+						<div class="collapse navbar-collapse" id="navbarCollapse">
+							<ul class="navbar-nav ml-auto">
+								<li class="nav-item active">
+									<a class="nav-link" href="{{path('home')}}" title="{% trans %} Home {% endtrans %}">
+										{% trans %}
+										Home
+										{% endtrans %}
+										<span class="sr-only">(current)</span>
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="{{path('home', {'_fragment':'contact-form'})}}" title="Contact">Contact</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="{{path('about')}}" title="{% trans %} About {% endtrans %}">{% trans %}
+										About
+										{% endtrans %}</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="{{path('blog')}}" title="Blog">Blog</a>
+								</li>
+								{% if is_granted('ROLE_ADMIN') %}
+									<li class="nav-item">
+										<a class="nav-link btn btn-info" href="{{path('admin')}}" title="admin">Admin</a>
+									</li>
+								{% endif %}
+								{% if app.user %}
+									<li class="nav-item">
+										<a class="nav-link btn btn-danger ml-4" title="logout" href=" {{path('logout')}} ">{% trans %}
+											Logout
+											{% endtrans %}</a>
+									</li>
+								{% endif %}
+							</ul>
+							<ul class="navbar-nav ml-auto">
+								{% for locale in locales %}
+									{% if locale != app.request.locale %}
+										<li class="nav-item">
+											<a href="{{path('change-locale', {'locale': locale})}}" class="nav-link" title="{% trans %} Passer en Français {% endtrans %}">
+												<img src="{{asset('images/' ~locale~ '.png')}}" alt="{{locale}}" width="24">
+											</a>
+										</li>
+									{% endif %}
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
+				</nav>
+			</header>
+			{# back to top #}
+			<a href="#top" id="" title="{% trans %} Back to Top {% endtrans %}">
+				<i class="far fa-arrow-alt-circle-up back-top"></i>
+			</a>
+
+			{% block body %}{% endblock %}
+			{% block javascripts %}{% endblock %}
+			<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+			<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+			<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+			<script src="{{asset('js/script.js')}}"></script>
+		</body>
+	</html>

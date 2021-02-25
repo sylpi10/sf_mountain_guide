@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}About
+{% endblock %}
+
+{% block body %}
+
+	<main class="main-about">
+		<div class="container about-container">
+			<div class="about-me">
+				<div class="about-text">
+					{% for locale in locales %}
+						{% if locale == app.request.locale %}
+							{% if locale =='fr' %}
+								<h1>{{about.whoTitle}}</h1>
+								<div>
+									{{about.whoText|raw}}
+								</div>
+							{% endif %}
+							{% if locale =='en' %}
+								<h1>{{about.whoEnglishTitle}}</h1>
+								<div class="">
+									{{about.whoEnglishText|raw}}
+								</div>
+							{% endif %}
+						{% endif %}
+					{% endfor %}
+				</div>
+				<div class=" about-pic">
+					<img src="{{asset('images/about-me.jpg')}}" alt="Person picture" class="img-fluid shadow" width="500">
+				</div>
+			</div>
+
+			<hr class="m-5">
+
+			<div class="about-me">
+				<div class="about-pic">
+					<img src="{{asset('images/about-me3.jpg')}}" alt="Person picture" class="img-fluid shadow" width="500">
+				</div>
+				<div class="about-text">
+					{% for locale in locales %}
+						{% if locale == app.request.locale %}
+							{% if locale =='fr' %}
+								<h1>{{about.whyTitle}}</h1>
+								<div>
+									{{about.whyText|raw}}
+								</div>
+							{% endif %}
+							{% if locale =='en' %}
+								<h1>{{about.whyEnglishTitle}}</h1>
+								<div>
+									{{about.whyEnglishText|raw}}
+								</div>
+							{% endif %}
+						{% endif %}
+					{% endfor %}
+				</div>
+			</div>
+
+		</div>
+	</main>
+	<div class="contact" id="contact">
+		{% include "contact.html.twig" %}</div>
+{% endblock %}
