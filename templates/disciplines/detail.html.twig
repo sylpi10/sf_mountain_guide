@@ -1,7 +1,9 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}
 	{{discipline}}
+{% endblock %}
+{% block description %}
+	<meta name="description" content="Détails de la discipline {{discipline}}">
 {% endblock %}
 
 {% block body %}
