@@ -15,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class DisciplinesController extends AbstractController
 {
+
     /**
      * @Route("discipline/{slug}-{id}", name="detail", requirements={"slug": "[a-z0-9\-]*"})
      *
@@ -72,10 +73,10 @@ class DisciplinesController extends AbstractController
 
             $this->addFlash('success', $message);
             return $this->redirectToRoute("detail", [
-                'id' => $id
+                'id' => $id,
+                'slug' => $slug
             ]);
         }
-
 
         return $this->render('disciplines/detail.html.twig', [
             'discipline' => $discipline,
