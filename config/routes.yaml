@@ -1,0 +1,7 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+
+# sitemaps:
+#   prefix: /sitemaps
+#   resource: "@CmfSeoBundle/Resources/config/routing/sitemap.xml"

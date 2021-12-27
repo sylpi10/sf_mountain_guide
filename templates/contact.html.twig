@@ -1,67 +1,37 @@
-<div class="contact-form shadow">
-  <h2 class="my-4 contact-title text-center">Contact</h2>
- 
-  <div class="contact-infos">
-    <p>
-      Quelque soit votre demande, je m’engage à vous donner 
-      une réponse rapide, alors n’hésitez pas à me contacter
-       pour discuter de vos envies et construire un projet 
-       ensemble. <br> A très vite!
-    </p>
-    <img src="{{asset('images/profile.jpg')}}" alt="profile image" width="216" height="220">
-  </div>
-  <div class="index-notif">
-    {% for msg in app.flashes('success') %}
-    <p class="alert-success alert w-50">{{msg}}</p>
-    {% endfor %}
-  </div>
-  
-  {{form_start(form)}}
-  <label class="control-label" for="">{% trans %} Your Name {% endtrans %}</label>
-  {{form_row(form.name, {'attr':{'placeholder': 'ex:Mike Horn'}})}}
-  <label class="control-label" for="">{% trans %} Your Email {% endtrans %}</label>
-  {{form_row(form.email, {'attr':{'placeholder': 'mail@gmail.com'}})}}
-  <label class="control-label" for="">{% trans %} Your Message {% endtrans %}</label>
-  {{form_row(form.message)}}
-  <input type="submit" value="{% trans %} Send {% endtrans %}" class="btn button-link">
-  {{form_end(form)}}
-  
+<div class="contact-form">
+	<h2 class="my-4 contact-title text-center">Contact</h2>
+
+	<div class="contact-infos">
+		<p>
+			{% trans %}
+			Whatever you fancy doing on the mountains, I will quickly reply to your request. So feel free to contact me and get ready for new adventures together !
+			{% endtrans %}
+			<br>
+			{% trans %}
+			See you real soon !
+			{% endtrans %}
+		</p>
+		<img src="{{asset('images/profile.jpg')}}" alt="profile image" width="216" height="220">
+	</div>
+
+
+	{{form_start(form)}}
+	<label class="control-label" for="">{% trans %}
+		Your Name
+		{% endtrans %}</label>
+	{{form_row(form.name, {'attr':{'placeholder': 'ex:Mike Horn'}})}}
+
+	<input type="text" id="website" name="website"/>
+
+	<label class="control-label" for="">{% trans %}
+		Your Email
+		{% endtrans %}</label>
+	{{form_row(form.email, {'attr':{'placeholder': 'mail@gmail.com'}})}}
+	<label class="control-label" for="">{% trans %}
+		Your Message
+		{% endtrans %}</label>
+	{{form_row(form.message)}}
+	<input type="submit" value="{% trans %} Send {% endtrans %}" class="btn button-link">
+	{{form_end(form)}}
+
 </div>
-<footer class="footer mt-5">
-  <div class="container">
-    <div class="about-footer">
-     
-        <div class="footer-infos">
-          <p>Yoann Georges</p>
-          <p>Guide de Haute Montagne</p>
-        </div>
-        <div class="img">
-          <img src="{{asset('images/logo-uiagm.png')}}" alt="Logo uiagm" width="220">
-        </div>
-        <div class="coords">
-        <ul>
-          <li><i class="fa fa-map-marker" aria-hidden="true"></i> Briançon</li>
-          <li><i class="fa fa-phone" aria-hidden="true"></i> <a href="tel:0645984568" title="Téléphone">0645984568</a> </li>
-          <li><i class="fa fa-envelope" aria-hidden="true"></i>
-            <a href="mailto:contact@directicimes.com" title="E-mail">contact@directicimes.com</a> </li>
-            <li>
-              <!-- Social icons -->
-              <div class="social-links">
-                <a href="" target="_new" title="Facebook">
-                  <i class="fab fa-facebook-f mr-3"></i>
-                </a>
-                <a href="" target="_new" title="Instagram">
-                  <i class="fab fa-instagram mr-3"></i>
-                </a>
-              </div>
-            </li>
-          </ul>
-        </div>
-    </div>
-    <div class="footer-copyright">
-      © 2020 Copyright
-      <a href="https://sylvainpillet.com/" target="_new" title="Portfolio">  Syl Pi </a>
-    
-    </div>
-  </div>
-</footer>

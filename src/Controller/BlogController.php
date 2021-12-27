@@ -16,13 +16,15 @@ class BlogController extends AbstractController
     public function index(BlogRepository $blogRepository, PaginatorInterface $paginator, Request $request)
     {
         // $articles = $blogRepository->findAll();
+        $displayBtn = true;
         $articles = $paginator->paginate(
             $blogRepository->findByDate(),
             $request->query->getInt('page', 1),
             6
         );
         return $this->render('blog/index.html.twig', [
-            'articles' => $articles
+            'articles' => $articles,
+            "displayBtn" => $displayBtn
         ]);
     }
 }

@@ -44,7 +44,7 @@ class DisciplinesController extends AbstractController
                 'slug' => $discipline->getSlug()
             ], 301);
         }
-
+        $displayBtn = true;
         $disciplines = $disciplineRepo->findAll();
         // $discipline = $disciplineRepo->findOneById($id);
         $form = $this->createForm(ContactType::class);
@@ -55,33 +55,37 @@ class DisciplinesController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $email = (new TemplatedEmail())
-                ->from($contact->get('email')->getData())
-                // ->to("georgesyn@gmail.com")
-                ->to("contact@directicimes.com")
-                ->subject("Nouveau Message depuis DirectiCimes")
-                // ->htmlTemplate("global/index.html.twig")
-                ->text($contact->get('message')->getData())
-                ->context([
-                    "form" => $form->createView()
+            if (!empty($_POST['website'])) {
+                return $this->redirectToRoute("home");
+            } else {
+                $email = (new TemplatedEmail())
+                    ->from($contact->get('email')->getData())
+                    ->to("contact@directicimes.com")
+                    ->subject("Nouveau Message depuis DirectiCimes")
+                    // ->htmlTemplate("global/index.html.twig")
+                    ->text($contact->get('message')->getData())
+                    ->context([
+                        "form" => $form->createView()
+                    ]);
+
+                $mailer->send($email);
+
+                // $notification->notify($contact);
+                $message = $translator->trans("Your email has been send");
+
+                $this->addFlash('success', $message);
+                return $this->redirectToRoute("detail", [
+                    'id' => $id,
+                    'slug' => $slug
                 ]);
-
-            $mailer->send($email);
-
-            // $notification->notify($contact);
-            $message = $translator->trans("Your email has been send");
-
-            $this->addFlash('success', $message);
-            return $this->redirectToRoute("detail", [
-                'id' => $id,
-                'slug' => $slug
-            ]);
+            }
         }
 
         return $this->render('disciplines/detail.html.twig', [
             'discipline' => $discipline,
             'disciplines' => $disciplines,
             'form' => $form->createView(),
+            "displayBtn" => $displayBtn
         ]);
     }
 }

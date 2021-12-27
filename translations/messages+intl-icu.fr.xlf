@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file source-language="en" target-language="fr" datatype="plaintext" original="file.ext">
+  <file source-language="fr" target-language="fr" datatype="plaintext" original="file.ext">
     <header>
       <tool tool-id="symfony" tool-name="Symfony"/>
     </header>
@@ -31,7 +31,7 @@
       </trans-unit>
       <trans-unit id="U9kq7Z1" resname="Wrong credentials">
         <source>Wrong credentials</source>
-        <target>__Wrong credentials</target>
+        <target>Mauvais identifiants</target>
       </trans-unit>
       <trans-unit id="588_9PF" resname="Password">
         <source>Password</source>
@@ -85,193 +85,43 @@
         <source>Who Am-I ?</source>
         <target>Qui Suis-je ?</target>
       </trans-unit>
-      <trans-unit id="swKcFmp" resname="You've never set foot on a glacier or in high mountain et you wish to discover the basics of alpinism ?">
-        <source>You've never set foot on a glacier or in high mountain et you wish to discover the basics of alpinism ?</source>
+      <trans-unit id="6B4IWFR" resname="See you real soon !">
+        <source>See you real soon !</source>
+        <target>A très vite !</target>
+      </trans-unit>
+      <trans-unit id="Qst_CBk" resname="High Mountain guide">
+        <source>High Mountain guide</source>
+        <target>Guide de Haute Montagne</target>
+      </trans-unit>
+      <trans-unit id="cIUFvpm" resname="Whatever you fancy doing on the mountains, I will quickly reply to your request. So feel free to contact me and get ready for new adventures together !">
+        <source>Whatever you fancy doing on the mountains, I will quickly reply to your request. So feel free to contact me and get ready for new adventures together !</source>
         <target>
-            Vous n’avez jamais mis les pieds sur un glacier ou en haute montagne et souhaitez découvrir les bases de l’alpinisme?
+          Quelque soit votre demande, je m’engage à vous donner une réponse rapide, alors n’hésitez pas à me contacter pour discuter de vos envies et construire un projet ensemble.
         </target>
       </trans-unit>
-      <trans-unit id="sGMGIO5" resname="You aready have some experience in alpinism and you're looking forward to evolve around more ambitious summit.">
-        <source>You aready have some experience in alpinism and you're looking forward to evolve around more ambitious summit.</source>
-        <target>
-          Vous avez déjà une première expérience en alpinisme et souhaitez évoluer vers des sommets plus ambitieux. 
-        </target>
+      <trans-unit id="TqFAWIF" resname="home">
+        <source>home</source>
+        <target>accueil</target>
       </trans-unit>
-      <trans-unit id="_cwt62c" resname="From ice hiking to summit climbing, I garanty you ideals conditions for a first experience in alpinism&#10;                or for some tougher climbing projects.">
-        <source>From ice hiking to summit climbing, I garanty you ideals conditions for a first experience in alpinism
-                or for some tougher climbing projects.</source>
-        <target>
-          De la randonnée glaciaire à l’escalade de sommets élancés, je vous garantie des conditions idéales pour une première expérience de l’alpinisme ou pour vos projets d’ascensions les plus durs.
-        </target>
+      <trans-unit id="j6mFlf4" resname="Mountaineering, Ski, Rock Climbing">
+        <source>Mountaineering, Ski, Rock Climbing</source>
+        <target>Alpinisme, ski, escalade</target>
       </trans-unit>
-      <trans-unit id="IDb68H0" resname="From a one day initiation to a full immersion on several days in the moutain and nights in refuges.">
-        <source>From a one day initiation to a full immersion on several days in the moutain and nights in refuges.</source>
-        <target>
-          Durée De 1 journée pour une initiation à plusieurs jours pour une immersion totale en montagne avec nuits en refuge
-        </target>
+      <trans-unit id="rezL_Hs" resname="Montain Guide in Briançon, I have many mountain activities to show you:">
+        <source>Montain Guide in Briançon, I have many mountain activities to show you:</source>
+        <target>Guide de Haute Montagne à Briançon, je peux vous faire découvrir les activités suivantes:</target>
       </trans-unit>
-      <trans-unit id="QMA8cOC" resname="Climbing">
-        <source>Climbing</source>
-        <target>Escalade</target>
+      <trans-unit id="pX.0H_2" resname="You have been registered to our newsletter">
+        <source>You have been registered to our newsletter</source>
+        <target>Vous avez bien été enregistré pour notre Newsletter</target>
       </trans-unit>
-      <trans-unit id="slOVII2" resname="Climbing school">
-        <source>Climbing school</source>
-        <target>Ecole d'escalade</target>
+      <trans-unit id="iGIZNP3" resname="Subscribe to our Newsletter to be aware of our latest news !">
+        <source>Subscribe to our Newsletter to be aware of our latest news !</source>
+        <target>Abonnez-vous à notre Newsletter pour recevoir nos dernières nouvelles !</target>
       </trans-unit>
-      <trans-unit id="sbzqQwn" resname="Beginner or more advanced, the climbing school allows you to develop technics and sensations before&#10;             going further in altitude or in difficulties...">
-        <source>Beginner or more advanced, the climbing school allows you to develop technics and sensations before
-             going further in altitude or in difficulties...</source>
-        <target>
-          Débutant ou confirmé, l'école d'escalade vous permet de développer techniques et sensations avant d'aller plus haut en altitude ou dans la difficulté …
-        </target>
-      </trans-unit>
-      <trans-unit id="gV2eqI5" resname="You are a beginner or climb in the 6th grade and you dream about the the 7A level ? Don't wait any longer and come to discover every&#10;             subtleties about climbing with complete confidence !&#10;             I will teach you many exercises adapted to you level and your background, to begin or really progress in you practice.">
-        <source>You are a beginner or climb in the 6th grade and you dream about the the 7A level ? Don't wait any longer and come to discover every
-             subtleties about climbing with complete confidence !
-             I will teach you many exercises adapted to you level and your background, to begin or really progress in you practice.</source>
-        <target>
-          Vous êtes débutant ou vous grimpez régulièrement dans le 6ème degré et le 7A vous fait rêver ? N'attendez plus, venez découvrir toutes les subtilités de la grimpe en toute confiance. Je vous proposerai des exercices adaptés à votre niveau et votre vécu, pour débuter ou progresser à fond dans votre pratique.
-        </target>
-      </trans-unit>
-      <trans-unit id="x4PQXkr" resname="High cliffs">
-        <source>High cliffs</source>
-        <target> Grandes voies
- </target>
-      </trans-unit>
-      <trans-unit id="v7tWv.S" resname="You like thrills and spills ? Climbing a hugh cliff is definitely for you !&#10;               I will give you the keys to high cliffs initiation or improvements.&#10;               The cliffs will be chosen regarding your level to make progress in the best possible conditions.">
-        <source>You like thrills and spills ? Climbing a hugh cliff is definitely for you !
-               I will give you the keys to high cliffs initiation or improvements.
-               The cliffs will be chosen regarding your level to make progress in the best possible conditions.</source>
-        <target>
-          Vous aimez les sensations fortes? Gravir une grande voie d'escalade est fait pour vous! Je vous donnerai les clés pour vous initier aux grandes voies ou vous perfectionner. Les voies seront sélectionnées en fonction de votre niveau pour progresser dans les meilleures conditions. 
-        </target>
-      </trans-unit>
-      <trans-unit id="0pf7s4F" resname="The “Trad”">
-        <source>The “Trad”</source>
-        <target>Le “Trad”</target>
-      </trans-unit>
-      <trans-unit id="cM6fyvw" resname="The &quot;Trad&quot; it's climbing while placing your own gear (friends, wedgers...) in non equiped cliffs.&#10;          It's a really great training to roam high mountain cliffs.">
-        <source>The "Trad" it's climbing while placing your own gear (friends, wedgers...) in non equiped cliffs.
-          It's a really great training to roam high mountain cliffs.</source>
-        <target>
-          Le “trad” c'est grimper en libre et poser ses propres protections (friends, coinceurs…) dans des voies non équipées.
-          C’est un super entraînement dans le but de parcourir de grandes voies en montagne.
-        </target>
-      </trans-unit>
-      <trans-unit id="x2i_mY." resname="If you wish to be ititiated to &quot;trad&quot; climbing, this is what I offer:">
-        <source>If you wish to be ititiated to "trad" climbing, this is what I offer:</source>
-        <target>Si vous souhaitez vous initier au “trad” voici ce que je vous propose de découvrir ensemble:</target>
-      </trans-unit>
-      <trans-unit id="vsyLZvE" resname="How to use the climbing gear, to protect yourself:">
-        <source>How to use the climbing gear, to protect yourself:</source>
-        <target>comment utiliser le matériel d'escalade artificielle pour vous protéger : coinceurs mécaniques, câblés, excentriques, crochets, pitons...etc
-</target>
-      </trans-unit>
-      <trans-unit id="MC6k9R1" resname="The &quot;trad&quot;s specific gesture: foot, hand wedging, finger lock, wedging in offwidths.">
-        <source>The "trad"s specific gesture: foot, hand wedging, finger lock, wedging in offwidths.</source>
-        <target>la gestuelle propre au “trad” : les coincements de pied, de main, les verrous de doigts, les coincements en fissures larges “offwidth”
-        </target>
-      </trans-unit>
-      <trans-unit id="Mi.Y1dq" resname="How to evolve safely (relays making, triangulation ... )">
-        <source>How to evolve safely (relays making, triangulation ... )</source>
-        <target>comment évoluer en sécurité (confections de relais, triangulation...etc)
-        </target>
-      </trans-unit>
-      <trans-unit id="0dcxIyw" resname="Where ? Annot in the Hautes Provences Alps, Chamonix, Val d'Orco (the little Italian Yosemite)">
-        <source>Where ? Annot in the Hautes Provences Alps, Chamonix, Val d'Orco (the little Italian Yosemite)</source>
-        <target>Ou? Annot dans les Alpes de Hautes Provence, Chamonix, Val d’Orco (le petit Yosemite Italien!!!)</target>
-      </trans-unit>
-      <trans-unit id="76dOXl3" resname="Ski touring">
-        <source>Ski touring</source>
-        <target>Ski de randonnée</target>
-      </trans-unit>
-      <trans-unit id="Cbv8_S8" resname="You are bored about marked ski trails and dream about some escape and new sensations ?">
-        <source>You are bored about marked ski trails and dream about some escape and new sensations ?</source>
-        <target>
-        Vous vous lassez du ski sur pistes balisées et rêvez d'évasion et de nouvelles sensations? 
-        </target>
-      </trans-unit>
-      <trans-unit id="J2mSLux" resname="The touring ski is an amazing activity combining pleasure with the effort of the ascent,&#10;            with the happiness of being in the mountain far from crowds et the joys of the &#10;            descent in a snow from a movie.">
-        <source>The touring ski is an amazing activity combining pleasure with the effort of the ascent,
-            with the happiness of being in the mountain far from crowds et the joys of the 
-            descent in a snow from a movie.</source>
-        <target>
-        Le ski de randonnée est une activité formidable, alliant le plaisir de l'effort de la montée, avec le bonheur d'être en montagne loin des foules et les joies de la descente dans une neige de cinéma
-        </target>
-      </trans-unit>
-      <trans-unit id="Rbq9Jch" resname="Wether you wish to acquire the basics of ski touring, improve your technique to go on raids, or&#10;            simply being accompanied by a professionnal. You can trust me to find the most adapted itineraries to your skills,&#10;             your expectations and to the  of the moment.">
-        <source>Wether you wish to acquire the basics of ski touring, improve your technique to go on raids, or
-            simply being accompanied by a professionnal. You can trust me to find the most adapted itineraries to your skills,
-             your expectations and to the  of the moment.</source>
-        <target>
-        Que vous souhaitiez acquérir les rudiments techniques du ski de randonnée, améliorer votre technique pour partir en raid, ou simplement être accompagné par un professionnel. Faites moi confiance pour dénicher les itinéraires les plus adaptés à votre niveau, vos envies et aux conditions du moment.
-        </target>
-      </trans-unit>
-      <trans-unit id="j0NHoVu" resname="Duration: For a day or a severl days raid, for a full dipping in the mountain with night(s) in refuge(s).">
-        <source>Duration: For a day or a severl days raid, for a full dipping in the mountain with night(s) in refuge(s).</source>
-        <target>Durée A la journée ou sur plusieurs jours en raids pour une immersion totale en montagne avec nuit(s) en refuge(s)</target>
-      </trans-unit>
-      <trans-unit id="dQNZDue" resname="Wild skiing">
-        <source>Wild skiing</source>
-        <target>Ski Hors-piste</target>
-      </trans-unit>
-      <trans-unit id="n.tIiPV" resname="You are comfortable on all types of ski trail, you like to play on the edges of ski trails &#10;            and want to push it further ?">
-        <source>You are comfortable on all types of ski trail, you like to play on the edges of ski trails 
-            and want to push it further ?</source>
-        <target>
-        Vous êtes à l'aise sur toutes les pistes, vous aimez jouer sur les bords de piste et vous souhaitez aller plus loin ?
-        </target>
-      </trans-unit>
-      <trans-unit id="tgaprHm" resname="You allready have a first experience in wild skiing and want to ski powder snow? &#10;            We'll find together the best itinirary for you: small or big height differences, huge spaces of fresh snow,&#10;            ski in forests... Trust me to guide you through all kind of field and ride some good puff.">
-        <source>You allready have a first experience in wild skiing and want to ski powder snow? 
-            We'll find together the best itinirary for you: small or big height differences, huge spaces of fresh snow,
-            ski in forests... Trust me to guide you through all kind of field and ride some good puff.</source>
-        <target>
-          Vous avez déjà une expérience du ski hors-piste et vous skiez en poudreuse ? 
-          Nous trouverons ensemble l’itinéraire qui vous correspond : petits ou longs dénivelés, grands espaces de neige fraîche et parfois vierge, ski en forêt... Faites moi confiance pour vous faire profiter de tous les terrains, et skier de la bonne neige.
-        </target>
-      </trans-unit>
-      <trans-unit id="huj.nDa" resname="Where ? In the best wild spots in the Alps: Chamonix, La Grave, Serre chevalier, Montgenevre ...">
-        <source>Where ? In the best wild spots in the Alps: Chamonix, La Grave, Serre chevalier, Montgenevre ...</source>
-        <target>
-        Ou? Dans les meilleurs spots de hors piste des Alpes : Chamonix, La Grave, Serre Chevalier, Montgenèvre,…
-        </target>
-      </trans-unit>
-      <trans-unit id="eytgCbO" resname="Ice Climbing">
-        <source>Ice Climbing</source>
-        <target>Cascade de glace</target>
-      </trans-unit>
-      <trans-unit id="ZFp2PFA" resname="In the heart of winter, the cold caught some ephemeres ice lines.">
-        <source>In the heart of winter, the cold caught some ephemeres ice lines.</source>
-        <target>
-        Au cœur de l'hiver, le froid a saisi des lignes de glace éphémères.
-        </target>
-      </trans-unit>
-      <trans-unit id="BzVFv.L" resname="For a few weeks a year, the alpinist climber may come to play in this fairy universe.&#10;            The raw sound of the ice pick biting the ice, le feeling of the spike holding your balance,&#10;            the ice climbing make you dive into a deep moment of focus.">
-        <source>For a few weeks a year, the alpinist climber may come to play in this fairy universe.
-            The raw sound of the ice pick biting the ice, le feeling of the spike holding your balance,
-            the ice climbing make you dive into a deep moment of focus.</source>
-        <target>
-          Quelques semaines par an, le grimpeur alpiniste peut venir jouer dans cet univers féérique.
-          Le son sec du piolet qui mord la glace, la sensation du crampon qui tient votre équilibre à un fil, la cascade de glace vous plonge dans un grand moment de concentration.
-        </target>
-      </trans-unit>
-      <trans-unit id="qGt.rzQ" resname="Ice climbing is ofter perceived as a tough activity, not accessible... &#10;              Try the experience, you will see it's not the case ! For all the winter long, &#10;              come discover some fresh new climbing feelings and taste the ice.">
-        <source>Ice climbing is ofter perceived as a tough activity, not accessible... 
-              Try the experience, you will see it's not the case ! For all the winter long, 
-              come discover some fresh new climbing feelings and taste the ice.</source>
-        <target>
-        La cascade de glace est souvent perçue comme une activité très physique, en un mot inaccessible... Tentez l’expérience, vous constaterez que c’est loin d’être le cas ! Tout au long de l’hiver, venez découvrir de nouvelles sensations de grimpe et goûter au plaisir de la glace.
-        </target>
-      </trans-unit>
-      <trans-unit id="l3N3aLI" resname="You already have some experience in ice climbing and wish to improve your techniques?&#10;            Close to home, the Fournel and Fraissinières valleys are the majors spots known internationaly&#10;            for that activity. We will find together the fitting aims for you.">
-        <source>You already have some experience in ice climbing and wish to improve your techniques?
-            Close to home, the Fournel and Fraissinières valleys are the majors spots known internationaly
-            for that activity. We will find together the fitting aims for you.</source>
-        <target>
-          Vous avez déjà une première expérience en glace et souhaitez améliorer votre technique?
-          A côté de la maison, les vallées du Fournel et de Freissinières sont des spots majeurs reconnus à l’échelle internationale pour la pratique de cette activité. Nous trouverons ensemble des objectifs qui vous correspondent.
-        </target>
+      <trans-unit id="zA442px" resname="Subscribe">
+        <source>Subscribe</source>
+        <target>S'abonner</target>
       </trans-unit>
     </body>
   </file>

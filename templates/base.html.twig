@@ -4,13 +4,15 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		{% block description %}
-			<meta name="description" content="Votre guide de montagne basé à Briançon
-					pour vos meilleures aventures autour de l'escalade, de l'alpinisme, du ski ou de la cascade de glace">
+			<meta name="description" content="Votre guide de haute montagne basé à Briançon pour vos meilleures aventures autour de l'escalade, de l'alpinisme, du ski ou de la cascade de glace">
 		{% endblock %}
-		<meta name="keywords" content="directicimes, guide de montagne, ski, aplinisme, escalade, aventure, ski, ski hors-piste, ski alpin, ski de randonnée, Briançon">
+		<meta name="keywords" content="directicimes, guide de haute montagne, ski, aplinisme, escalade, aventure, ski, ski hors-piste, ski alpin, ski de randonnée, Briançon">
 		<link rel="icon" type="image/x-icon" href="{{asset('images/favicon.ico')}}">
 		<title>
-			{% block title %}Moutain guide!
+			{% block title %}
+				{% trans %}
+				High Mountain guide
+				{% endtrans %}
 			{% endblock %}
 		</title>
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
@@ -21,15 +23,15 @@
 			<header id="top">
 				<nav class="navbar navbar-expand-md navbar-dark fixed-top menu">
 					<div class="container">
-
-						<a class="navbar-brand" href="{{path('home')}}">
-							<img src="{{asset('images/logo.png')}}" alt="site logo" title="{% trans %} Home {% endtrans %}" width="110">
+						<a class="" href="{{path('home')}}">
+							<img src="{{asset('images/logo.png')}}" id="logo" alt="Logo Directicimes" title=" {% trans %} home {% endtrans %} ">
 						</a>
+
 						<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 							<span class="navbar-toggler-icon"></span>
 						</button>
 						<div class="collapse navbar-collapse" id="navbarCollapse">
-							<ul class="navbar-nav ml-auto">
+							<ul class="navbar-nav mx-auto">
 								<li class="nav-item active">
 									<a class="nav-link" href="{{path('home')}}" title="{% trans %} Home {% endtrans %}">
 										{% trans %}
@@ -46,6 +48,7 @@
 										About
 										{% endtrans %}</a>
 								</li>
+
 								<li class="nav-item">
 									<a class="nav-link" href="{{path('blog')}}" title="Blog">Blog</a>
 								</li>
@@ -61,22 +64,45 @@
 											{% endtrans %}</a>
 									</li>
 								{% endif %}
+
+
 							</ul>
-							<ul class="navbar-nav ml-auto">
-								{% for locale in locales %}
-									{% if locale != app.request.locale %}
-										<li class="nav-item">
-											<a href="{{path('change-locale', {'locale': locale})}}" class="nav-link" title="{% trans %} Passer en Français {% endtrans %}">
-												<img src="{{asset('images/' ~locale~ '.png')}}" alt="{{locale}}" width="24">
-											</a>
-										</li>
-									{% endif %}
-								{% endfor %}
-							</ul>
+							{% if displayBtn %}
+								<div class="newsletter">
+									<a href="{{path('newsletter')}}" class="btn">Newsletter</a>
+								</div>
+							{% endif %}
+							<div class="right-nav">
+								<ul class="">
+									<li class="nav-item">
+										<a href="https://facebook.com/directicimes/" target="_new" title="Facebook">
+											<i class="fab fa-facebook-f mr-3"></i>
+										</a>
+									</li>
+									<li class="nav-item">
+										<a href="https://instagram.com/directicimes" target="_new" title="Instagram">
+											<i class="fab fa-instagram mr-3"></i>
+										</a>
+										<span>|</span>
+									</li>
+
+									{% for locale in locales %}
+										{% if locale != app.request.locale %}
+											<li class="nav-item">
+												<a href="{{path('change-locale', {'locale': locale})}}" class="nav-link" title="{% trans %} Passer en Français {% endtrans %}">
+													<img src="{{asset('images/' ~locale~ '.png')}}" alt="{{locale}}" width="24">
+												</a>
+											</li>
+										{% endif %}
+									{% endfor %}
+								</ul>
+							</div>
+
 						</div>
 					</div>
 				</nav>
 			</header>
+
 			{# back to top #}
 			<a href="#top" id="" title="{% trans %} Back to Top {% endtrans %}">
 				<i class="far fa-arrow-alt-circle-up back-top"></i>

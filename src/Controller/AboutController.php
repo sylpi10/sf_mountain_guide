@@ -17,38 +17,40 @@ class AboutController extends AbstractController
      * @Route("/about", name="about")
      */
     public function about(
-        Request $request,
-        MailerInterface $mailer,
+        // Request $request,
+        // MailerInterface $mailer,
         AboutRepository $aboutRepo
     ) {
         //  = new Contact();
-        $form = $this->createForm(ContactType::class);
-        $contact = $form->handleRequest($request);
+        // $form = $this->createForm(ContactType::class);
+        // $contact = $form->handleRequest($request);
         $about = $aboutRepo->findOneById(1);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $displayBtn = true;
+        // if ($form->isSubmitted() && $form->isValid()) {
 
-            $email = (new TemplatedEmail())
-                ->from($contact->get('email')->getData())
-                // ->to("syl.pillet@hotmail.fr")
-                ->to("contact@directicimes.com")
-                ->subject("New Mail from Website")
-                // ->htmlTemplate("global/index.html.twig")
-                ->text($contact->get('message')->getData())
-                ->context([
-                    "form" => $form->createView()
-                ]);
+        //     $email = (new TemplatedEmail())
+        //         ->from($contact->get('email')->getData())
+        //         // ->to("syl.pillet@hotmail.fr")
+        //         ->to("contact@directicimes.com")
+        //         ->subject("New Mail from Website")
+        //         // ->htmlTemplate("global/index.html.twig")
+        //         ->text($contact->get('message')->getData())
+        //         ->context([
+        //             "form" => $form->createView()
+        //         ]);
 
-            $mailer->send($email);
+        //     $mailer->send($email);
 
-            // $notification->notify($contact);
+        // $notification->notify($contact);
 
-            $this->addFlash('success', "Your email has been send !!");
-            return $this->redirectToRoute("about");
-        }
+        //     $this->addFlash('success', "Your email has been send !!");
+        //     return $this->redirectToRoute("about");
+        // }
 
         return $this->render('about/about.html.twig', [
-            'form' => $form->createView(),
-            'about' => $about
+            // 'form' => $form->createView(),
+            'about' => $about,
+            "displayBtn" => $displayBtn
         ]);
     }
 }

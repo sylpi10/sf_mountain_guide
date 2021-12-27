@@ -28,3 +28,8 @@ function backToTop() {
 $(document).ready(function() {
   $('a[href$="' + location.pathname + '"]').addClass('active');
 });
+
+
+// alerts
+$(".alert-success").alert();
+window.setTimeout(function() { $(".alert-success").alert('close'); }, 2000);

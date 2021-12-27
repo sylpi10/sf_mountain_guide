@@ -21,11 +21,11 @@ class AboutCrudController extends AbstractCrudController
             TextField::new('whoTitle'),
             TextField::new('whoEnglishTitle'),
             TextEditorField::new('whoText'),
-            TextEditorField::new('whoEnglishText')->onlyOnDetail(),
+            TextEditorField::new('whoEnglishText'),
             TextField::new('whyTitle'),
-            TextField::new('whyEnglishTitle'),
+            TextField::new('whyEnglishTitle')->onlyOnForms(),
             TextEditorField::new('whyText'),
-            TextEditorField::new('whyEnglishText')->onlyOnDetail(),
+            TextEditorField::new('whyEnglishText')->onlyOnForms()
         ];
     }
 }

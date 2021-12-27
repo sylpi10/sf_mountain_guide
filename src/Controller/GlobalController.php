@@ -30,29 +30,37 @@ class GlobalController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $email = (new TemplatedEmail())
-                ->from($contact->get('email')->getData())
-                // ->to("georgesyn@gmail.com")
-                ->to("contact@directicimes.com")
-                ->subject("Nouveau Message depuis DirectiCimes")
-                // ->htmlTemplate("global/index.html.twig")
-                ->text($contact->get('message')->getData())
-                ->context([
-                    "form" => $form->createView()
-                ]);
+            if (!empty($_POST['website'])) {
+                return $this->redirectToRoute("home");
+            } else {
+                $email = (new TemplatedEmail())
+                    ->from($contact->get('email')->getData())
+                    ->to("contact@directicimes.com")
+                    // ->to("syl.pillet@hotmail.fr")
+                    ->subject("Nouveau Message depuis DirectiCimes")
+                    // ->htmlTemplate("global/index.html.twig")
+                    ->text($contact->get('message')->getData())
+                    ->context([
+                        "form" => $form->createView(),
+                    ]);
 
-            $mailer->send($email);
+                $mailer->send($email);
 
-            // $notification->notify($contact);
-            $message = $translator->trans("Your email has been send");
+                // $notification->notify($contact);
+                $message = $translator->trans("Your email has been send");
 
-            $this->addFlash('success', $message);
-            return $this->redirectToRoute("home");
+                $this->addFlash('success', $message);
+                // return $this->redirect(
+                //     $this->generateUrl('home') . '#top'
+                // );
+                return $this->redirectToRoute("home");
+            }
         }
 
         return $this->render('global/index.html.twig', [
             'form' => $form->createView(),
-            "disciplines" => $disciplines
+            "disciplines" => $disciplines,
+            "displayBtn" => true
         ]);
     }
 
@@ -89,7 +97,8 @@ class GlobalController extends AbstractController
     {
         return $this->render('global/login.html.twig', [
             "lastUserName" => $util->getLastUsername(),
-            "error" => $util->getLastAuthenticationError()
+            "error" => $util->getLastAuthenticationError(),
+            "displayBtn" => false
         ]);
     }
 
