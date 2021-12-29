@@ -62,7 +62,7 @@ nav ul li .active {
   height: 100vh; }
 
 .slider-wrapper .carousel .carousel-inner .carousel1 {
-  background: url("../images/bg3.jpg") no-repeat top;
+  background: url("../images/bg1.jpg") no-repeat top;
   background-size: 100%;
   height: 100vh;
   margin-top: 0;
@@ -75,7 +75,7 @@ nav ul li .active {
   z-index: 1; }
 
 .slider-wrapper .carousel .carousel-inner .carousel3 {
-  background: url("../images/bg-test.jpg") no-repeat;
+  background: url("../images/bg3.jpg") no-repeat;
   background-size: 100%;
   height: 100vh;
   z-index: 1; }
@@ -272,39 +272,41 @@ h2 {
   color: #fff;
   margin-top: -40px;
   padding: 80px; }
-
-.about-text {
-  width: 46%;
-  min-width: 300px; }
-
-.about-pic {
-  width: 46%;
-  min-width: 320px; }
-
-.about-container {
-  margin-top: 120px; }
-  .about-container h1,
-  .about-container h2 {
-    text-transform: uppercase;
-    font-size: 1.7rem;
-    color: #fff; }
-
-.about-me {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  width: 100%;
-  align-items: center; }
+  .main-about .about-container {
+    margin-top: 120px;
+    height: 100%; }
+    .main-about .about-container h1,
+    .main-about .about-container h2 {
+      text-transform: uppercase;
+      font-size: 1.7rem;
+      color: #fff; }
+  .main-about .about-me {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 100%;
+    align-items: flex-start;
+    height: 100%; }
+    .main-about .about-me .about-text {
+      min-width: 300px;
+      height: 100%;
+      flex: 1;
+      padding-right: 40px; }
+    .main-about .about-me .about-pic {
+      min-width: 320px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between; }
+      .main-about .about-me .about-pic img {
+        margin-top: 30px; }
 
 @media screen and (max-width: 1000px) {
-  .about-container div {
-    width: 100%; }
-
   .main-about {
+    width: 90%;
+    margin: auto;
     padding: 5px; }
-
-  .about-me h2 {
-    margin-top: 30px; } }
+    .main-about .about-text {
+      padding-right: 0; } }
 #contact-form {
   margin-top: 180px; }
 
@@ -486,31 +488,25 @@ footer a > i:hover {
   background-color: transparent; }
 
 .escalade {
-  background: url("../images/escalade-detail.jpg") no-repeat left 24%;
+  background: url("../images/escalade-details.jpg") no-repeat left 24%;
   background-attachment: fixed;
   background-size: cover;
   /* height: 100vh; */ }
 
 .alpinisme {
-  background: url("../images/alpinisme-detail.jpg") no-repeat 20% 60%;
+  background: url("../images/alpinisme-details.jpg") no-repeat 50%;
   background-attachment: fixed;
   background-size: cover;
   /* height: 100vh; */ }
 
 .ski {
-  background: url("../images/ski-details.jpg") no-repeat left center;
-  background-attachment: fixed;
-  background-size: cover;
-  /* height: 100vh; */ }
-
-.ski-de-randonnee {
-  background: url("../images/ski-de-randonnee.jpg") no-repeat left;
+  background: url("../images/ski-details.jpg") no-repeat right center;
   background-attachment: fixed;
   background-size: cover;
   /* height: 100vh; */ }
 
 .cascade-de-glace {
-  background: url("../images/cascade-de-glace-details.jpg") no-repeat center;
+  background: url("../images/cascade-details.jpg") no-repeat top;
   background-attachment: fixed;
   background-size: cover;
   /* height: 100vh; */ }
@@ -634,18 +630,32 @@ hr {
   opacity: 0.2; }
 
 .blog-container {
-  margin-top: -40px; }
+  margin-top: -30px;
+  padding-top: 100px; }
+  .blog-container hr {
+    border: solid 1px #ccc; }
 
 .article-wrapper {
   background-color: #eee; }
+  .article-wrapper h1 {
+    text-align: center;
+    width: 100%;
+    margin: auto; }
 
 .article {
   margin: 40px auto; }
+  .article h2,
   .article h3 {
+    font-family: "Share Tech"; }
+  .article h2 {
+    font-size: 2.4rem; }
+  .article h3 {
+    font-size: 1.6rem; }
+  .article .date-loc {
     font-size: 1.2rem;
     margin-top: 14px; }
   .article img {
-    width: 500px;
+    width: 1200px;
     margin: auto; }
 
 .navigation {

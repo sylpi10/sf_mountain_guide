@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\BlogRepository;
 use Symfony\Component\HttpFoundation\File\File;
@@ -18,6 +20,7 @@ class Blog
     {
         $this->created_at = new \DateTime();
         $this->updated_at = new \DateTime();
+        $this->blogImages = new ArrayCollection();
     }
 
     /**
@@ -76,6 +79,7 @@ class Blog
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $location;
+
 
     public function getImage(): ?string
     {

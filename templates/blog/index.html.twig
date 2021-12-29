@@ -9,8 +9,9 @@
 
 {% block body %}
 	<div class="container blog-container">
-		<h1>Blog</h1>
 		<div class="mt-5 p-5 article-wrapper">
+			<h1>Blog</h1>
+			<hr>
 			{% for article in articles %}
 				<div class="article">
 					{% for locale in locales %}
@@ -20,15 +21,16 @@
 							{% else %}
 								<h2>{{article.englishTitle|title}}</h2>
 							{% endif %}
-							<h3 class="text-secondary">
+							<span class="text-secondary date-loc">
 								<i class="fas fa-calendar-alt"></i>
 								{{ article.createdAt|date("m/d/Y", "Europe/Paris")}},
 								<i class="fas fa-map-marker-alt"></i>
-								{{article.location}}</h3>
+								{{article.location}}
+							</span>
 							{% if locale == 'fr' %}
-								<p>{{article.content|raw}}</p>
+								<p>{{article.content|replace({'<h1>': '<h3>', '</h1>': "</h3>"})|raw }}</p>
 							{% else %}
-								<p>{{article.englishContent|raw}}</p>
+								<p>{{article.englishContent|replace({'<h1>': '<h3>', '</h1>': "</h3>"})|raw }}</p>
 							{% endif %}
 						{% endif %}
 					{% endfor %}
