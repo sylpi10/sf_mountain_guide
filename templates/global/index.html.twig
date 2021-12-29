@@ -9,10 +9,15 @@
 
 {% block body %}
 
-	<h1 class="main-title">{% trans %}
-		Mountaineering, Ski, Rock Climbing
-		{% endtrans %}
-	</h1>
+	<div class="hero-area">
+		<h1 class="main-title">{% trans %}
+			Mountaineering, Ski, Rock Climbing
+			{% endtrans %}
+		</h1>
+		<a href="{{path('home', {'_fragment':'disciplines'})}}" class="btn more-link button-link" title="Plus">
+			<i class="fas fa-angle-down"></i>
+		</a>
+	</div>
 
 	<div class="index-notif">
 		{% for msg in app.flashes('success') %}
@@ -20,35 +25,11 @@
 		{% endfor %}
 	</div>
 
-	<a href="{{path('home', {'_fragment':'main-section'})}}" class="btn more-link button-link" title="Plus">
-		<i class="fas fa-angle-down"></i>
-	</a>
 
-	<div class="slider-wrapper">
-		<div id="carouselExampleControls" class="carousel carousel-fade slide" data-ride="carousel">
-			<div class="carousel-inner">
-				<div class="carousel-item active carousel1"></div>
-				<div class="carousel-item carousel2"></div>
-				<div class="carousel-item carousel3"></div>
-			</div>
-			<a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-				<span class="sr-only">{% trans %}
-					Previous
-					{% endtrans %}</span>
-			</a>
-			<a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-				<span class="carousel-control-next-icon" aria-hidden="true"></span>
-				<span class="sr-only">{% trans %}
-					Next
-					{% endtrans %}</span>
-			</a>
-		</div>
-	</div>
 	{# end hero #}
 
 	<!-- // anchor for more link -->
-	<div id="main-section"></div>
+	<div id="disciplines"></div>
 
 
 	{# // disciplines section #}
@@ -84,6 +65,4 @@
 		{% include "contact.html.twig" %}
 		{% include "footer.html.twig" %}
 	</div>
-
-
 {% endblock %}
