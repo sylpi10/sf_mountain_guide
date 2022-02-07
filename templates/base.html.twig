@@ -21,8 +21,8 @@
 		</head>
 		<body>
 			<header id="top">
-				<nav class="navbar navbar-expand-md navbar-dark fixed-top menu">
-					<div class="container">
+				<nav class="navbar navbar-expand-md navbar-dark menu">
+					<div class="container-fluid">
 						<a class="" href="{{path('home')}}">
 							<img src="{{asset('images/logo.png')}}" id="logo" alt="Logo Directicimes" title=" {% trans %} home {% endtrans %} ">
 						</a>
@@ -30,8 +30,8 @@
 						<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 							<span class="navbar-toggler-icon"></span>
 						</button>
-						<div class="collapse navbar-collapse" id="navbarCollapse">
-							<ul class="navbar-nav mx-auto">
+						<div class="collapse navbar-collapse navs-wrapper" id="navbarCollapse">
+							<ul class="navbar-nav nav-primary">
 								<li class="nav-item active">
 									<a class="nav-link" href="{{path('home')}}" title="{% trans %} Home {% endtrans %}">
 										{% trans %}
@@ -52,6 +52,11 @@
 								<li class="nav-item">
 									<a class="nav-link" href="{{path('blog')}}" title="Blog">Blog</a>
 								</li>
+								{% if displayBtn %}
+									<div class="newsletter">
+										<a href="{{path('newsletter')}}" class="btn">Newsletter</a>
+									</div>
+								{% endif %}
 								{% if is_granted('ROLE_ADMIN') %}
 									<li class="nav-item">
 										<a class="nav-link btn btn-info" href="{{path('admin')}}" title="admin">Admin</a>
@@ -67,11 +72,7 @@
 
 
 							</ul>
-							{% if displayBtn %}
-								<div class="newsletter">
-									<a href="{{path('newsletter')}}" class="btn">Newsletter</a>
-								</div>
-							{% endif %}
+
 							<div class="right-nav">
 								<ul class="">
 									<li class="nav-item">

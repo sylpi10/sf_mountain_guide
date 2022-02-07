@@ -1,18 +1,31 @@
 
 window.onscroll = ()=> {
-    backToTop()
+    backToTop();
+      changeMenuOnscroll();
 };
+
 let backTop = document.querySelector('.back-top');
 
 function backToTop() {
        if (document.body.scrollTop > 180 || document.documentElement.scrollTop > 180) {
-        //  backTop.style.display = "block";
          backTop.style.opacity = "1";
        } else {
-        // backTop.style.display = "none";
         backTop.style.opacity = "0";
        }
  }
+
+ function changeMenuOnscroll() {
+
+  const menu = document.querySelector('nav');
+  if(window.innerWidth > 800){
+    if (document.body.scrollTop > 360 || document.documentElement.scrollTop > 360) {
+      menu.classList.add('scrolled-nav');
+    } else {
+      menu.classList.remove('scrolled-nav');
+    }
+  }
+ 
+}
 
 // hide menu onclick
  $(function(){ 

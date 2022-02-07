@@ -10,40 +10,42 @@
 
 {% block body %}
 
+	<div class="container newsletter-container">
 
-	<div class="subscribe-form contact-form">
-		<h1 class="text-white text-center">Newsletter</h1>
-		{{form_start(form)}}
+		<div class="subscribe-form contact-form">
+			<h1 class="text-white text-center">Newsletter</h1>
+			{{form_start(form)}}
 
-		<p>
-			{% trans %}
-			Subscribe to our Newsletter to be aware of our latest news !
-			{% endtrans %}
-			<hr>
-		</p>
+			<p>
+				{% trans %}
+				Subscribe to our Newsletter to be aware of our latest news !
+				{% endtrans %}
+				<hr>
+			</p>
 
-		<label class="control-label" for="">{% trans %}
-			Your Name
-			{% endtrans %}</label>
-		{{form_row(form.fullname, {'attr':{'placeholder': 'ex:Mike Horn'}})}}
+			<label class="control-label" for="">{% trans %}
+				Your Name
+				{% endtrans %}</label>
+			{{form_row(form.fullname, {'attr':{'placeholder': 'ex:Mike Horn'}})}}
 
-		<input type="text" id="website" name="website"/>
+			<input type="text" id="website" name="website"/>
 
-		<label class="control-label" for="">{% trans %}
-			Your Email
-			{% endtrans %}</label>
-		{{form_row(form.email, {'attr':{'placeholder': 'mail@gmail.com'}})}}
+			<label class="control-label" for="">{% trans %}
+				Your Email
+				{% endtrans %}</label>
+			{{form_row(form.email, {'attr':{'placeholder': 'mail@gmail.com'}})}}
 
-		<button type="submit" class="btn button-link">
-			<i class=" far fa-paper-plane"></i>
-			{% trans %}
-			Subscribe
-			{% endtrans %}
-		</button>
-		{{form_end(form)}}
+			<button type="submit" class="btn button-link">
+				<i class=" far fa-paper-plane"></i>
+				{% trans %}
+				Subscribe
+				{% endtrans %}
+			</button>
+			{{form_end(form)}}
+
+		</div>
 
 	</div>
-
 
 	<div class="contact" id="contact-form">
 		{% include "footer.html.twig" %}
