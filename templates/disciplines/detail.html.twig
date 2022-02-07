@@ -11,8 +11,8 @@
 		{% for locale in locales %}
 			{% if locale == app.request.locale %}
 				{# <div class="disciplines {{discipline|replace({" ":" -"})|lower|trim}}" id=""> #}
-				<div class="disciplines {{discipline.slug|lower}}" id="">
-					<div class="container-fluid">
+				<div class="disciplines {{discipline.slug|lower}}" id="" style="background-image:url('../uploads/{{discipline.imageDetail}}')">
+					<div class=" container-fluid">
 						<div class="text-wrapper">
 							<div class="text">
 
@@ -91,7 +91,7 @@
 			{% for disci in disciplines %}
 				{% if disci.id != discipline.id %}
 					<a href="{{ path('detail', {'id': disci.id, slug: disci.slug}) }}" title="details" class="discipline">
-						<div class="text" style="background:url('/images/{{disci.slug}}.jpg') center no-repeat;background-size:cover;">
+						<div class="text" style="background:url('../uploads/{{disci.image}}') center no-repeat;background-size:cover;">
 							{% for locale in locales %}
 								{% if locale == app.request.locale %}
 									{% if locale =='fr' %}

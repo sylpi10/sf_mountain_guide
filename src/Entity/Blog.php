@@ -41,7 +41,7 @@ class Blog
     private $content;
 
     /**
-     *@ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @var string|null;
      */
     private $image;
@@ -114,6 +114,7 @@ class Blog
         }
         return $this;
     }
+
     public function getId(): ?int
     {
         return $this->id;

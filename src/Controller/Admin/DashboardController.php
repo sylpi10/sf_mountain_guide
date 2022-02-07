@@ -12,18 +12,29 @@ use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlGenerator;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 
 class DashboardController extends AbstractDashboardController
 {
+
+    private AdminUrlGenerator $adminUrlGenerator;
+    public function __construct(AdminUrlGenerator $adminUrlGenerator)
+    {
+        $this->adminUrlGenerator = $adminUrlGenerator;
+    }
+
     /**
      * @Route("/admin", name="admin")
      */
     public function index(): Response
     {
-        $routeBuilder = $this->get(CrudUrlGenerator::class)->build();
+        $url = $this->adminUrlGenerator
+            ->setController(DisciplineCrudController::class)
+            // ->setAction('index')
+            ->generateUrl();
 
-        return $this->redirect($routeBuilder->setController(DisciplineCrudController::class)->generateUrl());
+        return $this->redirect($url);
     }
 
     public function configureDashboard(): Dashboard

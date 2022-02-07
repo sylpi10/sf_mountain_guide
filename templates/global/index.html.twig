@@ -43,8 +43,10 @@
 		</p>
 
 		{% for disci in disciplines %}
-			<a href="{{ path('detail', {id: disci.id, slug: disci.slug}) }}" class="discipline" title="details">
-				<div class="text" style="background:url('/images/{{disci.slug}}.jpg') center no-repeat;background-size:cover;">
+			<a
+				href="{{ path('detail', {id: disci.id, slug: disci.slug}) }}" class="discipline" title="details">
+				{# <div class="text" style="background:url('/images/{{disci.slug}}.jpg') center no-repeat;background-size:cover;"> #}
+				<div class="text" style="background:url('uploads/{{disci.image}}') center no-repeat;background-size:cover;">
 					{% for locale in locales %}
 						{% if locale == app.request.locale %}
 							{% if locale =='fr' %}

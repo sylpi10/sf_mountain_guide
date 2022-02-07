@@ -5,9 +5,12 @@ namespace App\Entity;
 use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\DisciplineRepository;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass=DisciplineRepository::class)
+ * @Vich\Uploadable
  */
 class Discipline
 {
@@ -77,6 +80,38 @@ class Discipline
      * @ORM\Column(type="string", length=255)
      */
     private $englishPrice;
+
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @var \DateTime
+     */
+    private $updated_at;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string|null;
+     */
+    private $image;
+
+    /**
+     * @Vich\UploadableField(mapping="discipline_images", fileNameProperty="image")
+     * @var File|null
+     */
+    private $imageFile;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string|null;
+     */
+    private $imageDetail;
+
+    /**
+     * @Vich\UploadableField(mapping="discipline_images_detail", fileNameProperty="imageDetail")
+     * @var File|null
+     */
+    private $imageDetailFile;
+
 
     public function getId(): ?int
     {
@@ -237,5 +272,105 @@ class Discipline
     public function __toString()
     {
         return $this->title;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+    public function setImage($image): self
+    {
+        $this->image = $image;
+        return $this;
+    }
+
+    /**
+     * @return File|null
+     */
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+    /**
+     *
+     * @param File $imageFile
+     * @return void
+     */
+    public function setImageFile(File $imageFile = null)
+    {
+        $this->imageFile = $imageFile;
+        // It is required that at least one field changes if you are using Doctrine,
+        // otherwise the event listeners won't be called and the file is lost
+        if (null !== $imageFile) {
+            // if 'updatedAt' is not defined in your entity, use another property
+            $this->updated_at = new \DateTime('now');
+        }
+        return $this;
+    }
+
+    /**
+     *
+     * @param File $image_detailFile
+     * @return void
+     */
+    public function setImageDetailFile(File $imageDetailFile = null)
+    {
+        $this->imageDetailFile = $imageDetailFile;
+        // It is required that at least one field changes if you are using Doctrine,
+        // otherwise the event listeners won't be called and the file is lost
+        if (null !== $imageDetailFile) {
+            // if 'updatedAt' is not defined in your entity, use another property
+            $this->updated_at = new \DateTime('now');
+        }
+        return $this;
+    }
+
+    /**
+     * @return File|null
+     */
+    public function getImageDetailFile(): ?File
+    {
+        return $this->imageDetailFile;
+    }
+
+    /**
+     * Get the value of image_detail
+     *
+     * @return  string|null;
+     */
+    public function getImageDetail()
+    {
+        return $this->imageDetail;
+    }
+
+    /**
+     * Set the value of image_detail
+     *
+     * @param  string|null;  $image_detail
+     *
+     * @return  self
+     */
+    public function setImageDetail($imageDetail)
+    {
+        $this->imageDetail = $imageDetail;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of updated_at
+     *
+     * @return  \DateTimeInterface
+     */
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updated_at;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updated_at): self
+    {
+        $this->updated_at = $updated_at;
+
+        return $this;
     }
 }

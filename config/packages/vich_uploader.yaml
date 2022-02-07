@@ -14,3 +14,17 @@ vich_uploader:
       namer: Vich\UploaderBundle\Naming\UniqidNamer
       delete_on_remove: true
       delete_on_update: true
+
+    discipline_images:
+      uri_prefix: "%app.path.discipline_images%"
+      upload_destination: "%kernel.project_dir%/public%app.path.discipline_images%"
+      namer: Vich\UploaderBundle\Naming\UniqidNamer
+      delete_on_remove: true
+      delete_on_update: true
+
+    discipline_images_detail:
+      uri_prefix: "%app.path.discipline_images_detail%"
+      upload_destination: "%kernel.project_dir%/public%app.path.discipline_images_detail%"
+      namer: Vich\UploaderBundle\Naming\UniqidNamer
+      delete_on_remove: true
+      delete_on_update: true

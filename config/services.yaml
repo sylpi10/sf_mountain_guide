@@ -7,6 +7,8 @@ parameters:
   #   images_directory: "%kernel.project_dir%/public/uploads"
   app.locales: [en, fr]
   app.path.blog_images: /uploads
+  app.path.discipline_images: /uploads
+  app.path.discipline_images_detail: /uploads
 services:
   # default configuration for services in *this* file
   _defaults:
@@ -28,6 +30,7 @@ services:
   App\Controller\:
     resource: "../src/Controller/"
     tags: ["controller.service_arguments"]
+    public: true
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones# config/packages/vich_uploader.yaml
