@@ -13,7 +13,10 @@ use Vich\UploaderBundle\Metadata\ClassMetadata;
  */
 class XmlDriver extends AbstractFileDriver
 {
-    protected function loadMetadataFromFile(\ReflectionClass $class, string $file): ?JMSClassMetadata
+    /**
+     * @param string $file
+     */
+    protected function loadMetadataFromFile(\ReflectionClass $class, $file): ?JMSClassMetadata
     {
         $elem = XmlUtils::loadFile($file);
         $elem = \simplexml_import_dom($elem);
@@ -40,15 +43,12 @@ class XmlDriver extends AbstractFileDriver
         return $classMetadata;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getExtension(): string
     {
         return 'xml';
     }
 
-    protected function guessClassName($file, \SimpleXMLElement $elem, \ReflectionClass $class = null)
+    protected function guessClassName(string $file, \SimpleXMLElement $elem, \ReflectionClass $class = null): string
     {
         if (null === $class) {
             return (string) $elem->attributes()->class;

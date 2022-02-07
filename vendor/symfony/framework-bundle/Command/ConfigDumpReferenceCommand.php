@@ -14,6 +14,8 @@ namespace Symfony\Bundle\FrameworkBundle\Command;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Dumper\XmlReferenceDumper;
 use Symfony\Component\Config\Definition\Dumper\YamlReferenceDumper;
+use Symfony\Component\Console\Completion\CompletionInput;
+use Symfony\Component\Console\Completion\CompletionSuggestions;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -22,6 +24,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Extension\ConfigurationExtensionInterface;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * A console command for dumping available configuration reference.
@@ -35,6 +38,7 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 class ConfigDumpReferenceCommand extends AbstractConfigCommand
 {
     protected static $defaultName = 'config:dump-reference';
+    protected static $defaultDescription = 'Dump the default configuration for an extension';
 
     /**
      * {@inheritdoc}
@@ -47,7 +51,7 @@ class ConfigDumpReferenceCommand extends AbstractConfigCommand
                 new InputArgument('path', InputArgument::OPTIONAL, 'The configuration option path'),
                 new InputOption('format', null, InputOption::VALUE_REQUIRED, 'The output format (yaml or xml)', 'yaml'),
             ])
-            ->setDescription('Dumps the default configuration for an extension')
+            ->setDescription(self::$defaultDescription)
             ->setHelp(<<<'EOF'
 The <info>%command.name%</info> command dumps the default configuration for an
 extension/bundle.
@@ -106,12 +110,19 @@ EOF
         if ($extension instanceof ConfigurationInterface) {
             $configuration = $extension;
         } else {
-            $configuration = $extension->getConfiguration([], $this->getContainerBuilder());
+            $configuration = $extension->getConfiguration([], $this->getContainerBuilder($this->getApplication()->getKernel()));
         }
 
         $this->validateConfiguration($extension, $configuration);
 
         $format = $input->getOption('format');
+
+        if ('yaml' === $format && !class_exists(Yaml::class)) {
+            $errorIo->error('Setting the "format" option to "yaml" requires the Symfony Yaml component. Try running "composer install symfony/yaml" or use "--format=xml" instead.');
+
+            return 1;
+        }
+
         $path = $input->getArgument('path');
 
         if (null !== $path && 'yaml' !== $format) {
@@ -147,5 +158,33 @@ EOF
         $io->writeln(null === $path ? $dumper->dump($configuration, $extension->getNamespace()) : $dumper->dumpAtPath($configuration, $path));
 
         return 0;
+    }
+
+    public function complete(CompletionInput $input, CompletionSuggestions $suggestions): void
+    {
+        if ($input->mustSuggestArgumentValuesFor('name')) {
+            $suggestions->suggestValues($this->getAvailableBundles());
+        }
+
+        if ($input->mustSuggestOptionValuesFor('format')) {
+            $suggestions->suggestValues($this->getAvailableFormatOptions());
+        }
+    }
+
+    private function getAvailableBundles(): array
+    {
+        $bundles = [];
+
+        foreach ($this->getApplication()->getKernel()->getBundles() as $bundle) {
+            $bundles[] = $bundle->getName();
+            $bundles[] = $bundle->getContainerExtension()->getAlias();
+        }
+
+        return $bundles;
+    }
+
+    private function getAvailableFormatOptions(): array
+    {
+        return ['yaml', 'xml'];
     }
 }

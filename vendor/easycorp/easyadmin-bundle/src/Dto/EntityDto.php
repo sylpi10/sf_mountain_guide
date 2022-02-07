@@ -2,12 +2,12 @@
 
 namespace EasyCorp\Bundle\EasyAdminBundle\Dto;
 
-use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\ActionCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
@@ -34,6 +34,11 @@ final class EntityDto
         $this->instance = $entityInstance;
         $this->primaryKeyName = $this->metadata->getIdentifierFieldNames()[0];
         $this->permission = $entityPermission;
+    }
+
+    public function __toString(): string
+    {
+        return $this->toString();
     }
 
     public function getFqcn(): string
@@ -79,10 +84,11 @@ final class EntityDto
             return $this->primaryKeyValue;
         }
 
-        $r = ClassUtils::newReflectionObject($this->instance);
-        $primaryKeyProperty = $r->getProperty($this->primaryKeyName);
-        $primaryKeyProperty->setAccessible(true);
-        $primaryKeyValue = $primaryKeyProperty->getValue($this->instance);
+        $propertyAccessor = PropertyAccess::createPropertyAccessorBuilder()
+            ->enableExceptionOnInvalidIndex()
+            ->getPropertyAccessor();
+
+        $primaryKeyValue = $propertyAccessor->getValue($this->instance, $this->primaryKeyName);
 
         return $this->primaryKeyValue = $primaryKeyValue;
     }

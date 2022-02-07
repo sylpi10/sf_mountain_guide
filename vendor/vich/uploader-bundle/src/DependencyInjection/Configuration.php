@@ -11,11 +11,15 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  * Configuration.
  *
  * @author Dustin Dobervich <ddobervich@gmail.com>
+ *
+ * @internal
  */
 final class Configuration implements ConfigurationInterface
 {
+    /** @var array<int, string> */
     private $supportedDbDrivers = ['orm', 'mongodb', 'phpcr'];
 
+    /** @var array<int, string> */
     private $supportedStorages = ['gaufrette', 'flysystem', 'file_system'];
 
     public function getConfigTreeBuilder(): TreeBuilder
@@ -53,7 +57,7 @@ final class Configuration implements ConfigurationInterface
                     ->defaultValue('file_system')
                     ->validate()
                         ->ifTrue(function ($storage) {
-                            return 0 !== \strpos($storage, '@') && !\in_array($storage, $this->supportedStorages, true);
+                            return null !== $storage && 0 !== \strpos($storage, '@') && !\in_array($storage, $this->supportedStorages, true);
                         })
                         ->thenInvalid('The storage %s is not supported. Please choose one of '.\implode(', ', $this->supportedStorages).' or provide a service name prefixed with "@".')
                     ->end()
@@ -74,6 +78,7 @@ final class Configuration implements ConfigurationInterface
                     ->fixXmlConfig('directory', 'directories')
                     ->children()
                         ->scalarNode('cache')->defaultValue('file')->end()
+                        ->scalarNode('type')->defaultValue('annotation')->end()
                         ->arrayNode('file_cache')
                             ->addDefaultsIfNotSet()
                             ->children()

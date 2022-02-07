@@ -16,11 +16,9 @@ namespace Symfony\Component\Uid;
  *
  * Use Uuid::v5() to compute one.
  *
- * @experimental in 5.1
- *
  * @author Grégoire Pineau <lyrixx@lyrixx.info>
  */
 class UuidV5 extends Uuid
 {
-    protected const TYPE = \UUID_TYPE_SHA1;
+    protected const TYPE = 5;
 }

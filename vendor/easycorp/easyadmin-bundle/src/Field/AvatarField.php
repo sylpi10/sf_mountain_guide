@@ -2,6 +2,7 @@
 
 namespace EasyCorp\Bundle\EasyAdminBundle\Field;
 
+use EasyCorp\Bundle\EasyAdminBundle\Config\Option\Size;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
@@ -15,7 +16,10 @@ final class AvatarField implements FieldInterface
     public const OPTION_IS_GRAVATAR_EMAIL = 'isGravatarEmail';
     public const OPTION_HEIGHT = 'height';
 
-    public static function new(string $propertyName, ?string $label = null): self
+    /**
+     * @param string|false|null $label
+     */
+    public static function new(string $propertyName, $label = null): self
     {
         return (new self())
             ->setProperty($propertyName)
@@ -23,13 +27,15 @@ final class AvatarField implements FieldInterface
             ->setTemplateName('crud/field/avatar')
             ->setFormType(TextType::class)
             ->addCssClass('field-avatar')
+            ->setDefaultColumns('col-md-10 col-xxl-8')
+            ->setSortable(false)
             ->setCustomOption(self::OPTION_IS_GRAVATAR_EMAIL, false)
             ->setCustomOption(self::OPTION_HEIGHT, null);
     }
 
     public function setHeight($heightInPixels): self
     {
-        $semanticHeights = ['sm' => 18, 'md' => 24, 'lg' => 48, 'xl' => 96];
+        $semanticHeights = [Size::SM => 18, Size::MD => 24, Size::LG => 48, Size::XL => 96];
 
         if (!\is_int($heightInPixels) && !\array_key_exists($heightInPixels, $semanticHeights)) {
             throw new \InvalidArgumentException(sprintf('The argument of the "%s()" method must be either an integer (the height in pixels) or one of these string values: %s (%d given).', __METHOD__, implode(', ', $semanticHeights), $heightInPixels));

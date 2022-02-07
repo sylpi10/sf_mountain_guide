@@ -12,6 +12,7 @@ use Vich\UploaderBundle\Util\Transliterator;
  * PropertyNamer.
  *
  * @author Kévin Gomez <contact@kevingomez.fr>
+ * @final
  */
 class PropertyNamer implements NamerInterface, ConfigurableInterface
 {
@@ -84,7 +85,10 @@ class PropertyNamer implements NamerInterface, ConfigurableInterface
         return $name;
     }
 
-    private function getPropertyValue($object, $propertyPath)
+    /**
+     * @return mixed|null
+     */
+    private function getPropertyValue(object $object, string $propertyPath)
     {
         $accessor = PropertyAccess::createPropertyAccessor();
 

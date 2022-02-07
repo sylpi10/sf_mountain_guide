@@ -21,6 +21,7 @@ use Symfony\Component\Filesystem\Filesystem;
 class MakeAdminMigrationCommand extends Command
 {
     protected static $defaultName = 'make:admin:migration';
+    protected static $defaultDescription = 'Migrates EasyAdmin2 YAML config into EasyAdmin 3 PHP config classes';
 
     public const SUCCESS = 0;
     public const FAILURE = 1;
@@ -45,10 +46,15 @@ class MakeAdminMigrationCommand extends Command
     public function configure()
     {
         $this
+            ->setDescription(self::$defaultDescription)
+            ->setHelp($this->getCommandHelp())
             ->addArgument('ea2-backup-file', InputArgument::OPTIONAL, 'The path to the EasyAdmin 2 backup file you want to migrate from.')
         ;
     }
 
+    /**
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
@@ -66,8 +72,8 @@ class MakeAdminMigrationCommand extends Command
 
         if (!$fs->exists($ea2ConfigBackupPath)) {
             $this->temporarySection->write(sprintf(
-            '<error> ERROR </error> The config backup file was not found in %s. To generate this file, run the <comment>make:admin:migration</comment> command in your application BEFORE upgrading to EasyAdmin 3 (the command must be run while still using EasyAdmin 2).',
-            $ea2ConfigBackupPath
+                '<error> ERROR </error> The config backup file was not found in %s. To generate this file, run the <comment>make:admin:migration</comment> command in your application BEFORE upgrading to EasyAdmin 3 (the command must be run while still using EasyAdmin 2).',
+                $ea2ConfigBackupPath
             ));
         }
         while (!$fs->exists($ea2ConfigBackupPath)) {
@@ -143,5 +149,21 @@ class MakeAdminMigrationCommand extends Command
         $question = new Question($questionText, $defaultAnswer);
 
         return $helper->ask($this->input, $this->temporarySection, $question);
+    }
+
+    private function getCommandHelp()
+    {
+        return <<<'HELP'
+The <info>%command.name%</info> command migrates the YAML-based configuration of
+an EasyAdmin 2 application into the PHP config classes used by EasyAdmin 3.
+Follow the steps shown by the command to select the YAML configuration file
+and the location and namespace of the newly generated classes.
+
+If you prefer, you can pass the path to the EasyAdmin 2 YAML config backup file
+as an argument:
+
+  <info>php %command.full_name% /path/to/some/easyadmin-config.backup</info>
+HELP
+        ;
     }
 }

@@ -4,6 +4,7 @@ namespace EasyCorp\Bundle\EasyAdminBundle\Factory;
 
 use Doctrine\DBAL\Types\Types;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
@@ -18,6 +19,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Form\Type\EaFormRowType;
 use EasyCorp\Bundle\EasyAdminBundle\Provider\AdminContextProvider;
 use EasyCorp\Bundle\EasyAdminBundle\Security\Permission;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -71,9 +73,17 @@ final class FieldFactory
 
         $context = $this->adminContextProvider->getContext();
         $currentPage = $context->getCrud()->getCurrentPage();
-        foreach ($fields as $fieldName => $fieldDto) {
+        $isDetailOrIndex = \in_array($currentPage, [Crud::PAGE_INDEX, Crud::PAGE_DETAIL], true);
+        foreach ($fields as $fieldDto) {
             if ((null !== $currentPage && false === $fieldDto->isDisplayedOn($currentPage))
                 || false === $this->authorizationChecker->isGranted(Permission::EA_VIEW_FIELD, $fieldDto)) {
+                $fields->unset($fieldDto);
+
+                continue;
+            }
+
+            // "form rows" only make sense in pages that contain forms
+            if ($isDetailOrIndex && EaFormRowType::class === $fieldDto->getFormType()) {
                 $fields->unset($fieldDto);
 
                 continue;
@@ -103,14 +113,14 @@ final class FieldFactory
         // but the first fields of the list don't belong to any panel. We must create an automatic empty
         // form panel for those "orphaned fields" so they are displayed as expected
         $firstFieldIsAFormPanel = $fields->first()->isFormDecorationField();
-        foreach ($fields as $fieldName => $fieldDto) {
+        foreach ($fields as $fieldDto) {
             if (!$firstFieldIsAFormPanel && $fieldDto->isFormDecorationField()) {
                 $fields->prepend(FormField::addPanel()->getAsDto());
                 break;
             }
         }
 
-        foreach ($fields as $fieldName => $fieldDto) {
+        foreach ($fields as $fieldDto) {
             if (Field::class !== $fieldDto->getFieldFqcn()) {
                 continue;
             }
@@ -120,14 +130,14 @@ final class FieldFactory
                 continue;
             }
 
-            if ($fieldName === $entityDto->getPrimaryKeyName()) {
+            if ($fieldDto->getProperty() === $entityDto->getPrimaryKeyName()) {
                 $guessedFieldFqcn = IdField::class;
             } else {
-                $doctrinePropertyType = $entityDto->getPropertyMetadata($fieldName)->get('type');
+                $doctrinePropertyType = $entityDto->getPropertyMetadata($fieldDto->getProperty())->get('type');
                 $guessedFieldFqcn = self::$doctrineTypeToFieldFqcn[$doctrinePropertyType] ?? null;
 
                 if (null === $guessedFieldFqcn) {
-                    throw new \RuntimeException(sprintf('The Doctrine type of the "%s" field is "%s", which is not supported by EasyAdmin yet.', $fieldName, $doctrinePropertyType));
+                    throw new \RuntimeException(sprintf('The Doctrine type of the "%s" field is "%s", which is not supported by EasyAdmin yet.', $fieldDto->getProperty(), $doctrinePropertyType));
                 }
             }
 
@@ -140,12 +150,14 @@ final class FieldFactory
     {
         /** @var FieldDto $newField */
         $newField = $newFieldFqcn::new($fieldDto->getProperty())->getAsDto();
+        $newField->setUniqueId($fieldDto->getUniqueId());
 
         $newField->setFieldFqcn($newFieldFqcn);
         $newField->setDisplayedOn($fieldDto->getDisplayedOn());
         $newField->setValue($fieldDto->getValue());
         $newField->setFormattedValue($fieldDto->getFormattedValue());
-        $newField->setCssClass($fieldDto->getCssClass());
+        $newField->setCssClass(trim($newField->getCssClass().' '.$fieldDto->getCssClass()));
+        $newField->setColumns($fieldDto->getColumns());
         $newField->setTranslationParameters($fieldDto->getTranslationParameters());
         $newField->setAssets($newField->getAssets()->mergeWith($fieldDto->getAssets()));
 

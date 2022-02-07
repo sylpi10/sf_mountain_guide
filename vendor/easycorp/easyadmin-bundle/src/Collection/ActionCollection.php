@@ -2,7 +2,6 @@
 
 namespace EasyCorp\Bundle\EasyAdminBundle\Collection;
 
-use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Collection\CollectionInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\ActionDto;
 
@@ -15,7 +14,7 @@ final class ActionCollection implements CollectionInterface
     private $actions;
 
     /**
-     * @param Action[] $actions
+     * @param ActionDto[] $actions
      */
     private function __construct(array $actions)
     {
@@ -78,8 +77,29 @@ final class ActionCollection implements CollectionInterface
     /**
      * @return \ArrayIterator|\Traversable|ActionDto[]
      */
-    public function getIterator()
+    public function getIterator(): \ArrayIterator
     {
         return new \ArrayIterator($this->actions);
+    }
+
+    public function getEntityActions(): self
+    {
+        return self::new(array_filter($this->actions, static function (ActionDto $action) {
+            return $action->isEntityAction();
+        }));
+    }
+
+    public function getGlobalActions(): self
+    {
+        return self::new(array_filter($this->actions, static function (ActionDto $action) {
+            return $action->isGlobalAction();
+        }));
+    }
+
+    public function getBatchActions(): self
+    {
+        return self::new(array_filter($this->actions, static function (ActionDto $action) {
+            return $action->isBatchAction();
+        }));
     }
 }

@@ -2,6 +2,7 @@
 
 namespace EasyCorp\Bundle\EasyAdminBundle\Config;
 
+use EasyCorp\Bundle\EasyAdminBundle\Config\Option\TextDirection;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\DashboardDto;
 
 /**
@@ -47,8 +48,8 @@ final class Dashboard
 
     public function setTextDirection(string $direction): self
     {
-        if (!\in_array($direction, ['ltr', 'rtl'], true)) {
-            throw new \InvalidArgumentException(sprintf('The "%s" value given to the textDirection option is not valid. It can only be "ltr" or "rtl"', $direction));
+        if (!\in_array($direction, [TextDirection::LTR, TextDirection::RTL], true)) {
+            throw new \InvalidArgumentException(sprintf('The "%s" value given to the textDirection option is not valid. It can only be "%s" or "%s"', $direction, TextDirection::LTR, TextDirection::RTL));
         }
 
         $this->dto->setTextDirection($direction);
@@ -66,6 +67,20 @@ final class Dashboard
     public function renderSidebarMinimized(bool $minimized = true): self
     {
         $this->dto->setSidebarWidth($minimized ? Crud::LAYOUT_SIDEBAR_COMPACT : Crud::LAYOUT_SIDEBAR_DEFAULT);
+
+        return $this;
+    }
+
+    public function disableUrlSignatures(bool $disableSignatures = true): self
+    {
+        $this->dto->setSignedUrls(!$disableSignatures);
+
+        return $this;
+    }
+
+    public function generateRelativeUrls(bool $relativeUrls = true): self
+    {
+        $this->dto->setAbsoluteUrls(!$relativeUrls);
 
         return $this;
     }

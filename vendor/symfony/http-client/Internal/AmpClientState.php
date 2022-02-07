@@ -149,7 +149,7 @@ final class AmpClientState extends ClientState
             public $uri;
             public $handle;
 
-            public function connect(string $uri, ?ConnectContext $context = null, ?CancellationToken $token = null): Promise
+            public function connect(string $uri, ConnectContext $context = null, CancellationToken $token = null): Promise
             {
                 $result = $this->connector->connect($this->uri ?? $uri, $context, $token);
                 $result->onResolve(function ($e, $socket) {
@@ -185,7 +185,7 @@ final class AmpClientState extends ClientState
             }
         }
 
-        $maxHostConnections = 0 < $this->maxHostConnections ? $this->maxHostConnections : PHP_INT_MAX;
+        $maxHostConnections = 0 < $this->maxHostConnections ? $this->maxHostConnections : \PHP_INT_MAX;
         $pool = new DefaultConnectionFactory($connector, $context);
         $pool = ConnectionLimitingPool::byAuthority($maxHostConnections, $pool);
 

@@ -8,7 +8,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Intl\IntlFormatter;
-use Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer;
 
 /**
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
@@ -46,19 +45,25 @@ final class NumberConfigurator implements FieldConfiguratorInterface
             $formatterAttributes['fraction_digit'] = $scale;
         }
 
-        $field->setFormattedValue($this->intlFormatter->formatNumber($value, $formatterAttributes));
+        if (null !== $numberFormat = $field->getCustomOption(NumberField::OPTION_NUMBER_FORMAT)) {
+            $field->setFormattedValue(sprintf($numberFormat, $value));
+        } elseif (null !== $numberFormat = $context->getCrud()->getNumberFormat()) {
+            $field->setFormattedValue(sprintf($numberFormat, $value));
+        } else {
+            $field->setFormattedValue($this->intlFormatter->formatNumber($value, $formatterAttributes));
+        }
     }
 
     private function getRoundingModeAsString(int $mode): string
     {
         return [
-            NumberToLocalizedStringTransformer::ROUND_DOWN => 'down',
-            NumberToLocalizedStringTransformer::ROUND_FLOOR => 'floor',
-            NumberToLocalizedStringTransformer::ROUND_UP => 'up',
-            NumberToLocalizedStringTransformer::ROUND_CEILING => 'ceiling',
-            NumberToLocalizedStringTransformer::ROUND_HALF_DOWN => 'halfdown',
-            NumberToLocalizedStringTransformer::ROUND_HALF_EVEN => 'halfeven',
-            NumberToLocalizedStringTransformer::ROUND_HALF_UP => 'halfup',
+            \NumberFormatter::ROUND_DOWN => 'down',
+            \NumberFormatter::ROUND_FLOOR => 'floor',
+            \NumberFormatter::ROUND_UP => 'up',
+            \NumberFormatter::ROUND_CEILING => 'ceiling',
+            \NumberFormatter::ROUND_HALFDOWN => 'halfdown',
+            \NumberFormatter::ROUND_HALFEVEN => 'halfeven',
+            \NumberFormatter::ROUND_HALFUP => 'halfup',
         ][$mode];
     }
 }

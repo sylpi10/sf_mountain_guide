@@ -13,6 +13,7 @@ namespace Symfony\Flex\Command;
 
 use Composer\Command\BaseCommand;
 use Composer\Config;
+use Composer\Factory;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -39,7 +40,7 @@ class DumpEnvCommand extends BaseCommand
             ->setAliases(['dump-env'])
             ->setDescription('Compiles .env files to .env.local.php.')
             ->setDefinition([
-                new InputArgument('env', InputArgument::REQUIRED, 'The application environment to dump .env files for - e.g. "prod".'),
+                new InputArgument('env', InputArgument::OPTIONAL, 'The application environment to dump .env files for - e.g. "prod".'),
             ])
             ->addOption('empty', null, InputOption::VALUE_NONE, 'Ignore the content of .env files')
         ;
@@ -47,10 +48,21 @@ class DumpEnvCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $_SERVER['APP_ENV'] = $env = $input->getArgument('env');
+        if ($env = $input->getArgument('env')) {
+            $_SERVER['APP_ENV'] = $env;
+        }
+
         $path = $this->options->get('root-dir').'/.env';
 
-        $vars = $input->getOption('empty') ? ['APP_ENV' => $env] : $this->loadEnv($path, $env);
+        if (!$env || !$input->getOption('empty')) {
+            $vars = $this->loadEnv($path, $env);
+            $env = $vars['APP_ENV'];
+        }
+
+        if ($input->getOption('empty')) {
+            $vars = ['APP_ENV' => $env];
+        }
+
         $vars = var_export($vars, true);
         $vars = <<<EOF
 <?php
@@ -60,18 +72,20 @@ class DumpEnvCommand extends BaseCommand
 return $vars;
 
 EOF;
-        file_put_contents($path.'.local.php', $vars, LOCK_EX);
+        file_put_contents($path.'.local.php', $vars, \LOCK_EX);
 
         $this->getIO()->writeError('Successfully dumped .env files in <info>.env.local.php</>');
 
         return 0;
     }
 
-    private function loadEnv(string $path, string $env): array
+    private function loadEnv(string $path, ?string $env): array
     {
         if (!file_exists($autoloadFile = $this->config->get('vendor-dir').'/autoload.php')) {
             throw new \RuntimeException(sprintf('Please run "composer install" before running this command: "%s" not found.', $autoloadFile));
         }
+
+        require $autoloadFile;
 
         if (!class_exists(Dotenv::class)) {
             throw new \RuntimeException('Please run "composer require symfony/dotenv" to load the ".env" files configuring the application.');
@@ -90,13 +104,24 @@ EOF;
                 $dotenv = new Dotenv(false);
             }
 
+            if (!$env && file_exists($p = "$path.local")) {
+                $env = $_ENV['APP_ENV'] = $dotenv->parse(file_get_contents($p), $p)['APP_ENV'] ?? null;
+            }
+
+            if (!$env) {
+                throw new \RuntimeException('Please provide the name of the environment either by passing it as command line argument or by defining the "APP_ENV" variable in the ".env.local" file.');
+            }
+
+            $config = @json_decode(file_get_contents(Factory::getComposerFile()), true);
+            $testEnvs = $config['extra']['runtime']['test_envs'] ?? ['test'];
+
             if (method_exists($dotenv, 'loadEnv')) {
-                $dotenv->loadEnv($path);
+                $dotenv->loadEnv($path, 'APP_ENV', 'dev', $testEnvs);
             } else {
                 // fallback code in case your Dotenv component is not 4.2 or higher (when loadEnv() was added)
                 $dotenv->load(file_exists($path) || !file_exists($p = "$path.dist") ? $path : $p);
 
-                if ('test' !== $env && file_exists($p = "$path.local")) {
+                if (!\in_array($env, $testEnvs, true) && file_exists($p = "$path.local")) {
                     $dotenv->load($p);
                 }
 

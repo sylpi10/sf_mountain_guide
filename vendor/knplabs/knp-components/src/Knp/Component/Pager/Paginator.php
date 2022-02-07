@@ -16,17 +16,14 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  */
 final class Paginator implements PaginatorInterface
 {
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
+    private EventDispatcherInterface $eventDispatcher;
 
     /**
      * Default options of paginator
      *
-     * @var array
+     * @var array<string, scalar>
      */
-    private $defaultOptions = [
+    private array $defaultOptions = [
         self::PAGE_PARAMETER_NAME => 'page',
         self::SORT_FIELD_PARAMETER_NAME => 'sort',
         self::SORT_DIRECTION_PARAMETER_NAME => 'direction',
@@ -37,15 +34,7 @@ final class Paginator implements PaginatorInterface
         self::DEFAULT_LIMIT => self::DEFAULT_LIMIT_VALUE,
     ];
 
-    /**
-     * @var RequestStack|null
-     */
-    private $requestStack;
-
-    /**
-     * @var Request
-     */
-    private $request;
+    private ?RequestStack $requestStack;
 
     public function __construct(EventDispatcherInterface $eventDispatcher, RequestStack $requestStack = null)
     {
@@ -103,12 +92,12 @@ final class Paginator implements PaginatorInterface
             $pageOutOfRangeOption = $options[PaginatorInterface::PAGE_OUT_OF_RANGE] ?? $this->defaultOptions[PaginatorInterface::PAGE_OUT_OF_RANGE];
             if ($pageOutOfRangeOption === PaginatorInterface::PAGE_OUT_OF_RANGE_FIX && $itemsEvent->count > 0) {
                 // replace page number out of range with max page
-                return $this->paginate($target, ceil($itemsEvent->count / $limit), $limit, $options);
+                return $this->paginate($target, (int) ceil($itemsEvent->count / $limit), $limit, $options);
             }
             if ($pageOutOfRangeOption === self::PAGE_OUT_OF_RANGE_THROW_EXCEPTION && $page > 1) {
                 throw new PageNumberOutOfRangeException(
                     sprintf('Page number: %d is out of range.', $page),
-                    ceil($itemsEvent->count / $limit)
+                    (int) ceil($itemsEvent->count / $limit)
                 );
             }
         }

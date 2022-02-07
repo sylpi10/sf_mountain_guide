@@ -27,11 +27,11 @@ use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
-use Symfony\Component\HttpClient\Response\ResponseTrait;
+use Symfony\Component\HttpClient\Response\StreamableInterface;
 use Symfony\Component\HttpClient\Response\StreamWrapper;
-use Symfony\Component\HttpClient\Response\TraceableResponse;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\Service\ResetInterface;
 
 if (!interface_exists(RequestFactoryInterface::class)) {
     throw new \LogicException('You cannot use the "Symfony\Component\HttpClient\Psr18Client" as the "psr/http-factory" package is not installed. Try running "composer require nyholm/psr7".');
@@ -50,7 +50,7 @@ if (!interface_exists(ClientInterface::class)) {
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-final class Psr18Client implements ClientInterface, RequestFactoryInterface, StreamFactoryInterface, UriFactoryInterface
+final class Psr18Client implements ClientInterface, RequestFactoryInterface, StreamFactoryInterface, UriFactoryInterface, ResetInterface
 {
     private $client;
     private $responseFactory;
@@ -105,7 +105,7 @@ final class Psr18Client implements ClientInterface, RequestFactoryInterface, Str
                 }
             }
 
-            $body = $response instanceof TraceableResponse || isset(class_uses($response)[ResponseTrait::class]) ? $response->toStream(false) : StreamWrapper::createResource($response, $this->client);
+            $body = $response instanceof StreamableInterface ? $response->toStream(false) : StreamWrapper::createResource($response, $this->client);
             $body = $this->streamFactory->createStreamFromResource($body);
 
             if ($body->isSeekable()) {
@@ -190,6 +190,13 @@ final class Psr18Client implements ClientInterface, RequestFactoryInterface, Str
         }
 
         throw new \LogicException(sprintf('You cannot use "%s()" as the "nyholm/psr7" package is not installed. Try running "composer require nyholm/psr7".', __METHOD__));
+    }
+
+    public function reset()
+    {
+        if ($this->client instanceof ResetInterface) {
+            $this->client->reset();
+        }
     }
 }
 

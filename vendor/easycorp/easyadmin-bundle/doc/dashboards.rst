@@ -1,17 +1,6 @@
 Dashboards
 ==========
 
-.. raw:: html
-
-    <div class="box box--small box--warning">
-        <strong class="title">WARNING:</strong>
-
-        You are browsing the documentation for <strong>EasyAdmin 3.x</strong>,
-        which has just been released. Switch to
-        <a href="https://symfony.com/doc/2.x/bundles/EasyAdminBundle/index.html">EasyAdmin 2.x docs</a>
-        if your application has not been upgraded to EasyAdmin 3 yet.
-    </div>
-
 **Dashboards** are the entry point of backends and they link to one or more
 :doc:`resources </crud>`. Dashboards also display a main menu to navigate the
 resources and the information of the logged in user.
@@ -52,71 +41,168 @@ Dashboard Route
 Each dashboard uses a single Symfony route to serve all its URLs. The needed
 information is passed using query string parameters. If you generated the
 dashboard with the ``make:admin:dashboard`` command, the route is defined using
-`Symfony route annotations`_::
+`Symfony route annotations`_ or PHP attributes (if the project requires PHP 8 or newer):
 
-    namespace App\Controller\Admin;
+.. configuration-block::
 
-    use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
-    use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
-    use Symfony\Component\Routing\Annotation\Route;
+    .. code-block:: php-annotations
 
-    class DashboardController extends AbstractDashboardController
-    {
-        /**
-         * @Route("/admin")
-         */
-        public function index(): Response
+        // src/Controller/Admin/DashboardController.php
+        namespace App\Controller\Admin;
+
+        use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
+        use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+        use Symfony\Component\HttpFoundation\Response;
+        use Symfony\Component\Routing\Annotation\Route;
+
+        class DashboardController extends AbstractDashboardController
         {
-            return parent::index();
+            /**
+             * @Route("/admin")
+             */
+            public function index(): Response
+            {
+                return parent::index();
+            }
+
+            // ...
         }
 
-        // ...
-    }
+    .. code-block:: php-attributes
+
+        // src/Controller/Admin/DashboardController.php
+        namespace App\Controller\Admin;
+
+        use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
+        use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+        use Symfony\Component\HttpFoundation\Response;
+        use Symfony\Component\Routing\Annotation\Route;
+
+        class DashboardController extends AbstractDashboardController
+        {
+            #[Route('/admin')]
+            public function index(): Response
+            {
+                return parent::index();
+            }
+
+            // ...
+        }
 
 The ``/admin`` URL is only a default value, so you can change it. If you do that,
 don't forget to also update this value in your Symfony security config to
 :ref:`restrict access to the entire backend <security-entire-backend>`.
 
-There's no need to define a explicit name for this route. Symfony autogenerates
+There's no need to define an explicit name for this route. Symfony autogenerates
 a route name and EasyAdmin gets that value at runtime to generate all URLs.
-However, if you generate URLs pointing to the dashboard, you may want to define
-an explicit name for the route to simplify your code::
+However, if you generate URLs pointing to the dashboard in other parts of your
+application, you can define an explicit route name to simplify your code:
 
-    /**
-     * @Route("/admin", name="some_route_name")
-     */
-    public function index(): Response
-    {
-        return parent::index();
-    }
+.. configuration-block::
+
+    .. code-block:: php-annotations
+
+        // src/Controller/Admin/DashboardController.php
+        namespace App\Controller\Admin;
+
+        use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
+        use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+        use Symfony\Component\HttpFoundation\Response;
+        use Symfony\Component\Routing\Annotation\Route;
+
+        class DashboardController extends AbstractDashboardController
+        {
+            /**
+             * @Route("/admin", name="some_route_name")
+             */
+            public function index(): Response
+            {
+                return parent::index();
+            }
+
+            // ...
+        }
+
+    .. code-block:: php-attributes
+
+        // src/Controller/Admin/DashboardController.php
+        namespace App\Controller\Admin;
+
+        use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
+        use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+        use Symfony\Component\HttpFoundation\Response;
+        use Symfony\Component\Routing\Annotation\Route;
+
+        class DashboardController extends AbstractDashboardController
+        {
+            #[Route('/admin', name: 'some_route_name')]
+            public function index(): Response
+            {
+                return parent::index();
+            }
+
+            // ...
+        }
 
 If you don't use annotations, you must configure the dashboard route using YAML,
-XML or PHP config in a separate file. For example, when using YAML:
+XML or PHP config in a separate file:
 
-.. code-block:: yaml
+.. configuration-block::
 
-    # config/routes.yaml
-    dashboard:
-        path: /admin
-        controller: App\Controller\Admin\DashboardController::index
+    .. code-block:: yaml
 
-    # ...
+        # config/routes.yaml
+        dashboard:
+            path: /admin
+            controller: App\Controller\Admin\DashboardController::index
+
+        # ...
+
+    .. code-block:: xml
+
+        <!-- config/routes.xml -->
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <routes xmlns="http://symfony.com/schema/routing"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://symfony.com/schema/routing
+                https://symfony.com/schema/routing/routing-1.0.xsd">
+
+            <route id="dashboard" path="/admin"
+                   controller="App\Controller\Admin\DashboardController::index"/>
+
+            <!-- ... -->
+        </routes>
+
+    .. code-block:: php
+
+        // config/routes.php
+        use App\Controller\Admin\DashboardController;
+        use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
+
+        return function (RoutingConfigurator $routes) {
+            $routes->add('dashboard', '/admin')
+                ->controller([DashboardController::class, 'index'])
+            ;
+
+            // ...
+        };
+
 
 In practice you won't have to deal with this route or the query string
 parameters in your application because EasyAdmin provides a service to
-:ref:`generate CRUD URLs <crud-generate-urls>`.
+:ref:`generate admin URLs <generate-admin-urls>`.
 
 .. note::
 
-    Using a single route for all URLs means that generated URLs are a bit ugly.
-    In exchange, all the other features are much simpler, from generating URLs
-    to protecting the entire backend.
+    Using a single route to handle all backend URLs means that generated URLs
+    are a bit long and ugly. This is a reasonable trade-off because it makes
+    many other features, such as generating admin URLs, much simpler.
 
 Dashboard Configuration
 -----------------------
 
-The basic dashboard configuration is defined in the ``configureDashboard()``
-method (the main menu and the user menu are configured in their own methods, as
+The dashboard configuration is defined in the ``configureDashboard()`` method
+(the main menu and the user menu are configured in their own methods, as
 explained later)::
 
     namespace App\Controller\Admin;
@@ -153,6 +239,16 @@ explained later)::
                 // set this option if you prefer the sidebar (which contains the main menu)
                 // to be displayed as a narrow column instead of the default expanded design
                 ->renderSidebarMinimized()
+
+                // by default, all backend URLs include a signature hash. If a user changes any
+                // query parameter (to "hack" the backend) the signature won't match and EasyAdmin
+                // triggers an error. If this causes any issue in your backend, call this method
+                // to disable this feature and remove all URL signature checks
+                ->disableUrlSignatures()
+
+                // by default, all backend URLs are generated as absolute URLs. If you
+                // need to generate relative URLs instead, call this method
+                ->generateRelativeUrls()
             ;
         }
     }
@@ -215,6 +311,14 @@ All menu items define the following methods to configure some options:
 * ``setPermission(string $permission)``, sets the `Symfony security permission`_
   that the user must have to see this menu item. Read the :ref:`menu security reference <security-menu>`
   for more details.
+* ``setBadge($content, string $style='secondary')``, renders the given content
+  as a badge of the menu item. It's commonly used to show notification counts.
+  The first argument can be any value that can be converted to a string in a Twig
+  template (numbers, strings, *stringable* objects, etc.) The second argument is
+  one of the predefined Bootstrap styles (``primary``, ``secondary``, ``success``,
+  ``danger``, ``warning``, ``info``, ``light``, ``dark``) or an arbitrary string
+  content which is passed as the value of the ``style`` attribute of the HTML
+  element associated to the badge.
 
 The rest of options depend on each menu item type, as explained in the next sections.
 
@@ -255,8 +359,7 @@ entity associated to the CRUD controller::
 
             // uses custom sorting options for the listing
             MenuItem::linkToCrud('Categories', 'fa fa-tags', Category::class)
-                ->setQueryParameter('sortField', 'createdAt'),
-                ->setQueryParameter('sortDirection', 'DESC'),
+                ->setDefaultSort(['createdAt' => 'DESC']),
         ];
     }
 
@@ -280,7 +383,7 @@ have to specify the route name (it's found automatically)::
 Route Menu Item
 ...............
 
-It links to any of the Symfony application routes::
+It links to any of the routes defined by your Symfony application::
 
     use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 
@@ -288,28 +391,16 @@ It links to any of the Symfony application routes::
     {
         return [
             MenuItem::linkToRoute('The Label', 'fa ...', 'route_name'),
-            MenuItem::linkToRoute('The Label', 'fa ...', 'route_name', [ ... route parameters ... ]),
+            MenuItem::linkToRoute('The Label', 'fa ...', 'route_name', ['routeParamName' => 'routeParamValue']),
             // ...
         ];
     }
 
-When using route menu items, EasyAdmin adds the following route parameters
-automatically (in addition to the optional route parameters defined by you):
-
-* ``menuIndex`` and ``submenuIndex``: they are needed to keep the selected menu
-  item when rendering the page of your action (in case you display the main menu);
-* ``eaContext``: a random-looking alphanumeric string that identifies the
-  Dashboard controller related to this action (this string is generated using
-  the application kernel secret, so it cannot be guessed by malicious users).
-  This is needed to load the dashboard configuration used to render the backend
-  layout (in case your action uses it). If you don't add this parameter and try
-  to use EasyAdmin templates, you'll see errors such as
-  *"Variable "ea" does not exist."* (which is related to the :ref:`admin context <admin-context>`).
-
 .. note::
 
-    The path of your route probably doesn't include these parameters added by
-    EasyAdmin, but that's fine (you'll see them as query string parameters).
+    Read the section about
+    :ref:`integrating Symfony controllers/actions in EasyAdmin <actions-integrating-symfony>`
+    to fully understand the URLs generated by ``linkToRoute()``.
 
 URL Menu Item
 .............
@@ -327,9 +418,9 @@ It links to a relative or absolute URL::
         ];
     }
 
-To avoid leaking internal backend information to external websites, if the menu
-item links to an external URL and doesn't define its ``rel`` option, the
-``rel="noreferrer"`` attribute is added automatically.
+To avoid leaking internal backend information to external websites, EasyAdmin
+adds the ``rel="noopener"`` attribute to all URL menu items, except if the
+menu item defines its own ``rel`` option.
 
 Section Menu Item
 .................
@@ -536,8 +627,10 @@ service to get the context variable::
         // ...
     }
 
-In controllers, use the ``AdminContext`` type-hint in any argument where you
-want to inject the context object::
+In EasyAdmin's :doc:`CRUD controllers </crud>` and in
+:ref:`Symfony controllers integrated into EasyAdmin <actions-integrating-symfony>`,
+use the ``AdminContext`` type-hint in any argument where you want to inject the
+context object::
 
     use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -682,9 +775,32 @@ applications can rely on its default values:
 
                 // the 'name' HTML attribute of the <input> used for the password field (default: '_password')
                 'password_parameter' => 'my_custom_password_field',
+
+                // whether to enable or not the "forgot password?" link (default: false)
+                'forgot_password_enabled' => true,
+
+                // the path (i.e. a relative or absolute URL) to visit when clicking the "forgot password?" link (default: '#')
+                'forgot_password_path' => $this->generateUrl('...', ['...' => '...']),
+
+                // the label displayed for the "forgot password?" link (the |trans filter is applied to it)
+                'forgot_password_label' => 'Forgot your password?',
+
+                // whether to enable or not the "remember me" checkbox (default: false)
+                'remember_me_enabled' => true,
+
+                // remember me name form field (default: '_remember_me')
+                'remember_me_parameter' => 'custom_remember_me_param',
+
+                // whether to check by default the "remember me" checkbox (default: false)
+                'remember_me_checked' => true,
+
+                // the label displayed for the remember me checkbox (the |trans filter is applied to it)
+                'remember_me_label' => 'Remember me',
             ]);
         }
     }
+
+.. _content_page_template:
 
 Content Page Template
 ~~~~~~~~~~~~~~~~~~~~~
@@ -694,12 +810,42 @@ Twig Template Path: ``@EasyAdmin/page/content.html.twig``
 It displays a simple page similar to the index/detail/form pages, with the main
 header, the sidebar menu and the central content section. The only difference is
 that the content section is completely empty, so it's useful to display your own
-text contents, custom forms, etc.
+contents and custom forms, to :ref:`integrate Symfony actions inside EasyAdmin <actions-integrating-symfony>`,
+etc. Example:
+
+.. code-block:: twig
+
+    {# templates/admin/my-custom-page.html.twig #}
+    {% extends '@EasyAdmin/page/content.html.twig' %}
+
+    {% block content_title %}The Title of the Page{% endblock %}
+    {% block page_actions %}
+        <a class="btn btn-primary" href="...">Some Action</a>
+    {% endblock %}
+
+    {% block main %}
+        <table class="datagrid">
+            <thead>
+                <tr>
+                    <td>Some Column</td>
+                    <td>Another Column</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in my_own_data %}
+                    <tr>
+                        <td>{{ data.someColumn }}</td>
+                        <td>{{ data.anotherColumn }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endblock %}
 
 .. _`Symfony controllers`: https://symfony.com/doc/current/controller.html
 .. _`Symfony route annotations`: https://symfony.com/doc/current/routing.html#creating-routes-as-annotations
 .. _`context object`: https://wiki.c2.com/?ContextObject
-.. _`FontAwesome`: https://fontawesome.com/
+.. _`FontAwesome`: https://fontawesome.com/v5.15/icons?d=gallery&p=2&m=free
 .. _`allowed values for the "rel" attribute`: https://developer.mozilla.org/en-US/docs/Web/HTML/Link_types
 .. _`Symfony security permission`: https://symfony.com/doc/current/security.html#roles
 .. _`logout feature`: https://symfony.com/doc/current/security.html#logging-out

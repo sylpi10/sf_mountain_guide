@@ -93,7 +93,7 @@ class UrlPackage extends Package
     /**
      * Returns the base URL for a path.
      *
-     * @return string The base URL
+     * @return string
      */
     public function getBaseUrl(string $path)
     {
@@ -110,7 +110,7 @@ class UrlPackage extends Package
      * Override this method to change the default distribution strategy.
      * This method should always return the same base URL index for a given path.
      *
-     * @return int The base URL index for the given path
+     * @return int
      */
     protected function chooseBaseUrl(string $path)
     {
@@ -123,7 +123,7 @@ class UrlPackage extends Package
         foreach ($urls as $url) {
             if ('https://' === substr($url, 0, 8) || '//' === substr($url, 0, 2)) {
                 $sslUrls[] = $url;
-            } elseif (null === parse_url($url, PHP_URL_SCHEME)) {
+            } elseif (null === parse_url($url, \PHP_URL_SCHEME)) {
                 throw new InvalidArgumentException(sprintf('"%s" is not a valid URL.', $url));
             }
         }

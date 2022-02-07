@@ -17,9 +17,6 @@ use Symfony\Component\Cache\Adapter\PhpArrayAdapter;
 use Symfony\Component\Config\Resource\ClassExistenceResource;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 
-/**
- * @internal
- */
 abstract class AbstractPhpFileCacheWarmer implements CacheWarmerInterface
 {
     private $phpArrayFile;
@@ -52,7 +49,7 @@ abstract class AbstractPhpFileCacheWarmer implements CacheWarmerInterface
         spl_autoload_register([ClassExistenceResource::class, 'throwOnRequiredClass']);
         try {
             if (!$this->doWarmUp($cacheDir, $arrayAdapter)) {
-                return;
+                return [];
             }
         } finally {
             spl_autoload_unregister([ClassExistenceResource::class, 'throwOnRequiredClass']);

@@ -3,6 +3,7 @@
 namespace EasyCorp\Bundle\EasyAdminBundle\Factory;
 
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Option\EA;
 use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Menu\MenuItemInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -10,8 +11,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Dto\MainMenuDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\MenuItemDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\UserMenuDto;
 use EasyCorp\Bundle\EasyAdminBundle\Provider\AdminContextProvider;
-use EasyCorp\Bundle\EasyAdminBundle\Registry\DashboardControllerRegistry;
-use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlGenerator;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use EasyCorp\Bundle\EasyAdminBundle\Security\Permission;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -25,22 +25,20 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 final class MenuFactory
 {
     private $adminContextProvider;
-    private $dashboardRegistry;
     private $authChecker;
     private $translator;
     private $urlGenerator;
     private $logoutUrlGenerator;
-    private $crudUrlGenerator;
+    private $adminUrlGenerator;
 
-    public function __construct(AdminContextProvider $adminContextProvider, DashboardControllerRegistry $dashboardRegistry, AuthorizationCheckerInterface $authChecker, TranslatorInterface $translator, UrlGeneratorInterface $urlGenerator, LogoutUrlGenerator $logoutUrlGenerator, CrudUrlGenerator $crudRouter)
+    public function __construct(AdminContextProvider $adminContextProvider, AuthorizationCheckerInterface $authChecker, TranslatorInterface $translator, UrlGeneratorInterface $urlGenerator, LogoutUrlGenerator $logoutUrlGenerator, AdminUrlGenerator $adminUrlGenerator)
     {
         $this->adminContextProvider = $adminContextProvider;
-        $this->dashboardRegistry = $dashboardRegistry;
         $this->authChecker = $authChecker;
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
         $this->logoutUrlGenerator = $logoutUrlGenerator;
-        $this->crudUrlGenerator = $crudRouter;
+        $this->adminUrlGenerator = $adminUrlGenerator;
     }
 
     /**
@@ -69,9 +67,6 @@ final class MenuFactory
     {
         $adminContext = $this->adminContextProvider->getContext();
         $translationDomain = $adminContext->getI18n()->getTranslationDomain();
-        $dashboardRouteName = $adminContext->getDashboardRouteName();
-        $dashboardControllerFqcn = $adminContext->getDashboardControllerFqcn();
-        $adminContextId = $this->dashboardRegistry->getContextIdByControllerFqcn($dashboardControllerFqcn);
 
         $builtItems = [];
         /** @var MenuItemInterface $menuItem */
@@ -87,16 +82,16 @@ final class MenuFactory
                     continue;
                 }
 
-                $subItems[] = $this->buildMenuItem($menuSubItemDto, [], $i, $j, $translationDomain, $dashboardRouteName, $adminContextId);
+                $subItems[] = $this->buildMenuItem($menuSubItemDto, [], $i, $j, $translationDomain);
             }
 
-            $builtItems[] = $this->buildMenuItem($menuItemDto, $subItems, $i, -1, $translationDomain, $dashboardRouteName, $adminContextId);
+            $builtItems[] = $this->buildMenuItem($menuItemDto, $subItems, $i, -1, $translationDomain);
         }
 
         return $builtItems;
     }
 
-    private function buildMenuItem(MenuItemDto $menuItemDto, array $subItems, int $index, int $subIndex, string $translationDomain, string $dashboardRouteName, string $adminContextId): MenuItemDto
+    private function buildMenuItem(MenuItemDto $menuItemDto, array $subItems, int $index, int $subIndex, string $translationDomain): MenuItemDto
     {
         $uLabel = u($menuItemDto->getLabel());
         // labels with this prefix are considered internal and must be translated
@@ -108,7 +103,7 @@ final class MenuFactory
         $label = $uLabel->toString();
         $translatedLabel = empty($label) ? $label : $this->translator->trans($label, $menuItemDto->getTranslationParameters(), $translationDomain);
 
-        $url = $this->generateMenuItemUrl($menuItemDto, $dashboardRouteName, $adminContextId, $index, $subIndex);
+        $url = $this->generateMenuItemUrl($menuItemDto, $index, $subIndex);
 
         $menuItemDto->setIndex($index);
         $menuItemDto->setSubIndex($subIndex);
@@ -116,33 +111,40 @@ final class MenuFactory
         $menuItemDto->setLinkUrl($url);
         $menuItemDto->setSubItems($subItems);
 
+        // if menu item points to an absolute URL and no 'rel' attribute is defined,
+        // assign the 'rel="noopener"' attribute for performance and security reasons.
+        // see https://web.dev/external-anchors-use-rel-noopener/
+        if ('' === $menuItemDto->getLinkRel() && MenuItemDto::TYPE_URL === $menuItemDto->getType()) {
+            $menuItemDto->setLinkRel('noopener');
+        }
+
         return $menuItemDto;
     }
 
-    private function generateMenuItemUrl(MenuItemDto $menuItemDto, string $dashboardRouteName, string $adminContextId, int $index, int $subIndex): string
+    private function generateMenuItemUrl(MenuItemDto $menuItemDto, int $index, int $subIndex): string
     {
         $menuItemType = $menuItemDto->getType();
 
         if (MenuItemDto::TYPE_CRUD === $menuItemType) {
             $routeParameters = $menuItemDto->getRouteParameters();
 
-            // remove all existing query params to avoid keeping search queries, filters and pagination
-            $urlBuilder = $this->crudUrlGenerator->build()->unsetAll();
+            $this->adminUrlGenerator
+                // remove all existing query params to avoid keeping search queries, filters and pagination
+                ->unsetAll()
+                // add the index and subIndex query parameters to display the selected menu item
+                ->set(EA::MENU_INDEX, $index)->set(EA::SUBMENU_INDEX, $subIndex)
+                // set any other parameters defined by the menu item
+                ->setAll($routeParameters);
 
-            // add the index and subIndex query parameters to display the selected menu item
-            $urlBuilder->set('menuIndex', $index)->set('submenuIndex', $subIndex);
-
-            $urlBuilder->setAll($routeParameters);
-
-            $entityFqcn = $routeParameters['entityFqcn'] ?? null;
-            $crudControllerFqcn = $routeParameters['crudControllerFqcn'] ?? null;
+            $entityFqcn = $routeParameters[EA::ENTITY_FQCN] ?? null;
+            $crudControllerFqcn = $routeParameters[EA::CRUD_CONTROLLER_FQCN] ?? null;
             if (null === $entityFqcn && null === $crudControllerFqcn) {
                 throw new \RuntimeException(sprintf('The CRUD menu item with label "%s" must define either the entity FQCN (using the third constructor argument) or the CRUD Controller FQCN (using the "setController()" method).', $menuItemDto->getLabel()));
             }
 
             // 1. if CRUD controller is defined, use it...
             if (null !== $crudControllerFqcn) {
-                $urlBuilder->setController($crudControllerFqcn);
+                $this->adminUrlGenerator->setController($crudControllerFqcn);
             // 2. ...otherwise, find the CRUD controller from the entityFqcn
             } else {
                 $crudControllers = $this->adminContextProvider->getContext()->getCrudControllers();
@@ -150,22 +152,28 @@ final class MenuFactory
                     throw new \RuntimeException(sprintf('Unable to find the controller related to the "%s" Entity; did you forget to extend "%s"?', $entityFqcn, AbstractCrudController::class));
                 }
 
-                $urlBuilder->setController($controllerFqcn);
-                $urlBuilder->unset('entityFqcn');
+                $this->adminUrlGenerator->setController($controllerFqcn);
+                $this->adminUrlGenerator->unset(EA::ENTITY_FQCN);
             }
 
-            return $urlBuilder->generateUrl();
+            return $this->adminUrlGenerator->generateUrl();
         }
 
         if (MenuItemDto::TYPE_DASHBOARD === $menuItemType) {
-            return $this->urlGenerator->generate($dashboardRouteName, ['menuIndex' => $index, 'submenuIndex' => $subIndex]);
+            return $this->adminUrlGenerator
+                ->unsetAll()
+                ->set(EA::MENU_INDEX, $index)
+                ->set(EA::SUBMENU_INDEX, $subIndex)
+                ->generateUrl();
         }
 
         if (MenuItemDto::TYPE_ROUTE === $menuItemType) {
-            return $this->urlGenerator->generate($menuItemDto->getRouteName(), array_merge(
-                ['menuIndex' => $index, 'submenuIndex' => $subIndex, 'eaContext' => $adminContextId],
-                $menuItemDto->getRouteParameters()
-            ));
+            return $this->adminUrlGenerator
+                ->unsetAll()
+                ->setRoute($menuItemDto->getRouteName(), $menuItemDto->getRouteParameters())
+                ->set(EA::MENU_INDEX, $index)
+                ->set(EA::SUBMENU_INDEX, $subIndex)
+                ->generateUrl();
         }
 
         if (MenuItemDto::TYPE_SECTION === $menuItemType) {

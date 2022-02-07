@@ -7,6 +7,11 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Yaml\Yaml;
 
+/**
+ * @final
+ *
+ * @internal
+ */
 class RegisterMappingDriversPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
@@ -21,6 +26,7 @@ class RegisterMappingDriversPass implements CompilerPassInterface
 
         if (\class_exists(Yaml::class)) {
             $drivers[] = new Reference('vich_uploader.metadata_driver.yaml');
+            $drivers[] = new Reference('vich_uploader.metadata_driver.yml');
         }
 
         $container

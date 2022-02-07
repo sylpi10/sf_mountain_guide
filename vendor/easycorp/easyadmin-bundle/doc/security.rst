@@ -1,17 +1,6 @@
 Security
 ========
 
-.. raw:: html
-
-    <div class="box box--small box--warning">
-        <strong class="title">WARNING:</strong>
-
-        You are browsing the documentation for <strong>EasyAdmin 3.x</strong>,
-        which has just been released. Switch to
-        <a href="https://symfony.com/doc/2.x/bundles/EasyAdminBundle/index.html">EasyAdmin 2.x docs</a>
-        if your application has not been upgraded to EasyAdmin 3 yet.
-    </div>
-
 EasyAdmin relies on `Symfony Security`_ for everything related to security.
 That's why before restricting access to some parts of the backend, you need
 to properly setup security in your Symfony application:
@@ -80,6 +69,13 @@ user must have in order to see the menu item::
         ];
     }
 
+.. note::
+
+    This permission only shows/hides menu items. The actions associated to those
+    menu items are still executable, even if the user can't see the menu items.
+    Use the :ref:`actions permissions <security-permissions-actions>` to also
+    restrict the access to those actions.
+
 If your needs are more advanced, remember that the dashboard class is a regular
 Symfony controller, so you can use any service related to security to evaluate
 complex expressions. In those cases, it's more convenient to use the alternative
@@ -95,6 +91,8 @@ menu item definition to not have to deal with array merges::
 
         // ...
     }
+
+.. _security-permissions-actions:
 
 Restrict Access to Actions
 --------------------------

@@ -12,12 +12,13 @@
 namespace Symfony\Component\HttpClient\Internal;
 
 use Http\Client\Exception\NetworkException;
+use Http\Promise\Promise;
+use Psr\Http\Message\RequestInterface as Psr7RequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface as Psr7ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use Symfony\Component\HttpClient\Response\ResponseTrait;
+use Symfony\Component\HttpClient\Response\StreamableInterface;
 use Symfony\Component\HttpClient\Response\StreamWrapper;
-use Symfony\Component\HttpClient\Response\TraceableResponse;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -34,6 +35,9 @@ final class HttplugWaitLoop
     private $responseFactory;
     private $streamFactory;
 
+    /**
+     * @param \SplObjectStorage<ResponseInterface, array{Psr7RequestInterface, Promise}>|null $promisePool
+     */
     public function __construct(HttpClientInterface $client, ?\SplObjectStorage $promisePool, ResponseFactoryInterface $responseFactory, StreamFactoryInterface $streamFactory)
     {
         $this->client = $client;
@@ -48,7 +52,7 @@ final class HttplugWaitLoop
             return 0;
         }
 
-        $guzzleQueue = \GuzzleHttp\Promise\queue();
+        $guzzleQueue = \GuzzleHttp\Promise\Utils::queue();
 
         if (0.0 === $remainingDuration = $maxDuration) {
             $idleTimeout = 0.0;
@@ -120,7 +124,7 @@ final class HttplugWaitLoop
             }
         }
 
-        if ($response instanceof TraceableResponse || isset(class_uses($response)[ResponseTrait::class])) {
+        if ($response instanceof StreamableInterface) {
             $body = $this->streamFactory->createStreamFromResource($response->toStream(false));
         } elseif (!$buffer) {
             $body = $this->streamFactory->createStreamFromResource(StreamWrapper::createResource($response, $this->client));

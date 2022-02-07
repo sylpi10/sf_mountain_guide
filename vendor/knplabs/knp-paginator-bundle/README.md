@@ -2,7 +2,7 @@
 
 Friendly Symfony paginator to paginate everything
 
-[![Build Status](https://travis-ci.org/KnpLabs/KnpPaginatorBundle.svg?branch=master)](https://travis-ci.org/KnpLabs/KnpPaginatorBundle)
+[![Build Status](https://github.com/KnpLabs/KnpPaginatorBundle/workflows/Build/badge.svg)](https://github.com/KnpLabs/KnpPaginatorBundle/actions)
 
 Generally this bundle is based on [Knp Pager component][knp_component_pager]. This
 component introduces a different way of pagination handling. You can read more about the
@@ -122,9 +122,11 @@ return static function (ContainerConfigurator $configurator): void
 That could be used out of the box in `knp_paginator.template.pagination` key:
 
 * `@KnpPaginator/Pagination/sliding.html.twig` (by default)
+* `@KnpPaginator/Pagination/bootstrap_v5_pagination.html.twig`
 * `@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig`
 * `@KnpPaginator/Pagination/twitter_bootstrap_v3_pagination.html.twig`
 * `@KnpPaginator/Pagination/twitter_bootstrap_pagination.html.twig`
+* `@KnpPaginator/Pagination/foundation_v6_pagination.html.twig`
 * `@KnpPaginator/Pagination/foundation_v5_pagination.html.twig`
 * `@KnpPaginator/Pagination/bulma_pagination.html.twig`
 * `@KnpPaginator/Pagination/semantic_ui_pagination.html.twig`
@@ -136,11 +138,21 @@ That could be used out of the box in `knp_paginator.template.pagination` key:
 That could be used out of the box in `knp_paginator.template.sortable` key:
 
 * `@KnpPaginator/Pagination/sortable_link.html.twig` (by default)
+* `@KnpPaginator/Pagination/bootstrap_v5_bi_sortable_link.html.twig`
+* `@KnpPaginator/Pagination/bootstrap_v5_fa_sortable_link.html.twig`
+* `@KnpPaginator/Pagination/bootstrap_v5_md_sortable_link.html.twig`
 * `@KnpPaginator/Pagination/twitter_bootstrap_v3_sortable_link.html.twig`
 * `@KnpPaginator/Pagination/twitter_bootstrap_v4_font_awesome_sortable_link.html.twig`
 * `@KnpPaginator/Pagination/twitter_bootstrap_v4_material_design_icons_sortable_link.html.twig`
 * `@KnpPaginator/Pagination/semantic_ui_sortable_link.html.twig`
 * `@KnpPaginator/Pagination/uikit_v3_sortable.html.twig`
+
+#### Additional filtration templates
+That could be used out of the box in `knp_paginator.template.filtration` key:
+
+* `@KnpPaginator/Pagination/filtration.html.twig` (by default)
+* `@KnpPaginator/Pagination/bootstrap_v5_filtration.html.twig`
+* `@KnpPaginator/Pagination/twitter_bootstrap_v4_filtration.html.twig`
 
 ## Usage examples:
 

@@ -44,7 +44,7 @@ class MappingRule
      * If the rule matches, the form mapped by the rule is returned.
      * Otherwise this method returns false.
      *
-     * @return FormInterface|null The mapped form or null
+     * @return FormInterface|null
      */
     public function match(string $propertyPath)
     {
@@ -54,13 +54,13 @@ class MappingRule
     /**
      * Matches a property path against a prefix of the rule path.
      *
-     * @return bool Whether the property path is a prefix of the rule or not
+     * @return bool
      */
     public function isPrefix(string $propertyPath)
     {
         $length = \strlen($propertyPath);
         $prefix = substr($this->propertyPath, 0, $length);
-        $next = isset($this->propertyPath[$length]) ? $this->propertyPath[$length] : null;
+        $next = $this->propertyPath[$length] ?? null;
 
         return $prefix === $propertyPath && ('[' === $next || '.' === $next);
     }

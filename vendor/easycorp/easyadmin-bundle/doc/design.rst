@@ -1,20 +1,20 @@
 Design
 ======
 
-.. raw:: html
-
-    <div class="box box--small box--warning">
-        <strong class="title">WARNING:</strong>
-
-        You are browsing the documentation for <strong>EasyAdmin 3.x</strong>,
-        which has just been released. Switch to
-        <a href="https://symfony.com/doc/2.x/bundles/EasyAdminBundle/index.html">EasyAdmin 2.x docs</a>
-        if your application has not been upgraded to EasyAdmin 3 yet.
-    </div>
-
 The design of the backend is ready for any kind of application. It's been
-created with `Bootstrap 4`_, `Font Awesome icons`_ and some custom CSS and
+created with `Bootstrap 5`_, `Font Awesome icons`_ and some custom CSS and
 JavaScript code; all managed by `Webpack`_ via Symfony's `Webpack Encore`_.
+
+Like any other Symfony bundle, assets are copied to (or symlinked from) the
+``public/bundles/`` directory of your application when installing or updating
+the bundle. If this doesn't work for any reason, your backend won't display the
+proper CSS/JS styles. In those cases, run this command to install those assets
+manually:
+
+.. code-block:: terminal
+
+    # remove the --symlink option if your system doesn't support symbolic links
+    $ php bin/console assets:install --symlink
 
 Depending on your needs, there are several ways of customizing the design. Some
 of them require pure CSS/JavaScript code and others require overriding and/or
@@ -167,7 +167,7 @@ fields in the ``new`` and ``edit`` pages, which use Symfony forms.
 Form Field Templates
 ~~~~~~~~~~~~~~~~~~~~
 
-EasyAdmin provides a ready-to-use `form theme`_ based on Boostrap 4. Dashboards
+EasyAdmin provides a ready-to-use `form theme`_ based on Bootstrap 5. Dashboards
 and CRUD controllers define ``addFormTheme(string $themePath)`` and
 ``setFormThemes(array $themePaths)`` methods so you can
 `customize individual form fields`_ using your own form theme.
@@ -188,7 +188,10 @@ requires to know the `form fragment naming rules`_ defined by Symfony:
 .. code-block:: twig
 
     {# templates/admin/form.html.twig #}
-    {% block _product_custom_title_widget %}
+    {# note that the Twig block name starts with an uppercase letter
+       ('_Product_...' instead of '_product_...') because the first part
+       of the block name is the unmodified entity name #}
+    {% block _Product_custom_title_widget %}
         {# ... #}
         <a href="...">More information</a>
     {% endblock %}
@@ -216,6 +219,13 @@ Finally, add this custom theme to the list of themes used to render backend form
         }
     }
 
+.. note::
+
+    You can also override the form widget by using the original field name.
+    In the example above it would look like this:
+    ``{% block _Product_title_widget %}``. The full syntax is:
+    ``{% block _<Entity name>_<Field name>_widget %}``.
+
 Adding Custom Web Assets
 ------------------------
 
@@ -235,11 +245,18 @@ the :doc:`CRUD controllers </crud>` to add your own CSS and JavaScript files::
         public function configureAssets(Assets $assets): Assets
         {
             return $assets
-                // the argument of these methods is passed to the asset() Twig function
-                // CSS assets are added just before the closing </head> element
-                // and JS assets are added just before the closing </body> element
+                // adds the CSS and JS assets associated to the given Webpack Encore entry
+                // it's equivalent to adding these inside the <head> element:
+                // {{ encore_entry_link_tags('...') }} and {{ encore_entry_script_tags('...') }}
+                ->addWebpackEncoreEntry('admin-app')
+
+                // it's equivalent to adding this inside the <head> element:
+                // <link rel="stylesheet" href="{{ asset('...') }}">
                 ->addCssFile('build/admin.css')
                 ->addCssFile('https://example.org/css/admin2.css')
+
+                // it's equivalent to adding this inside the <head> element:
+                // <script src="{{ asset('...'') }}"></script>
                 ->addJsFile('build/admin.js')
                 ->addJsFile('https://example.org/js/admin2.js')
 
@@ -251,6 +268,30 @@ the :doc:`CRUD controllers </crud>` to add your own CSS and JavaScript files::
             ;
         }
     }
+
+.. versionadded:: 3.3
+
+    JavaScript files and JavaScript Webpack Encore entries are included in the
+    ``<head>`` element of the page. In previous EasyAdmin versions they were
+    included at the bottom of the ``<body>`` element.
+
+If you need to customize the HTML attributes or other features of the ``<link>``
+and ``<script>`` tags, pass an ``Asset`` object to the ``addCssFile()``,
+``addJsFile()`` and ``addWebpackEncoreEntry()`` methods::
+
+    use EasyCorp\Bundle\EasyAdminBundle\Config\Asset;
+    // ...
+
+    return $assets
+        ->addCssFile(Asset::new('build/admin.css')->preload()->nopush())
+        ->addCssFile(Asset::new('build/admin-print.css')->htmlAttr('media', 'print'))
+
+        ->addJsFile(Asset::new('build/admin.js')->defer())
+        ->addJsFile(Asset::new('build/admin.js')->preload())
+        ->addJsFile(Asset::new('build/admin.js')->htmlAttr('referrerpolicy', 'strict-origin'))
+
+        ->addWebpackEncoreEntry(Asset::new('admin-app')->webpackEntrypointName('...'))
+    ;
 
 .. tip::
 
@@ -268,8 +309,8 @@ Customizing the Backend Design
 
 The design of the backend is created with lots of CSS variables. This makes it
 easier to customize it to your own needs. You'll find all variables in the
-``assets/css/easyadmin-theme/variables.scss`` file. To override any of them,
-create a CSS file and redefine the variable values:
+``vendor/easycorp/easyadmin-bundle/assets/css/easyadmin-theme/variables-theme.scss`` file.
+To override any of them, create a CSS file and redefine the variable values:
 
 .. code-block:: text
 
@@ -288,7 +329,6 @@ create a CSS file and redefine the variable values:
 Then, load this CSS file in your dashboard and/or resource admin::
 
     use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
-    use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
     use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 
     class DashboardController extends AbstractDashboardController
@@ -305,8 +345,8 @@ Then, load this CSS file in your dashboard and/or resource admin::
 
     Because of how Bootstrap styles are defined, it's not possible to use CSS
     variables to override every style. Sometimes you may need to also override
-    the value of some `Sass`_ variables (which are also defined in the same
-    ``assets/css/easyadmin-theme/variables.scss`` file).
+    the value of some `Sass`_ variables (which are defined in the 
+    ``assets/css/easyadmin-theme/variables-bootstrap.scss`` file).
 
 CSS Selectors
 ~~~~~~~~~~~~~
@@ -332,10 +372,10 @@ CSS classes at the same time:
 ==========  ============================================
 Page        ``<body>`` CSS class
 ==========  ============================================
-``detail``  ``ea detail detail-<entity_name>``
-``edit``    ``ea edit edit-<entity_name>``
-``index``   ``ea index index-<entity_name>``
-``new``     ``ea new new-<entity_name>``
+``detail``  ``ea-detail ea-detail-<entity_name>``
+``edit``    ``ea-edit ea-edit-<entity_name>``
+``index``   ``ea-index ea-index-<entity_name>``
+``new``     ``ea-new ea-new-<entity_name>``
 ==========  ============================================
 
 If you are displaying for example the listing of ``User`` entity elements, the
@@ -355,7 +395,7 @@ directory. The only caveat is that EasyAdmin doesn't use Webpack Encore yet when
 loading the assets, so you can't use features like versioning. This will be
 fixed in future versions.
 
-.. _`Bootstrap 4`: https://github.com/twbs/bootstrap
+.. _`Bootstrap 5`: https://github.com/twbs/bootstrap
 .. _`Sass`: https://sass-lang.com/
 .. _`Font Awesome icons`: https://github.com/FortAwesome/Font-Awesome
 .. _`Webpack`: https://webpack.js.org/

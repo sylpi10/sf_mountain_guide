@@ -12,6 +12,9 @@ use Vich\UploaderBundle\Naming\NamerInterface;
  * PropertyMapping.
  *
  * @author Dustin Dobervich <ddobervich@gmail.com>
+ * @final
+ *
+ * @internal
  */
 class PropertyMapping
 {
@@ -279,6 +282,8 @@ class PropertyMapping
 
     /**
      * Sets the configured configuration mapping name.
+     *
+     * @param string $mappingName
      */
     public function setMappingName($mappingName): void
     {
@@ -296,7 +301,7 @@ class PropertyMapping
     {
         if (!$this->hasNamer()) {
             $msg = 'Not using a namer is deprecated and will be removed in version 2.';
-            @\trigger_error($msg, E_USER_DEPRECATED);
+            @\trigger_error($msg, \E_USER_DEPRECATED);
 
             return $this->getFile($obj)->getClientOriginalName();
         }

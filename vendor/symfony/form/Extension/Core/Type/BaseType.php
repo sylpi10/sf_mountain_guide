@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\Form\Extension\Core\Type;
 
+use Symfony\Component\Form\AbstractRendererEngine;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -106,13 +107,14 @@ abstract class BaseType extends AbstractType
             'translation_domain' => $translationDomain,
             'label_translation_parameters' => $labelTranslationParameters,
             'attr_translation_parameters' => $attrTranslationParameters,
+            'priority' => $options['priority'],
             // Using the block name here speeds up performance in collection
             // forms, where each entry has the same full block name.
             // Including the type is important too, because if rows of a
             // collection form have different types (dynamically), they should
             // be rendered differently.
             // https://github.com/symfony/symfony/issues/5038
-            'cache_key' => $uniqueBlockPrefix.'_'.$form->getConfig()->getType()->getBlockPrefix(),
+            AbstractRendererEngine::CACHE_KEY_VAR => $uniqueBlockPrefix.'_'.$form->getConfig()->getType()->getBlockPrefix(),
         ]);
     }
 
@@ -134,11 +136,15 @@ abstract class BaseType extends AbstractType
             'attr' => [],
             'translation_domain' => null,
             'auto_initialize' => true,
+            'priority' => 0,
         ]);
 
         $resolver->setAllowedTypes('block_prefix', ['null', 'string']);
         $resolver->setAllowedTypes('attr', 'array');
         $resolver->setAllowedTypes('row_attr', 'array');
         $resolver->setAllowedTypes('label_html', 'bool');
+        $resolver->setAllowedTypes('priority', 'int');
+
+        $resolver->setInfo('priority', 'The form rendering priority (higher priorities will be rendered first)');
     }
 }

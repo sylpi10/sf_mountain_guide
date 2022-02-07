@@ -1,17 +1,6 @@
 CRUD Controllers
 ================
 
-.. raw:: html
-
-    <div class="box box--small box--warning">
-        <strong class="title">WARNING:</strong>
-
-        You are browsing the documentation for <strong>EasyAdmin 3.x</strong>,
-        which has just been released. Switch to
-        <a href="https://symfony.com/doc/2.x/bundles/EasyAdminBundle/index.html">EasyAdmin 2.x docs</a>
-        if your application has not been upgraded to EasyAdmin 3 yet.
-    </div>
-
 **CRUD controllers** provide the CRUD operations (create, show, update, delete)
 for Doctrine ORM entities. Each CRUD controller can be associated to one or more
 dashboards.
@@ -137,12 +126,12 @@ Entity Options
             ->setEntityLabelInPlural('Products')
 
             // in addition to a string, the argument of the singular and plural label methods
-            // can be a closure that receives both the current entity instance (which will
-            // be null in 'index' and 'new' pages) and the page name
+            // can be a closure that defines two nullable arguments: entityInstance (which will
+            // be null in 'index' and 'new' pages) and the current page name
             ->setEntityLabelInSingular(
-                fn (?Product $product, string $pageName) => $product ? $product->toString() : 'Product'
+                fn (?Product $product, ?string $pageName) => $product ? $product->toString() : 'Product'
             )
-            ->setEntityLabelInPlural(function (?Category $category, string $pageName) {
+            ->setEntityLabelInPlural(function (?Category $category, ?string $pageName) {
                 return 'edit' === $pageName ? $category->getLabel() : 'Categories';
             })
 
@@ -167,7 +156,10 @@ You can override the default page titles with the following methods::
     {
         return $crud
             // the visible title at the top of the page and the content of the <title> element
-            // it can include these placeholders: %entity_id%, %entity_label_singular%, %entity_label_plural%
+            // it can include these placeholders:
+            //   %entity_name%, %entity_as_string%,
+            //   %entity_id%, %entity_short_id%
+            //   %entity_label_singular%, %entity_label_plural%
             ->setPageTitle('index', '%entity_label_plural% listing')
 
             // you can pass a PHP closure as the value of the title
@@ -175,7 +167,7 @@ You can override the default page titles with the following methods::
 
             // in DETAIL and EDIT pages, the closure receives the current entity
             // as the first argument
-            ->setPageTitle('detail', function(Product $product) => (string) $product)
+            ->setPageTitle('detail', fn (Product $product) => (string) $product)
             ->setPageTitle('edit', fn (Category $category) => sprintf('Editing <b>%s</b>', $category->getName()))
 
             // the help message displayed to end users (it can contain HTML tags)
@@ -193,7 +185,7 @@ Date, Time and Number Formatting Options
         return $crud
             // the argument must be either one of these strings: 'short', 'medium', 'long', 'full', 'none'
             // (the strings are also available as \EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField::FORMAT_* constants)
-            // or a valid ICU Datetime Pattern (see http://userguide.icu-project.org/formatparse/datetime)
+            // or a valid ICU Datetime Pattern (see https://unicode-org.github.io/icu/userguide/format_parse/datetime/)
             ->setDateFormat('...')
             ->setTimeFormat('...')
 
@@ -203,13 +195,18 @@ Date, Time and Number Formatting Options
             ->setDateIntervalFormat('%%y Year(s) %%m Month(s) %%d Day(s)')
             ->setTimezone('...')
 
-            // used to format numbers before rendering them on templates
+            // this option makes numeric values to be rendered with a sprintf()
+            // call using this value as the first argument.
+            // this option overrides any formatting option for all numeric values
+            // (e.g. setNumDecimals(), setRoundingMode(), etc. are ignored)
+            // NumberField and IntegerField can override this value with their
+            // own setNumberFormat() methods, which works in the same way
             ->setNumberFormat('%.2d');
         ;
     }
 
-Search and Pagination Options
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Search, Order, and Pagination Options
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -220,7 +217,7 @@ Search and Pagination Options
             // (by default it looks for in all properties)
             ->setSearchFields(['name', 'description'])
             // use dots (e.g. 'seller.email') to search in Doctrine associations
-            ->setSearchFields(['name', 'description', 'seller.email', 'seller.phone'])
+            ->setSearchFields(['name', 'description', 'seller.email', 'seller.address.zipCode'])
             // set it to null to disable and hide the search box
             ->setSearchFields(null)
 
@@ -228,9 +225,17 @@ Search and Pagination Options
             // (user can later change this sorting by clicking on the table columns)
             ->setDefaultSort(['id' => 'DESC'])
             ->setDefaultSort(['id' => 'DESC', 'title' => 'ASC', 'startsAt' => 'DESC'])
+            // you can sort by Doctrine associations up to two levels
+            ->setDefaultSort(['seller.name' => 'ASC'])
 
             // the max number of entities to display per page
             ->setPaginatorPageSize(30)
+            // the number of pages to display on each side of the current page
+            // e.g. if num pages = 35, current page = 7 and you set ->setPaginatorRangeSize(4)
+            // the paginator displays: [Previous]  1 ... 3  4  5  6  [7]  8  9  10  11 ... 35  [Next]
+            // set this number to 0 to display a simple "< Previous | Next >" pager
+            ->setPaginatorRangeSize(4)
+
             // these are advanced options related to Doctrine Pagination
             // (see https://www.doctrine-project.org/projects/doctrine-orm/en/2.7/tutorials/pagination.html)
             ->setPaginatorUseOutputWalkers(true)
@@ -262,13 +267,13 @@ Templates and Form Options
             // this method allows to use your own template to render a certain part
             // of the backend instead of using EasyAdmin default template
             // the first argument is the "template name", which is the same as the
-            // Twig path but without the `@EasyAdmin/` prefix
+            // Twig path but without the `@EasyAdmin/` prefix and the `.html.twig` suffix
             ->overrideTemplate('crud/field/id', 'admin/fields/my_id.html.twig')
 
             // the theme/themes to use when rendering the forms of this entity
             // (in addition to EasyAdmin default theme)
             ->addFormTheme('foo.html.twig')
-            // this method overrides all existing the form themes (including the
+            // this method overrides all existing form themes (including the
             // default EasyAdmin form theme)
             ->setFormThemes(['my_theme.html.twig', 'admin.html.twig'])
 
@@ -286,6 +291,33 @@ Templates and Form Options
                 ['validation_groups' => ['Default'], '...' => '...'],
             );
         ;
+    }
+
+Custom Redirect After Creating or Editing Entities
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+By default, when clicking on "Save" button when creating or editing entities
+you are redirected to the previous page. If you want to change this behavior,
+override the ``getRedirectResponseAfterSave()`` method.
+
+For example, if you've added a :ref:`custom action <actions-custom>` called
+"Save and view detail", you may prefer to redirect to the detail page after
+saving the changes::
+
+    protected function getRedirectResponseAfterSave(AdminContext $context, string $action): RedirectResponse
+    {
+        $submitButtonName = $context->getRequest()->request->all()['ea']['newForm']['btn'];
+
+        if ('saveAndViewDetail' === $submitButtonName) {
+            $url = $this->get(AdminUrlGenerator::class)
+                ->setAction(Action::DETAIL)
+                ->setEntityId($context->getEntity()->getPrimaryKeyValue())
+                ->generateUrl();
+
+            return $this->redirect($url);
+        }
+
+        return parent::getRedirectResponseAfterSave($context, $action);
     }
 
 Same Configuration in Different CRUD Controllers
@@ -412,6 +444,7 @@ own controller to add/remove/change those template variables::
 
     use App\Entity\Product;
     use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+    use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
     use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
     class ProductCrudController extends AbstractCrudController
@@ -438,55 +471,102 @@ need. The only mandatory parameter is either ``templateName`` or
 ``templatePath`` to set respectively the name or path of the template to render
 as the result of the CRUD action.
 
-.. _crud-generate-urls:
+Template Names and Template Paths
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Generating CRUD URLs
---------------------
+All the templates used by EasyAdmin to render its contents are configurable.
+That's why EasyAdmin deals with "template names" instead of normal Twig
+template paths.
+
+A template name is the same as the template path but without the ``@EasyAdmin``
+prefix and the ``.html.twig`` suffix. For example, ``@EasyAdmin/layout.html.twig``
+refers to the built-in layout template provided by EasyAdmin. However, ``layout``
+refers to "whichever template is configured as the layout in the application".
+
+Working with template names instead of paths gives you full flexibility to
+customize the application behavior while keeping all the customized templates.
+In Twig templates, use the ``ea.templatePath()`` function to get the Twig path
+associated to the given template name:
+
+.. code-block:: twig
+
+    <div id="flash-messages">
+        {{ include(ea.templatePath('flash_messages')) }}
+    </div>
+
+    {% if some_value is null %}
+        {{ include(ea.templatePath('label/null')) }}
+    {% endif %}
+
+.. _crud-generate-urls:
+.. _generate-admin-urls:
+
+Generating Admin URLs
+---------------------
+
+.. versionadded:: 3.2
+
+    The ``AdminUrlGenerator`` class was introduced in EasyAdmin 3.2.0. In earlier
+    versions, you had to use the ``CrudUrlGenerator`` class and call the
+    ``build()`` method to start building a URL.
 
 :ref:`As explained <dashboard-route>` in the article about Dashboards, all URLs
 of a given dashboard use the same route and they only differ in the query string
-parameters. Instead of having to deal with that, you can use the ``CrudUrlGenerator``
-service to generate URLs in your PHP code::
+parameters. Instead of having to deal with that, you can use the ``AdminUrlGenerator``
+service to generate URLs in your PHP code.
+
+When generating a URL, you don't start from scratch. EasyAdmin reuses all the
+query parameters existing in the current request. This is done on purpose because
+generating new URLs based on the current URL is the most common scenario. Use
+the ``unsetAll()`` method to remove all existing query parameters::
 
     namespace App\Controller\Admin;
 
     use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-    use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlGenerator;
+    use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 
     class SomeCrudController extends AbstractCrudController
     {
+        private $adminUrlGenerator;
+
+        public function __construct(AdminUrlGenerator $adminUrlGenerator)
+        {
+            $this->adminUrlGenerator = $adminUrlGenerator;
+        }
+
         // ...
 
         public function someMethod()
         {
-            // new URLs are generated starting from the current URL, but you can add,
-            // change or remove parameters from the current URL with the given methods
+            // instead of injecting the AdminUrlGenerator service in the constructor,
+            // you can also get it from inside a controller action as follows:
+            // $adminUrlGenerator = $this->get(AdminUrlGenerator::class);
 
-            // if you prefer, you can inject the CrudUrlGenerator service in the
-            // constructor and/or action of this controller
-            $crudUrlGenerator = $this->get(CrudUrlGenerator::class);
-
-            // the constructor argument is the new value of the given query parameters
-            // the rest of existing query parameters are maintained, so you only
+            // the existing query parameters are maintained, so you only
             // have to pass the values you want to change.
-            $url = $crudUrlGenerator->build(['page' => 2])->generateUrl();
-
-            // this other syntax is also possible
-            $url = $crudUrlGenerator->build()->set('page', 2)->generateUrl();
+            $url = $this->adminUrlGenerator->set('page', 2)->generateUrl();
 
             // you can remove existing parameters
-            $url = $crudUrlGenerator->build()->unset('menuIndex')->generateUrl();
-            $url = $crudUrlGenerator->build()->unsetAll()->set('foo', 'someValue')->generateUrl();
+            $url = $this->adminUrlGenerator->unset('menuIndex')->generateUrl();
+            $url = $this->adminUrlGenerator->unsetAll()->set('foo', 'someValue')->generateUrl();
 
             // the URL builder provides shortcuts for the most common parameters
-            $url = $crudUrlGenerator->build()
-                ->setController(SomeController::class)
+            $url = $this->adminUrlGenerator
+                ->setController(SomeCrudController::class)
                 ->setAction('theActionName')
                 ->generateUrl();
 
             // ...
         }
     }
+
+.. tip::
+
+    If you need to deal with the admin URLs manually for any reason, the names
+    of the query string parameters are defined as constants in the
+    :class:`EasyCorp\\Bundle\\EasyAdminBundle\\Config\\Option\\EA` class.
+
+.. _ea-url-function:
 
 The exact same features are available in templates thanks to the ``ea_url()``
 Twig function. In templates you can omit the call to the ``generateUrl()``
@@ -501,55 +581,55 @@ method (it will be called automatically for you):
     {% set url = ea_url().set('page', 2) %}
 
     {% set url = ea_url()
-        .setController('App\\Controller\\Admin\\SomeController')
+        .setController('App\\Controller\\Admin\\SomeCrudController')
         .setAction('theActionName') %}
 
 Generating CRUD URLs from outside EasyAdmin
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-When generating URLs to EasyAdmin pages from outside EasyAdmin (e.g. a regular
-Symfony controller) the :ref:`admin context variable <admin-context>` is not
-available. That's why you must always set the CRUD controller the URL is
-associated to. If you have more than one dashboard, you must also set the Dashboard::
+When generating URLs of EasyAdmin pages from outside EasyAdmin (e.g. from a
+regular Symfony controller) the :ref:`admin context variable <admin-context>`
+is not available. That's why you must always set the CRUD controller associated
+to the URL. If you have more than one dashboard, you must also set the Dashboard::
 
     use App\Controller\Admin\DashboardController;
     use App\Controller\Admin\ProductCrudController;
     use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
-    use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlGenerator;
+    use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
     class SomeSymfonyController extends AbstractController
     {
-        private $crudUrlGenerator;
+        private $adminUrlGenerator;
 
-        public function __construct(CrudUrlGenerator $crudUrlGenerator)
+        public function __construct(AdminUrlGenerator $adminUrlGenerator)
         {
-            $this->crudUrlGenerator = $crudUrlGenerator;
+            $this->adminUrlGenerator = $adminUrlGenerator;
         }
 
         public function someMethod()
         {
             // if your application only contains one Dashboard, it's enough
             // to define the controller related to this URL
-            $url = $this->crudUrlGenerator
-                ->build()
+            $url = $this->adminUrlGenerator
                 ->setController(ProductCrudController::class)
-                ->setAction(Action::INDEX);
+                ->setAction(Action::INDEX)
+                ->generateUrl();
 
             // in applications containing more than one Dashboard, you must also
             // define the Dashboard associated to the URL
-            $url = $this->crudUrlGenerator
-                ->build()
+            $url = $this->adminUrlGenerator
                 ->setDashboard(DashboardController::class)
                 ->setController(ProductCrudController::class)
-                ->setAction(Action::INDEX);
+                ->setAction(Action::INDEX)
+                ->generateUrl();
 
             // some actions may require to pass additional parameters
-            $url = $this->crudUrlGenerator
-                ->build()
+            $url = $this->adminUrlGenerator
                 ->setController(ProductCrudController::class)
                 ->setAction(Action::EDIT)
-                ->setEntityId($product->getId());
+                ->setEntityId($product->getId())
+                ->generateUrl();
 
             // ...
         }

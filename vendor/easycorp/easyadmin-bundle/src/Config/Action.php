@@ -10,6 +10,7 @@ use function Symfony\Component\String\u;
  */
 final class Action
 {
+    public const BATCH_DELETE = 'batchDelete';
     public const DELETE = 'delete';
     public const DETAIL = 'detail';
     public const EDIT = 'edit';
@@ -42,13 +43,13 @@ final class Action
 
     /**
      * @param string|false|null $label Use FALSE to hide the label; use NULL to autogenerate it
+     * @param string|null       $icon  The full CSS classes of the FontAwesome icon to render (see https://fontawesome.com/v5.15/icons?d=gallery&p=2&m=free)
      */
     public static function new(string $name, $label = null, ?string $icon = null): self
     {
         $dto = new ActionDto();
         $dto->setType(self::TYPE_ENTITY);
         $dto->setName($name);
-        $dto->setCssClass('action-'.$name);
         $dto->setLabel($label ?? self::humanizeString($name));
         $dto->setIcon($icon);
         $dto->setHtmlElement('a');
@@ -89,6 +90,11 @@ final class Action
         return $this;
     }
 
+    /**
+     * If you set your own CSS classes, the default CSS classes are not applied.
+     * You may want to also add the 'btn' (and 'btn-primary', etc.) classes to make
+     * your action look like a button.
+     */
     public function setCssClass(string $cssClass): self
     {
         $this->dto->setCssClass($cssClass);
@@ -96,6 +102,11 @@ final class Action
         return $this;
     }
 
+    /**
+     * If you add a custom CSS class, the default CSS classes are not applied.
+     * You may want to also add the 'btn' (and 'btn-primary', etc.) classes to make
+     * your action look like a button.
+     */
     public function addCssClass(string $cssClass): self
     {
         $this->dto->setCssClass(trim($this->dto->getCssClass().' '.$cssClass));
@@ -209,6 +220,7 @@ final class Action
             ->replaceMatches('/[_\s]+/', ' ')
             ->trim()
             ->lower()
-            ->title(true);
+            ->title(true)
+            ->toString();
     }
 }

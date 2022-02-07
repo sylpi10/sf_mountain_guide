@@ -34,11 +34,11 @@ final class CollectionConfigurator implements FieldConfiguratorInterface
 
         $autocompletableFormTypes = [CountryType::class, CurrencyType::class, LanguageType::class, LocaleType::class, TimezoneType::class];
         if (\in_array($entryTypeFqcn, $autocompletableFormTypes, true)) {
-            $field->setFormTypeOption('entry_options.attr.data-widget', 'select2');
+            $field->setFormTypeOption('entry_options.attr.data-ea-widget', 'ea-autocomplete');
         }
 
-        $field->setFormTypeOption('allow_add', $field->getCustomOptions()->get(CollectionField::OPTION_ALLOW_ADD));
-        $field->setFormTypeOption('allow_delete', $field->getCustomOptions()->get(CollectionField::OPTION_ALLOW_DELETE));
+        $field->setFormTypeOptionIfNotSet('allow_add', $field->getCustomOptions()->get(CollectionField::OPTION_ALLOW_ADD));
+        $field->setFormTypeOptionIfNotSet('allow_delete', $field->getCustomOptions()->get(CollectionField::OPTION_ALLOW_DELETE));
         $field->setFormTypeOptionIfNotSet('by_reference', false);
         $field->setFormTypeOptionIfNotSet('delete_empty', true);
 
@@ -69,7 +69,7 @@ final class CollectionConfigurator implements FieldConfiguratorInterface
 
         $collectionItemsAsText = [];
         foreach ($field->getValue() ?? [] as $item) {
-            if (!\is_string($item) && !method_exists($item, '__toString')) {
+            if (!\is_string($item) && !(\is_object($item) && method_exists($item, '__toString'))) {
                 return $this->countNumElements($field->getValue());
             }
 
@@ -78,7 +78,7 @@ final class CollectionConfigurator implements FieldConfiguratorInterface
 
         $isDetailAction = Action::DETAIL === $context->getCrud()->getCurrentAction();
 
-        return u(', ')->join($collectionItemsAsText)->truncate($isDetailAction ? 512 : 32, '…');
+        return u(', ')->join($collectionItemsAsText)->truncate($isDetailAction ? 512 : 32, '…')->toString();
     }
 
     private function countNumElements($collection): int

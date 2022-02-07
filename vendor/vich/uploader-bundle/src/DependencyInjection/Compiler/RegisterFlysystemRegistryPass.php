@@ -10,6 +10,8 @@ use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @author Titouan Galopin <galopintitouan@gmail.com>
+ *
+ * @internal
  */
 final class RegisterFlysystemRegistryPass implements CompilerPassInterface
 {
@@ -22,8 +24,18 @@ final class RegisterFlysystemRegistryPass implements CompilerPassInterface
         $storageDefinition = $container->getDefinition('vich_uploader.storage.flysystem');
 
         // OneupFlysystemBundle
-        if ($container->hasDefinition('oneup_flysystem.mount_manager')) {
-            $storageDefinition->replaceArgument(1, new Reference('oneup_flysystem.mount_manager'));
+        if ($container->hasDefinition('oneup_flysystem.filesystem')) {
+            $registry = [];
+            foreach ($container->findTaggedServiceIds('oneup_flysystem.filesystem') as $serviceId => $tags) {
+                foreach ($tags as $tag) {
+                    if (isset($tag['mount'])) {
+                        $service = 'oneup_flysystem.'.$tag['mount'].'_filesystem';
+                        $registry[$service] = new Reference($service);
+                    }
+                }
+            }
+
+            $storageDefinition->replaceArgument(1, ServiceLocatorTagPass::register($container, $registry));
 
             return;
         }

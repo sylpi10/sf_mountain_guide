@@ -21,6 +21,7 @@ use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\PasswordHasher\Command\UserPasswordHashCommand;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Encoder\SelfSaltingEncoderInterface;
 
@@ -30,10 +31,13 @@ use Symfony\Component\Security\Core\Encoder\SelfSaltingEncoderInterface;
  * @author Sarah Khalil <mkhalil.sarah@gmail.com>
  *
  * @final
+ *
+ * @deprecated since Symfony 5.3, use {@link UserPasswordHashCommand} instead
  */
 class UserPasswordEncoderCommand extends Command
 {
     protected static $defaultName = 'security:encode-password';
+    protected static $defaultDescription = 'Encode a password';
 
     private $encoderFactory;
     private $userClasses;
@@ -52,7 +56,7 @@ class UserPasswordEncoderCommand extends Command
     protected function configure()
     {
         $this
-            ->setDescription('Encodes a password')
+            ->setDescription(self::$defaultDescription)
             ->addArgument('password', InputArgument::OPTIONAL, 'The plain password to encode.')
             ->addArgument('user-class', InputArgument::OPTIONAL, 'The User entity class path associated with the encoder used to encode the password.')
             ->addOption('empty-salt', null, InputOption::VALUE_NONE, 'Do not generate a salt or let the encoder generate one.')
@@ -69,7 +73,7 @@ Suppose that you have the following security configuration in your application:
 # app/config/security.yml
 security:
     encoders:
-        Symfony\Component\Security\Core\User\User: plaintext
+        Symfony\Component\Security\Core\User\InMemoryUser: plaintext
         App\Entity\User: auto
 </comment>
 
@@ -106,6 +110,8 @@ EOF
         $io = new SymfonyStyle($input, $output);
         $errorIo = $output instanceof ConsoleOutputInterface ? new SymfonyStyle($input, $output->getErrorOutput()) : $io;
 
+        $errorIo->caution('The use of the "security:encode-password" command is deprecated since version 5.3 and will be removed in 6.0. Use "security:hash-password" instead.');
+
         $input->isInteractive() ? $errorIo->title('Symfony Password Encoder Utility') : $errorIo->newLine();
 
         $password = $input->getArgument('password');
@@ -134,7 +140,7 @@ EOF
         if ($input->isInteractive() && !$emptySalt) {
             $emptySalt = true;
 
-            $errorIo->note('The command will take care of generating a salt for you. Be aware that some encoders advise to let them generate their own salt. If you\'re using one of those encoders, please answer \'no\' to the question below. '.PHP_EOL.'Provide the \'empty-salt\' option in order to let the encoder handle the generation itself.');
+            $errorIo->note('The command will take care of generating a salt for you. Be aware that some encoders advise to let them generate their own salt. If you\'re using one of those encoders, please answer \'no\' to the question below. '.\PHP_EOL.'Provide the \'empty-salt\' option in order to let the encoder handle the generation itself.');
 
             if ($errorIo->confirm('Confirm salt generation ?')) {
                 $salt = $this->generateSalt();

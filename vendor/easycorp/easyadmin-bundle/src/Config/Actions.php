@@ -29,24 +29,15 @@ final class Actions
      */
     public function add(string $pageName, $actionNameOrObject): self
     {
-        if (!\is_string($actionNameOrObject) && !$actionNameOrObject instanceof Action) {
-            throw new \InvalidArgumentException(sprintf('The argument of "%s" can only be either a string with the action name or a "%s" object with the action config.', __METHOD__, Action::class));
-        }
+        return $this->doAddAction($pageName, $actionNameOrObject);
+    }
 
-        $actionName = \is_string($actionNameOrObject) ? $actionNameOrObject : (string) $actionNameOrObject;
-        $action = \is_string($actionNameOrObject) ? $this->createBuiltInAction($pageName, $actionNameOrObject) : $actionNameOrObject;
-
-        if (null !== $this->dto->getAction($pageName, $actionName)) {
-            throw new \InvalidArgumentException(sprintf('The "%s" action already exists in the "%s" page, so you can\'t add it again. Instead, you can use the "updateAction()" method to update any options of an existing action.', $actionName, $pageName));
-        }
-
-        if (Crud::PAGE_INDEX === $pageName && Action::DELETE === $actionName) {
-            $this->dto->prependAction($pageName, $action->getAsDto());
-        } else {
-            $this->dto->appendAction($pageName, $action->getAsDto());
-        }
-
-        return $this;
+    /**
+     * @param string|Action $actionNameOrObject
+     */
+    public function addBatchAction($actionNameOrObject): self
+    {
+        return $this->doAddAction(Crud::PAGE_INDEX, $actionNameOrObject, true);
     }
 
     /**
@@ -86,6 +77,12 @@ final class Actions
         }
 
         $this->dto->removeAction($pageName, $actionName);
+        // if 'delete' is removed, 'batch delete' is removed automatically (but the
+        // opposite doesn't happen). This is the most common case, but user can re-add
+        // the 'batch delete' action if needed manually
+        if (Action::DELETE === $actionName) {
+            $this->dto->removeAction($pageName, Action::BATCH_DELETE);
+        }
 
         return $this;
     }
@@ -135,6 +132,13 @@ final class Actions
 
     public function disable(string ...$disabledActionNames): self
     {
+        // if 'delete' is disabled, 'batch delete' is disabled automatically (but the
+        // opposite doesn't happen). This is the most common case, but user can re-enable
+        // the 'batch delete' action if needed manually
+        if (\in_array(Action::DELETE, $disabledActionNames)) {
+            $disabledActionNames[] = Action::BATCH_DELETE;
+        }
+
         $this->dto->disableActions($disabledActionNames);
 
         return $this;
@@ -153,40 +157,54 @@ final class Actions
      */
     private function createBuiltInAction(string $pageName, string $actionName): Action
     {
+        if (Action::BATCH_DELETE === $actionName) {
+            return Action::new(Action::BATCH_DELETE, '__ea__action.delete', null)
+                ->linkToCrudAction(Action::BATCH_DELETE)
+                ->setCssClass('action-'.Action::BATCH_DELETE)
+                ->addCssClass('btn btn-secondary pr-0 text-danger');
+        }
+
         if (Action::NEW === $actionName) {
             return Action::new(Action::NEW, '__ea__action.new', null)
                 ->createAsGlobalAction()
                 ->linkToCrudAction(Action::NEW)
+                ->setCssClass('action-'.Action::NEW)
                 ->addCssClass('btn btn-primary');
         }
 
         if (Action::EDIT === $actionName) {
             return Action::new(Action::EDIT, '__ea__action.edit', null)
                 ->linkToCrudAction(Action::EDIT)
+                ->setCssClass('action-'.Action::EDIT)
                 ->addCssClass(Crud::PAGE_DETAIL === $pageName ? 'btn btn-primary' : '');
         }
 
         if (Action::DETAIL === $actionName) {
             return Action::new(Action::DETAIL, '__ea__action.detail')
-                ->linkToCrudAction(Action::DETAIL);
+                ->linkToCrudAction(Action::DETAIL)
+                ->setCssClass('action-'.Action::DETAIL)
+                ->addCssClass(Crud::PAGE_EDIT === $pageName ? 'btn btn-secondary' : '');
         }
 
         if (Action::INDEX === $actionName) {
             return Action::new(Action::INDEX, '__ea__action.index')
                 ->linkToCrudAction(Action::INDEX)
-                ->addCssClass(Crud::PAGE_DETAIL === $pageName ? 'btn btn-secondary' : '');
+                ->setCssClass('action-'.Action::INDEX)
+                ->addCssClass(\in_array($pageName, [Crud::PAGE_DETAIL, Crud::PAGE_EDIT, Crud::PAGE_NEW], true) ? 'btn btn-secondary' : '');
         }
 
         if (Action::DELETE === $actionName) {
-            $cssClass = Crud::PAGE_DETAIL === $pageName ? 'btn btn-link pr-0 text-danger' : 'text-danger';
+            $cssClass = \in_array($pageName, [Crud::PAGE_DETAIL, Crud::PAGE_EDIT], true) ? 'btn btn-secondary pr-0 text-danger' : 'text-danger';
 
             return Action::new(Action::DELETE, '__ea__action.delete', Crud::PAGE_INDEX === $pageName ? null : 'fa fa-fw fa-trash-o')
                 ->linkToCrudAction(Action::DELETE)
+                ->setCssClass('action-'.Action::DELETE)
                 ->addCssClass($cssClass);
         }
 
         if (Action::SAVE_AND_RETURN === $actionName) {
             return Action::new(Action::SAVE_AND_RETURN, Crud::PAGE_EDIT === $pageName ? '__ea__action.save' : '__ea__action.create')
+                ->setCssClass('action-'.Action::SAVE_AND_RETURN)
                 ->addCssClass('btn btn-primary action-save')
                 ->displayAsButton()
                 ->setHtmlAttributes(['type' => 'submit', 'name' => 'ea[newForm][btn]', 'value' => $actionName])
@@ -195,6 +213,7 @@ final class Actions
 
         if (Action::SAVE_AND_CONTINUE === $actionName) {
             return Action::new(Action::SAVE_AND_CONTINUE, Crud::PAGE_EDIT === $pageName ? '__ea__action.save_and_continue' : '__ea__action.create_and_continue', 'far fa-edit')
+                ->setCssClass('action-'.Action::SAVE_AND_CONTINUE)
                 ->addCssClass('btn btn-secondary action-save')
                 ->displayAsButton()
                 ->setHtmlAttributes(['type' => 'submit', 'name' => 'ea[newForm][btn]', 'value' => $actionName])
@@ -203,6 +222,7 @@ final class Actions
 
         if (Action::SAVE_AND_ADD_ANOTHER === $actionName) {
             return Action::new(Action::SAVE_AND_ADD_ANOTHER, '__ea__action.create_and_add_another')
+                ->setCssClass('action-'.Action::SAVE_AND_ADD_ANOTHER)
                 ->addCssClass('btn btn-secondary action-save')
                 ->displayAsButton()
                 ->setHtmlAttributes(['type' => 'submit', 'name' => 'ea[newForm][btn]', 'value' => $actionName])
@@ -210,5 +230,32 @@ final class Actions
         }
 
         throw new \InvalidArgumentException(sprintf('The "%s" action is not a built-in action, so you can\'t add or configure it via its name. Either refer to one of the built-in actions or create a custom action called "%s".', $actionName, $actionName));
+    }
+
+    private function doAddAction(string $pageName, $actionNameOrObject, bool $isBatchAction = false): self
+    {
+        if (!\is_string($actionNameOrObject) && !$actionNameOrObject instanceof Action) {
+            throw new \InvalidArgumentException(sprintf('The argument of "%s" can only be either a string with the action name or a "%s" object with the action config.', __METHOD__, Action::class));
+        }
+
+        $actionName = \is_string($actionNameOrObject) ? $actionNameOrObject : (string) $actionNameOrObject;
+        $action = \is_string($actionNameOrObject) ? $this->createBuiltInAction($pageName, $actionNameOrObject) : $actionNameOrObject;
+
+        if (null !== $this->dto->getAction($pageName, $actionName)) {
+            throw new \InvalidArgumentException(sprintf('The "%s" action already exists in the "%s" page, so you can\'t add it again. Instead, you can use the "updateAction()" method to update any options of an existing action.', $actionName, $pageName));
+        }
+
+        $actionDto = $action->getAsDto();
+        if ($isBatchAction) {
+            $actionDto->setType(Action::TYPE_BATCH);
+        }
+
+        if (Crud::PAGE_INDEX === $pageName && Action::DELETE === $actionName) {
+            $this->dto->prependAction($pageName, $actionDto);
+        } else {
+            $this->dto->appendAction($pageName, $actionDto);
+        }
+
+        return $this;
     }
 }

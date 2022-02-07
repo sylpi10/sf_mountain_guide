@@ -11,12 +11,14 @@
 
 namespace Symfony\Bundle\TwigBundle\DependencyInjection;
 
+use Composer\InstalledVersions;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\FileExistenceResource;
 use Symfony\Component\Console\Application;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Translation\Translator;
@@ -34,22 +36,26 @@ class TwigExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('twig.xml');
-
-        if (class_exists('Symfony\Component\Form\Form')) {
-            $loader->load('form.xml');
+        if (!class_exists(InstalledVersions::class)) {
+            trigger_deprecation('symfony/twig-bundle', '5.4', 'Configuring Symfony without the Composer Runtime API is deprecated. Consider upgrading to Composer 2.1 or later.');
         }
 
-        if (class_exists(Application::class)) {
-            $loader->load('console.xml');
+        $loader = new PhpFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('twig.php');
+
+        if ($container::willBeAvailable('symfony/form', Form::class, ['symfony/twig-bundle'], true)) {
+            $loader->load('form.php');
         }
 
-        if (class_exists(Mailer::class)) {
-            $loader->load('mailer.xml');
+        if ($container::willBeAvailable('symfony/console', Application::class, ['symfony/twig-bundle'], true)) {
+            $loader->load('console.php');
         }
 
-        if (!class_exists(Translator::class)) {
+        if ($container::willBeAvailable('symfony/mailer', Mailer::class, ['symfony/twig-bundle'], true)) {
+            $loader->load('mailer.php');
+        }
+
+        if (!$container::willBeAvailable('symfony/translation', Translator::class, ['symfony/twig-bundle'], true)) {
             $container->removeDefinition('twig.translation.extractor');
         }
 
@@ -172,7 +178,7 @@ class TwigExtension extends Extension
 
     private function normalizeBundleName(string $name): string
     {
-        if ('Bundle' === substr($name, -6)) {
+        if (str_ends_with($name, 'Bundle')) {
             $name = substr($name, 0, -6);
         }
 

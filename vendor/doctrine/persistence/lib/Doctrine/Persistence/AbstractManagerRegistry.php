@@ -2,8 +2,10 @@
 
 namespace Doctrine\Persistence;
 
+use Doctrine\Deprecations\Deprecation;
 use InvalidArgumentException;
 use ReflectionClass;
+
 use function explode;
 use function sprintf;
 use function strpos;
@@ -28,7 +30,10 @@ abstract class AbstractManagerRegistry implements ManagerRegistry
     /** @var string */
     private $defaultManager;
 
-    /** @var string */
+    /**
+     * @var string
+     * @psalm-var class-string
+     */
     private $proxyInterfaceName;
 
     /**
@@ -38,6 +43,7 @@ abstract class AbstractManagerRegistry implements ManagerRegistry
      * @param string   $defaultConnection
      * @param string   $defaultManager
      * @param string   $proxyInterfaceName
+     * @psalm-param class-string $proxyInterfaceName
      */
     public function __construct($name, array $connections, array $managers, $defaultConnection, $defaultManager, $proxyInterfaceName)
     {
@@ -157,13 +163,9 @@ abstract class AbstractManagerRegistry implements ManagerRegistry
      */
     public function getManagerForClass($class)
     {
-        // Check for namespace alias
-        if (strpos($class, ':') !== false) {
-            [$namespaceAlias, $simpleClassName] = explode(':', $class, 2);
-            $class                              = $this->getAliasNamespace($namespaceAlias) . '\\' . $simpleClassName;
-        }
+        $className = $this->getRealClassName($class);
 
-        $proxyClass = new ReflectionClass($class);
+        $proxyClass = new ReflectionClass($className);
 
         if ($proxyClass->implementsInterface($this->proxyInterfaceName)) {
             $parentClass = $proxyClass->getParentClass();
@@ -172,16 +174,18 @@ abstract class AbstractManagerRegistry implements ManagerRegistry
                 return null;
             }
 
-            $class = $parentClass->getName();
+            $className = $parentClass->getName();
         }
 
         foreach ($this->managers as $id) {
             $manager = $this->getService($id);
 
-            if (! $manager->getMetadataFactory()->isTransient($class)) {
+            if (! $manager->getMetadataFactory()->isTransient($className)) {
                 return $manager;
             }
         }
+
+        return null;
     }
 
     /**
@@ -208,11 +212,11 @@ abstract class AbstractManagerRegistry implements ManagerRegistry
     /**
      * {@inheritdoc}
      */
-    public function getRepository($persistentObjectName, $persistentManagerName = null)
+    public function getRepository($persistentObject, $persistentManagerName = null)
     {
         return $this
-            ->selectManager($persistentObjectName, $persistentManagerName)
-            ->getRepository($persistentObjectName);
+            ->selectManager($persistentObject, $persistentManagerName)
+            ->getRepository($persistentObject);
     }
 
     /**
@@ -235,12 +239,39 @@ abstract class AbstractManagerRegistry implements ManagerRegistry
         return $this->getManager($name);
     }
 
-    private function selectManager(string $persistentObjectName, ?string $persistentManagerName = null) : ObjectManager
+    /**
+     * @psalm-param class-string $persistentObjectName
+     */
+    private function selectManager(string $persistentObjectName, ?string $persistentManagerName = null): ObjectManager
     {
         if ($persistentManagerName !== null) {
             return $this->getManager($persistentManagerName);
         }
 
         return $this->getManagerForClass($persistentObjectName) ?? $this->getManager();
+    }
+
+    /**
+     * @psalm-return class-string
+     */
+    private function getRealClassName(string $classNameOrAlias): string
+    {
+        // Check for namespace alias
+        if (strpos($classNameOrAlias, ':') !== false) {
+            Deprecation::trigger(
+                'doctrine/persistence',
+                'https://github.com/doctrine/persistence/issues/204',
+                'Short namespace aliases such as "%s" are deprecated, use ::class constant instead.',
+                $classNameOrAlias
+            );
+
+            [$namespaceAlias, $simpleClassName] = explode(':', $classNameOrAlias, 2);
+
+            /** @psalm-var class-string */
+            return $this->getAliasNamespace($namespaceAlias) . '\\' . $simpleClassName;
+        }
+
+        /** @psalm-var class-string */
+        return $classNameOrAlias;
     }
 }

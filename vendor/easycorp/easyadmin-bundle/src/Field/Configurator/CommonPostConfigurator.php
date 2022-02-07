@@ -48,7 +48,11 @@ final class CommonPostConfigurator implements FieldConfiguratorInterface
             return $value;
         }
 
-        return new Markup($callable($value, $entityDto->getInstance()), $this->charset);
+        $formatted = $callable($value, $entityDto->getInstance());
+
+        // if the callable returns a string, wrap it in a Twig Markup to render the
+        // HTML and CSS/JS elements that it might contain
+        return \is_string($formatted) ? new Markup($formatted, $this->charset) : $formatted;
     }
 
     private function updateFieldTemplate(FieldDto $field): void

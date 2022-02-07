@@ -3,6 +3,7 @@
 namespace EasyCorp\Bundle\EasyAdminBundle\Router;
 
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Option\EA;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Controller\CrudControllerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Controller\DashboardControllerInterface;
@@ -22,17 +23,22 @@ class CrudUrlBuilder
     private $dashboardControllers;
     private $crudControllers;
     private $urlGenerator;
+    private $urlSigner;
     private $routeParameters;
+    private $signUrls;
+    private $currentPageReferrer;
 
-    public function __construct(?AdminContext $adminContext, UrlGeneratorInterface $urlGenerator, DashboardControllerRegistry $dashboardControllers, CrudControllerRegistry $crudControllers, array $newRouteParameters = [])
+    public function __construct(?AdminContext $adminContext, UrlGeneratorInterface $urlGenerator, DashboardControllerRegistry $dashboardControllers, CrudControllerRegistry $crudControllers, UrlSigner $urlSigner, array $newRouteParameters = [])
     {
         $this->dashboardRoute = null === $adminContext ? null : $adminContext->getDashboardRouteName();
         $this->dashboardControllers = $dashboardControllers;
         $this->crudControllers = $crudControllers;
         $this->urlGenerator = $urlGenerator;
+        $this->urlSigner = $urlSigner;
 
+        $this->signUrls = null === $adminContext ? false : $adminContext->getSignedUrls();
         $currentRouteParameters = $currentRouteParametersCopy = null === $adminContext ? [] : $adminContext->getRequest()->query->all();
-        unset($currentRouteParametersCopy['referrer']);
+        unset($currentRouteParametersCopy[EA::REFERRER]);
         $currentPageReferrer = null === $adminContext ? null : sprintf('%s?%s', $adminContext->getRequest()->getPathInfo(), http_build_query($currentRouteParametersCopy));
         $this->currentPageReferrer = $currentPageReferrer;
 
@@ -48,28 +54,30 @@ class CrudUrlBuilder
 
     public function setCrudId(string $crudId): self
     {
-        $this->setRouteParameter('crudId', $crudId);
+        $this->setRouteParameter(EA::CRUD_ID, $crudId);
 
         return $this;
     }
 
     public function setController(string $crudControllerFqcn): self
     {
-        $this->setRouteParameter('crudControllerFqcn', $crudControllerFqcn);
+        $this->setRouteParameter(EA::CRUD_CONTROLLER_FQCN, $crudControllerFqcn);
+        $this->unset(EA::ROUTE_NAME);
+        $this->unset(EA::ROUTE_PARAMS);
 
         return $this;
     }
 
     public function setAction(string $action): self
     {
-        $this->setRouteParameter('crudAction', $action);
+        $this->setRouteParameter(EA::CRUD_ACTION, $action);
 
         return $this;
     }
 
     public function setEntityId($entityId): self
     {
-        $this->setRouteParameter('entityId', $entityId);
+        $this->setRouteParameter(EA::ENTITY_ID, $entityId);
 
         return $this;
     }
@@ -123,6 +131,13 @@ class CrudUrlBuilder
         return $this;
     }
 
+    public function addSignature(bool $addSignature = true): self
+    {
+        $this->signUrls = $addSignature;
+
+        return $this;
+    }
+
     // this method allows to omit the 'generateUrl()' call in templates, making code more concise
     public function __toString(): string
     {
@@ -131,38 +146,40 @@ class CrudUrlBuilder
 
     public function generateUrl(): string
     {
+        trigger_deprecation('easycorp/easyadmin-bundle', '3.2.0', 'The "%s" class/service is deprecated, use "%s()" instead.', __CLASS__, AdminUrlGenerator::class);
+
         if (true === $this->includeReferrer) {
-            $this->setRouteParameter('referrer', $this->currentPageReferrer);
+            $this->setRouteParameter(EA::REFERRER, $this->currentPageReferrer);
         }
 
         if (false === $this->includeReferrer) {
-            $this->unset('referrer');
+            $this->unset(EA::REFERRER);
         }
 
         // transform 'crudControllerFqcn' into 'crudId'
-        if (null !== $crudControllerFqcn = $this->get('crudControllerFqcn')) {
+        if (null !== $crudControllerFqcn = $this->get(EA::CRUD_CONTROLLER_FQCN)) {
             if (null === $crudId = $this->crudControllers->findCrudIdByCrudFqcn($crudControllerFqcn)) {
                 throw new \InvalidArgumentException(sprintf('The given "%s" class is not a valid CRUD controller. Make sure it extends from "%s" or implements "%s".', $crudControllerFqcn, AbstractCrudController::class, CrudControllerInterface::class));
             }
 
-            $this->set('crudId', $crudId);
-            $this->unset('crudControllerFqcn');
+            $this->set(EA::CRUD_ID, $crudId);
+            $this->unset(EA::CRUD_CONTROLLER_FQCN);
         }
 
         // this avoids forcing users to always be explicit about the action to execute
-        if (null !== $this->get('crudId') && null === $this->get('crudAction')) {
-            $this->set('crudAction', Action::INDEX);
+        if (null !== $this->get(EA::CRUD_ID) && null === $this->get(EA::CRUD_ACTION)) {
+            $this->set(EA::CRUD_ACTION, Action::INDEX);
         }
 
         // if the Dashboard FQCN is defined, find its route and use it to override
         // the current route (this is needed to allow generating links to different dashboards)
-        if (null !== $dashboardControllerFqcn = $this->get('dashboardControllerFqcn')) {
+        if (null !== $dashboardControllerFqcn = $this->get(EA::DASHBOARD_CONTROLLER_FQCN)) {
             if (null === $dashboardRoute = $this->dashboardControllers->getRouteByControllerFqcn($dashboardControllerFqcn)) {
                 throw new \InvalidArgumentException(sprintf('The given "%s" class is not a valid Dashboard controller. Make sure it extends from "%s" or implements "%s".', $dashboardControllerFqcn, AbstractDashboardController::class, DashboardControllerInterface::class));
             }
 
             $this->dashboardRoute = $dashboardRoute;
-            $this->unset('dashboardControllerFqcn');
+            $this->unset(EA::DASHBOARD_CONTROLLER_FQCN);
         }
 
         // this happens when generating URLs from outside EasyAdmin (AdminContext is null) and
@@ -182,9 +199,15 @@ class CrudUrlBuilder
         $routeParameters = array_filter($this->routeParameters, static function ($parameterValue) {
             return null !== $parameterValue;
         });
-        ksort($routeParameters);
+        ksort($routeParameters, \SORT_STRING);
 
-        return $this->urlGenerator->generate($this->dashboardRoute, $routeParameters, UrlGeneratorInterface::ABSOLUTE_URL);
+        $url = $this->urlGenerator->generate($this->dashboardRoute, $routeParameters, UrlGeneratorInterface::ABSOLUTE_URL);
+
+        if ($this->signUrls) {
+            $url = $this->urlSigner->sign($url);
+        }
+
+        return $url;
     }
 
     private function setRouteParameter(string $paramName, $paramValue): void

@@ -12,7 +12,10 @@
 namespace Symfony\Bundle\MakerBundle\Maker;
 
 use Doctrine\Common\Annotations\Annotation;
+use Doctrine\ORM\EntityManagerInterface;
 use PhpParser\Builder\Param;
+use Symfony\Bridge\Twig\AppVariable;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\DependencyBuilder;
 use Symfony\Bundle\MakerBundle\Doctrine\DoctrineHelper;
@@ -26,17 +29,31 @@ use Symfony\Bundle\MakerBundle\InputConfiguration;
 use Symfony\Bundle\MakerBundle\Security\InteractiveSecurityHelper;
 use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
 use Symfony\Bundle\MakerBundle\Util\ClassSourceManipulator;
+use Symfony\Bundle\MakerBundle\Util\TemplateComponentGenerator;
 use Symfony\Bundle\MakerBundle\Util\YamlSourceManipulator;
 use Symfony\Bundle\MakerBundle\Validator;
+use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Validator\Validation;
 use Symfony\Component\Yaml\Yaml;
+use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
+use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestTrait;
 use SymfonyCasts\Bundle\ResetPassword\Persistence\Repository\ResetPasswordRequestRepositoryTrait;
 use SymfonyCasts\Bundle\ResetPassword\Persistence\ResetPasswordRequestRepositoryInterface;
+use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelper;
+use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 use SymfonyCasts\Bundle\ResetPassword\SymfonyCastsResetPasswordBundle;
 
 /**
@@ -54,6 +71,14 @@ class MakeResetPassword extends AbstractMaker
     private $doctrineHelper;
     private $entityClassGenerator;
 
+    private $fromEmailAddress;
+    private $fromEmailName;
+    private $controllerResetSuccessRedirect;
+    private $userClass;
+    private $emailPropertyName;
+    private $emailGetterMethodName;
+    private $passwordSetterMethodName;
+
     public function __construct(FileManager $fileManager, DoctrineHelper $doctrineHelper, EntityClassGenerator $entityClassGenerator)
     {
         $this->fileManager = $fileManager;
@@ -66,38 +91,41 @@ class MakeResetPassword extends AbstractMaker
         return 'make:reset-password';
     }
 
-    public function configureCommand(Command $command, InputConfiguration $inputConfig)
+    public static function getCommandDescription(): string
+    {
+        return 'Create controller, entity, and repositories for use with symfonycasts/reset-password-bundle';
+    }
+
+    public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
         $command
-            ->setDescription('Create controller, entity, and repositories for use with symfonycasts/reset-password-bundle')
             ->setHelp(file_get_contents(__DIR__.'/../Resources/help/MakeResetPassword.txt'))
         ;
     }
 
-    public function configureDependencies(DependencyBuilder $dependencies)
+    public function configureDependencies(DependencyBuilder $dependencies): void
     {
         $dependencies->addClassDependency(SymfonyCastsResetPasswordBundle::class, 'symfonycasts/reset-password-bundle');
         $dependencies->addClassDependency(MailerInterface::class, 'symfony/mailer');
+        $dependencies->addClassDependency(Form::class, 'symfony/form');
+        $dependencies->addClassDependency(Validation::class, 'symfony/validator');
+        $dependencies->addClassDependency(SecurityBundle::class, 'security-bundle');
+        $dependencies->addClassDependency(AppVariable::class, 'twig');
 
         ORMDependencyBuilder::buildDependencies($dependencies);
 
         $dependencies->addClassDependency(Annotation::class, 'annotations');
+
+        // reset-password-bundle 1.6 includes the ability to generate a fake token.
+        // we need to check that version 1.6 is installed
+        if (class_exists(ResetPasswordHelper::class) && !method_exists(ResetPasswordHelper::class, 'generateFakeResetToken')) {
+            throw new RuntimeCommandException('Please run "composer upgrade symfonycasts/reset-password-bundle". Version 1.6 or greater of this bundle is required.');
+        }
     }
 
-    public function interact(InputInterface $input, ConsoleStyle $io, Command $command)
+    public function interact(InputInterface $input, ConsoleStyle $io, Command $command): void
     {
         $io->title('Let\'s make a password reset feature!');
-
-        // initialize arguments & commands that are internal (i.e. meant only to be asked)
-        $command
-            ->addArgument('from-email-address', InputArgument::REQUIRED)
-            ->addArgument('from-email-name', InputArgument::REQUIRED)
-            ->addArgument('controller-reset-success-redirect', InputArgument::REQUIRED)
-            ->addArgument('user-class')
-            ->addArgument('email-property-name')
-            ->addArgument('email-getter')
-            ->addArgument('password-setter')
-        ;
 
         $interactiveSecurityHelper = new InteractiveSecurityHelper();
 
@@ -109,62 +137,48 @@ class MakeResetPassword extends AbstractMaker
         $securityData = $manipulator->getData();
         $providersData = $securityData['security']['providers'] ?? [];
 
-        $input->setArgument(
-            'user-class',
-            $userClass = $interactiveSecurityHelper->guessUserClass(
-                $io,
-                $providersData,
-                'What is the User entity that should be used with the "forgotten password" feature? (e.g. <fg=yellow>App\\Entity\\User</>)'
-            )
+        $this->userClass = $interactiveSecurityHelper->guessUserClass(
+            $io,
+            $providersData,
+            'What is the User entity that should be used with the "forgotten password" feature? (e.g. <fg=yellow>App\\Entity\\User</>)'
         );
 
-        $input->setArgument(
-            'email-property-name',
-            $interactiveSecurityHelper->guessEmailField($io, $userClass)
-        );
-        $input->setArgument(
-            'email-getter',
-            $interactiveSecurityHelper->guessEmailGetter($io, $userClass, $input->getArgument('email-property-name'))
-        );
-        $input->setArgument(
-            'password-setter',
-            $interactiveSecurityHelper->guessPasswordSetter($io, $userClass)
-        );
+        $this->emailPropertyName = $interactiveSecurityHelper->guessEmailField($io, $this->userClass);
+        $this->emailGetterMethodName = $interactiveSecurityHelper->guessEmailGetter($io, $this->userClass, $this->emailPropertyName);
+        $this->passwordSetterMethodName = $interactiveSecurityHelper->guessPasswordSetter($io, $this->userClass);
 
-        $io->text(sprintf('Implementing reset password for <info>%s</info>', $userClass));
+        $io->text(sprintf('Implementing reset password for <info>%s</info>', $this->userClass));
 
         $io->section('- ResetPasswordController -');
         $io->text('A named route is used for redirecting after a successful reset. Even a route that does not exist yet can be used here.');
-        $input->setArgument('controller-reset-success-redirect', $io->ask(
+
+        $this->controllerResetSuccessRedirect = $io->ask(
             'What route should users be redirected to after their password has been successfully reset?',
             'app_home',
             [Validator::class, 'notBlank']
-        )
         );
 
         $io->section('- Email -');
         $emailText[] = 'These are used to generate the email code. Don\'t worry, you can change them in the code later!';
         $io->text($emailText);
 
-        $input->setArgument('from-email-address', $io->ask(
+        $this->fromEmailAddress = $io->ask(
             'What email address will be used to send reset confirmations? e.g. mailer@your-domain.com',
             null,
             [Validator::class, 'validateEmailAddress']
-        ));
+        );
 
-        $input->setArgument('from-email-name', $io->ask(
+        $this->fromEmailName = $io->ask(
             'What "name" should be associated with that email address? e.g. "Acme Mail Bot"',
             null,
             [Validator::class, 'notBlank']
-        )
         );
     }
 
-    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator)
+    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
-        $userClass = $input->getArgument('user-class');
         $userClassNameDetails = $generator->createClassNameDetails(
-            '\\'.$userClass,
+            '\\'.$this->userClass,
             'Entity\\'
         );
 
@@ -193,26 +207,56 @@ class MakeResetPassword extends AbstractMaker
             'Form\\'
         );
 
+        /*
+         * @legacy Conditional can be removed when MakerBundle no longer
+         *         supports Symfony < 5.2
+         */
+        $passwordHasher = UserPasswordEncoderInterface::class;
+
+        if (interface_exists(UserPasswordHasherInterface::class)) {
+            $passwordHasher = UserPasswordHasherInterface::class;
+        }
+
+        $useStatements = [
+            Generator::getControllerBaseClass()->getFullName(), // @legacy see getControllerBaseClass comment
+            $userClassNameDetails->getFullName(),
+            $changePasswordFormTypeClassNameDetails->getFullName(),
+            $requestFormTypeClassNameDetails->getFullName(),
+            TemplatedEmail::class,
+            RedirectResponse::class,
+            Request::class,
+            Response::class,
+            MailerInterface::class,
+            Address::class,
+            Route::class,
+            ResetPasswordControllerTrait::class,
+            ResetPasswordExceptionInterface::class,
+            ResetPasswordHelperInterface::class,
+            $passwordHasher,
+            EntityManagerInterface::class,
+        ];
+
         $generator->generateController(
             $controllerClassNameDetails->getFullName(),
             'resetPassword/ResetPasswordController.tpl.php',
             [
-                'user_full_class_name' => $userClassNameDetails->getFullName(),
+                'use_statements' => TemplateComponentGenerator::generateUseStatements($useStatements),
                 'user_class_name' => $userClassNameDetails->getShortName(),
-                'request_form_type_full_class_name' => $requestFormTypeClassNameDetails->getFullName(),
                 'request_form_type_class_name' => $requestFormTypeClassNameDetails->getShortName(),
-                'reset_form_type_full_class_name' => $changePasswordFormTypeClassNameDetails->getFullName(),
                 'reset_form_type_class_name' => $changePasswordFormTypeClassNameDetails->getShortName(),
-                'password_setter' => $input->getArgument('password-setter'),
-                'success_redirect_route' => $input->getArgument('controller-reset-success-redirect'),
-                'from_email' => $input->getArgument('from-email-address'),
-                'from_email_name' => $input->getArgument('from-email-name'),
-                'email_getter' => $input->getArgument('email-getter'),
-                'email_field' => $input->getArgument('email-property-name'),
+                'password_setter' => $this->passwordSetterMethodName,
+                'success_redirect_route' => $this->controllerResetSuccessRedirect,
+                'from_email' => $this->fromEmailAddress,
+                'from_email_name' => $this->fromEmailName,
+                'email_getter' => $this->emailGetterMethodName,
+                'email_field' => $this->emailPropertyName,
+                'password_hasher_class_details' => ($passwordClassDetails = $generator->createClassNameDetails($passwordHasher, '\\')),
+                'password_hasher_variable_name' => str_replace('Interface', '', sprintf('$%s', lcfirst($passwordClassDetails->getShortName()))), // @legacy see passwordHasher conditional above
+                'use_password_hasher' => UserPasswordHasherInterface::class === $passwordHasher, // @legacy see passwordHasher conditional above
             ]
         );
 
-        $this->generateRequestEntity($generator, $requestClassNameDetails, $repositoryClassNameDetails, $userClass);
+        $this->generateRequestEntity($generator, $requestClassNameDetails, $repositoryClassNameDetails);
 
         $this->setBundleConfig($io, $generator, $repositoryClassNameDetails->getFullName());
 
@@ -220,7 +264,7 @@ class MakeResetPassword extends AbstractMaker
             $requestFormTypeClassNameDetails->getFullName(),
             'resetPassword/ResetPasswordRequestFormType.tpl.php',
             [
-                'email_field' => $input->getArgument('email-property-name'),
+                'email_field' => $this->emailPropertyName,
             ]
         );
 
@@ -243,7 +287,7 @@ class MakeResetPassword extends AbstractMaker
             'reset_password/request.html.twig',
             'resetPassword/twig_request.tpl.php',
             [
-                'email_field' => $input->getArgument('email-property-name'),
+                'email_field' => $this->emailPropertyName,
             ]
         );
 
@@ -258,7 +302,7 @@ class MakeResetPassword extends AbstractMaker
         $this->successMessage($input, $io, $requestClassNameDetails->getFullName());
     }
 
-    private function setBundleConfig(ConsoleStyle $io, Generator $generator, string $repositoryClassFullName)
+    private function setBundleConfig(ConsoleStyle $io, Generator $generator, string $repositoryClassFullName): void
     {
         $configFileExists = $this->fileManager->fileExists($path = 'config/packages/reset_password.yaml');
 
@@ -308,7 +352,7 @@ class MakeResetPassword extends AbstractMaker
         $generator->dumpFile($path, $manipulator->getContents());
     }
 
-    private function successMessage(InputInterface $input, ConsoleStyle $io, string $requestClassName)
+    private function successMessage(InputInterface $input, ConsoleStyle $io, string $requestClassName): void
     {
         $closing[] = 'Next:';
         $closing[] = sprintf('  1) Run <fg=yellow>"php bin/console make:migration"</> to generate a migration for the new <fg=yellow>"%s"</> entity.', $requestClassName);
@@ -323,14 +367,20 @@ class MakeResetPassword extends AbstractMaker
         $io->newLine();
     }
 
-    private function generateRequestEntity(Generator $generator, ClassNameDetails $requestClassNameDetails, ClassNameDetails $repositoryClassNameDetails, string $userClass): void
+    private function generateRequestEntity(Generator $generator, ClassNameDetails $requestClassNameDetails, ClassNameDetails $repositoryClassNameDetails): void
     {
         $requestEntityPath = $this->entityClassGenerator->generateEntityClass($requestClassNameDetails, false, false, false);
 
         $generator->writeChanges();
 
+        $useAttributesForDoctrineMapping = $this->doctrineHelper->isDoctrineSupportingAttributes() && $this->doctrineHelper->doesClassUsesAttributes($requestClassNameDetails->getFullName());
+
         $manipulator = new ClassSourceManipulator(
-            $this->fileManager->getFileContents($requestEntityPath)
+            $this->fileManager->getFileContents($requestEntityPath),
+            false,
+            !$useAttributesForDoctrineMapping,
+            true,
+            $useAttributesForDoctrineMapping
         );
 
         $manipulator->addInterface(ResetPasswordRequestInterface::class);
@@ -351,7 +401,7 @@ CODE
 
         $manipulator->addManyToOneRelation((new RelationManyToOne())
             ->setPropertyName('user')
-            ->setTargetClassName($userClass)
+            ->setTargetClassName($this->userClass)
             ->setMapInverseRelation(false)
             ->setCustomReturnType('object', false)
             ->avoidSetter()

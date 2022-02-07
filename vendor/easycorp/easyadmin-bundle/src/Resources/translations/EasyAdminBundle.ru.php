@@ -2,9 +2,9 @@
 
 return [
     'page_title' => [
-        // 'dashboard' => '',
-        'detail' => '%entity_label_singular% <small>(#%entity_short_id%)</small>',
-        'edit' => '%entity_label_singular% <small>(#%entity_short_id%)</small>',
+        'dashboard' => 'Дашборд',
+        'detail' => '%entity_as_string%',
+        'edit' => '%entity_label_singular%',
         'index' => '%entity_label_plural%',
         'new' => 'Создать новый %entity_label_singular%',
         'exception' => 'Ошибка|Ошибки|Ошибок',
@@ -63,7 +63,7 @@ return [
     ],
 
     'batch_action_modal' => [
-        'title' => 'Вы действительно хотите изменить выбранные элементы?',
+        'title' => 'Вы собираетесь выполнить действие "%action_name%" для выбранных строк (%num_items%)',
         'content' => 'Эту операцию нельзя отменить.',
         'action' => 'Продолжить',
     ],
@@ -100,7 +100,8 @@ return [
 
     'form' => [
         'are_you_sure' => 'Вы не сохранили сделанные изменения.',
-        // 'tab.error_badge_title' => '',
+        'tab.error_badge_title' => 'Один неверный ввод|%count% неверных ввода|%count% неверных вводов',
+        'slug.confirm_text' => 'Если вы измените текстовый идентификатор, вы можете сломать ссылки на других страницах.',
     ],
 
     'user' => [
@@ -115,6 +116,8 @@ return [
         'username' => 'Логин',
         'password' => 'Пароль',
         'sign_in' => 'Войти',
+        'forgot_password' => 'Забыли пароль?',
+        'remember_me' => 'Запомнить меня',
     ],
 
     'exception' => [
@@ -122,5 +125,11 @@ return [
         'entity_remove' => 'Элемент не может быть удалён, потому что другой элемент зависит от него.',
         'forbidden_action' => 'Запрашиваемое действие запрещено для этого элемента.',
         'insufficient_entity_permission' => 'У вас недостаточно прав для доступа к этому элементу.',
+    ],
+
+    'autocomplete' => [
+        'no-results-found' => 'Совпадений не найдено',
+        // 'no-more-results' => 'No more results',
+        'loading-more-results' => 'Загрузка данных…',
     ],
 ];

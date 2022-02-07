@@ -9,6 +9,7 @@ use Vich\UploaderBundle\Util\Transliterator;
  * This namer uses a slug to keep original name when possibile.
  *
  * @author Massimiliano Arione <garakkio@gmail.com>
+ * @final
  */
 final class SlugNamer implements NamerInterface
 {
@@ -38,8 +39,8 @@ final class SlugNamer implements NamerInterface
     {
         $file = $mapping->getFile($object);
         $originalName = $file->getClientOriginalName();
-        $extension = \strtolower(\pathinfo($originalName, PATHINFO_EXTENSION));
-        $basename = \substr(\pathinfo($originalName, PATHINFO_FILENAME), 0, 240);
+        $extension = \strtolower(\pathinfo($originalName, \PATHINFO_EXTENSION));
+        $basename = \substr(\pathinfo($originalName, \PATHINFO_FILENAME), 0, 240);
         $basename = \strtolower($this->transliterator->transliterate($basename));
         $slug = \sprintf('%s.%s', $basename, $extension);
 

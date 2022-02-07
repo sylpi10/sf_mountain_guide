@@ -8,11 +8,14 @@ use Vich\UploaderBundle\Mapping\PropertyMapping;
  * Directory namer wich can create subfolder depends on generated filename.
  *
  * @author Konstantin Myakshin <koc-dp@yandex.ru>
+ * @final
  */
 class SubdirDirectoryNamer implements DirectoryNamerInterface, ConfigurableInterface
 {
+    /** @var int */
     private $charsPerDir = 2;
 
+    /** @var int */
     private $dirs = 1;
 
     /**

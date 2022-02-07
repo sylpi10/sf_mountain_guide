@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use function Symfony\Component\String\u;
 
@@ -19,6 +20,7 @@ use function Symfony\Component\String\u;
 class MakeAdminDashboardCommand extends Command
 {
     protected static $defaultName = 'make:admin:dashboard';
+    protected static $defaultDescription = 'Creates a new EasyAdmin Dashboard class';
     private $classMaker;
     private $projectDir;
 
@@ -29,6 +31,17 @@ class MakeAdminDashboardCommand extends Command
         $this->projectDir = $projectDir;
     }
 
+    protected function configure()
+    {
+        $this
+            ->setDescription(self::$defaultDescription)
+            ->setHelp($this->getCommandHelp())
+        ;
+    }
+
+    /**
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
@@ -44,7 +57,7 @@ class MakeAdminDashboardCommand extends Command
             'src/Controller/Admin/',
             static function (string $selectedDir) use ($fs, $projectDir) {
                 $absoluteDir = u($selectedDir)->ensureStart($projectDir.\DIRECTORY_SEPARATOR);
-                if ($absoluteDir->containsAny('..')) {
+                if (null !== $absoluteDir->indexOf('..')) {
                     throw new \RuntimeException(sprintf('The given directory path can\'t contain ".." and must be relative to the project directory (which is "%s")', $projectDir));
                 }
 
@@ -70,6 +83,7 @@ class MakeAdminDashboardCommand extends Command
         $generatedFilePath = $this->classMaker->make(sprintf('%s/%s.php', $controllerDir, $controllerClassName), 'dashboard.tpl', [
             'namespace' => $guessedNamespace,
             'site_title' => $this->getSiteTitle($this->projectDir),
+            'use_php_attributes' => $this->canUsePhpAttributes(),
         ]);
 
         $io = new SymfonyStyle($input, $output);
@@ -77,7 +91,7 @@ class MakeAdminDashboardCommand extends Command
         $io->text('Next steps:');
         $io->listing([
             sprintf('Configure your Dashboard at "%s"', $generatedFilePath),
-            sprintf('Run "make:admin:crud" to generate CRUD controllers and link them from the Dashboard.'),
+            'Run "make:admin:crud" to generate CRUD controllers and link them from the Dashboard.',
         ]);
 
         return 0;
@@ -92,5 +106,44 @@ class MakeAdminDashboardCommand extends Command
             ->toString();
 
         return empty($guessedTitle) ? 'EasyAdmin' : $guessedTitle;
+    }
+
+    private function canUsePhpAttributes(): bool
+    {
+        return Kernel::VERSION_ID >= 50200 && version_compare($this->phpVersionRequiredByProject(), '8.0', '>=');
+    }
+
+    /**
+     * Based on Symfony\Bundle\MakerBundle\Util\PhpCompatUtil
+     * https://github.com/symfony/maker-bundle/blob/main/src/Util/PhpCompatUtil.php
+     * (c) Jesse Rushlow <jr@rushlow.dev>.
+     */
+    private function phpVersionRequiredByProject(): string
+    {
+        $composerLockPath = sprintf('%s/composer.lock', $this->projectDir);
+        if (!file_exists($composerLockPath)) {
+            return \PHP_VERSION;
+        }
+
+        $lockFileContents = json_decode(file_get_contents($composerLockPath), true);
+
+        $phpVersionRequirement = $lockFileContents['platform-overrides']['php'] ?? $lockFileContents['platform']['php'] ?? \PHP_VERSION;
+        // e.g. $phpVersionRequirement = '>=7.2.5', $phpVersion = '7.2.5'
+        $phpVersion = preg_replace('/[^0-9\.]/', '', $phpVersionRequirement);
+
+        return $phpVersion;
+    }
+
+    private function getCommandHelp()
+    {
+        return <<<'HELP'
+The <info>%command.name%</info> command creates a new EasyAdmin Dashboard class
+in your application. Follow the steps shown by the command to configure the
+name and location of the new class.
+
+This command never changes or overwrites an existing class, so you can run it
+safely as many times as needed to create multiple dashboards.
+HELP
+        ;
     }
 }

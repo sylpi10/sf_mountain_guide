@@ -14,7 +14,10 @@
 /var/
 /deploy
 /
-/vendor
+/vendor/*
+/.readme
+/.htaccess
+/.readme
 ###< symfony/framework-bundle ###
 
 ###> symfony/phpunit-bridge ###

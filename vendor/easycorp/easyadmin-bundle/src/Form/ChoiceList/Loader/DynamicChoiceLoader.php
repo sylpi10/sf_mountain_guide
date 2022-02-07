@@ -3,6 +3,7 @@
 namespace EasyCorp\Bundle\EasyAdminBundle\Form\ChoiceList\Loader;
 
 use Symfony\Component\Form\ChoiceList\ArrayChoiceList;
+use Symfony\Component\Form\ChoiceList\ChoiceListInterface;
 use Symfony\Component\Form\ChoiceList\Loader\ChoiceLoaderInterface;
 
 /**
@@ -18,10 +19,7 @@ class DynamicChoiceLoader implements ChoiceLoaderInterface
     private $cached = false;
     private $choiceList;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function loadChoiceList($value = null)
+    public function loadChoiceList(?callable $value = null): ChoiceListInterface
     {
         if (null === $this->choiceList || !$this->cached) {
             $this->choiceList = new ArrayChoiceList(array_combine($this->choices, $this->choices));
@@ -31,9 +29,6 @@ class DynamicChoiceLoader implements ChoiceLoaderInterface
         return $this->choiceList;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function loadChoicesForValues(array $values, $value = null): array
     {
         if ($this->choices !== $values) {
@@ -43,9 +38,6 @@ class DynamicChoiceLoader implements ChoiceLoaderInterface
         return $this->choices = $values;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function loadValuesForChoices(array $choices, $value = null): array
     {
         return $choices;

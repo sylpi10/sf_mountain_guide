@@ -14,6 +14,9 @@ use Vich\UploaderBundle\Util\ClassUtils;
  * PropertyMappingFactory.
  *
  * @author Dustin Dobervich <ddobervich@gmail.com>
+ * @final
+ *
+ * @internal
  */
 class PropertyMappingFactory
 {
@@ -112,7 +115,7 @@ class PropertyMappingFactory
         return $this->createMapping($obj, $field, $mappingData);
     }
 
-    public function fromFirstField($obj, ?string $className = null): ?PropertyMapping
+    public function fromFirstField(object $obj, ?string $className = null): ?PropertyMapping
     {
         if ($obj instanceof Proxy) {
             $obj->__load();

@@ -3,8 +3,8 @@
 return [
     'page_title' => [
         'dashboard' => 'Inicio',
-        'detail' => '%entity_label_singular% <small>(#%entity_short_id%)</small>',
-        'edit' => 'Modificar %entity_label_singular% <small>(#%entity_short_id%)</small>',
+        'detail' => '%entity_as_string%',
+        'edit' => 'Modificar %entity_label_singular%',
         'index' => '%entity_label_plural%',
         'new' => 'Crear %entity_label_singular%',
         'exception' => 'Error|Errores',
@@ -63,7 +63,7 @@ return [
     ],
 
     'batch_action_modal' => [
-        'title' => '¿Realmente quieres modificar los elementos seleccionados?',
+        'title' => 'Se va a aplicar la acción "%action_name%" a %num_items% elemento(s).',
         'content' => 'Esta acción no se puede deshacer.',
         'action' => 'Continuar',
     ],
@@ -115,12 +115,20 @@ return [
         'username' => 'Nombre de usuario',
         'password' => 'Contraseña',
         'sign_in' => 'Iniciar sesión',
+        'forgot_password' => '¿Olvidaste tu contraseña?',
+        'remember_me' => 'Recuérdame',
     ],
 
     'exception' => [
         'entity_not_found' => 'Este elemento ya no está disponible.',
         'entity_remove' => 'Este elemento no se puede eliminar porque otros elementos dependen de él.',
         'forbidden_action' => 'No se puede realizar la acción solicitada en este elemento.',
-        // 'insufficient_entity_permission' => 'You don't have permission to access this item.',
+        'insufficient_entity_permission' => 'No tienes permiso para acceder a este elemento.',
+    ],
+
+    'autocomplete' => [
+        'no-results-found' => 'No se han encontrado resultados',
+        'no-more-results' => 'No hay más resultados',
+        'loading-more-results' => 'Cargando más resultados…',
     ],
 ];

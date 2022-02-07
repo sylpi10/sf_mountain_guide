@@ -3,8 +3,8 @@
 return [
     'page_title' => [
         // 'dashboard' => '',
-        'detail' => '%entity_label_singular% <small>(#%entity_short_id%)</small>',
-        'edit' => 'Modifica %entity_label_singular% <small>(#%entity_short_id%)</small>',
+        'detail' => '%entity_as_string%',
+        'edit' => 'Modifica %entity_label_singular%',
         'index' => '%entity_label_plural%',
         'new' => 'Crea %entity_label_singular%',
         'exception' => 'Errore|Errori',
@@ -54,12 +54,12 @@ return [
         'add_new_item' => 'Aggiungi un nuovo elemento',
         'remove_item' => 'Rimuovi l\'elemento',
         'choose_file' => 'Scegli file',
-        // 'close' => '',
-        // 'create' => '',
-        // 'create_and_add_another' => '',
-        // 'create_and_continue' => '',
-        // 'save' => '',
-        // 'save_and_continue' => '',
+        'close' => 'Chiudi',
+        'create' => 'Crea',
+        'create_and_add_another' => 'Crea ed aggiungi',
+        'create_and_continue' => 'Crea e continua',
+        'save' => 'Salva',
+        'save_and_continue' => 'Salva e continua a modificare',
     ],
 
     'batch_action_modal' => [
@@ -115,6 +115,8 @@ return [
         'username' => 'Nome utente',
         'password' => 'Password',
         'sign_in' => 'Accedi',
+        'forgot_password' => 'Password dimenticata?',
+        'remember_me' => 'Ricordami',
     ],
 
     'exception' => [
@@ -122,5 +124,11 @@ return [
         'entity_remove' => 'L\'elemento selezionato non può essere cancellato perché altri elementi dipendono da questo.',
         'forbidden_action' => 'L\'azione richiesta non può essere eseguita su questo elemento.',
         // 'insufficient_entity_permission' => 'You don't have permission to access this item.',
+    ],
+
+    'autocomplete' => [
+        'no-results-found' => 'Nessun risultato trovato',
+        'no-more-results' => 'Non ci sono altri risultati',
+        'loading-more-results' => 'Caricando più risultati…',
     ],
 ];
