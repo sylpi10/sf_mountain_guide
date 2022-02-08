@@ -66,7 +66,7 @@ class GlobalController extends AbstractController
 
                 $sentEmail->setName($form->get('name')->getData());
                 $sentEmail->setEmail($form->get('email')->getData());
-                $sentEmail->setMEssage($form->get('message')->getData());
+                $sentEmail->setMessage($form->get('message')->getData());
 
                 // persist contact infos
                 $this->manager->persist($sentEmail);

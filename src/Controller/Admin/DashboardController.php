@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Blog;
 use App\Entity\User;
 use App\Entity\About;
+use App\Entity\Contact;
 use App\Entity\Discipline;
 use App\Entity\NewsLetter;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,5 +52,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Blog', 'fas fa-newspaper', Blog::class);
         yield MenuItem::linkToCrud('About', 'fas fa-address-card', About::class);
         yield MenuItem::linkToCrud('Newsletter', 'far fa-paper-plane', NewsLetter::class);
+        yield MenuItem::linkToCrud('Contact', 'fas fa-envelope-open-text', Contact::class);
     }
 }

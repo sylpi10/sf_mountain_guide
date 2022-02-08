@@ -15,7 +15,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class DisciplinesController extends AbstractController
 {
-
     /**
      * @Route("discipline/{slug}-{id}", name="detail", requirements={"slug": "[a-z0-9\-]*"})
      *

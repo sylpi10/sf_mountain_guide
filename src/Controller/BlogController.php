@@ -10,15 +10,26 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class BlogController extends AbstractController
 {
+    private PaginatorInterface $paginator;
+    private BlogRepository $blogRepository;
+
+    public function __construct(
+        BlogRepository $blogRepository,
+        PaginatorInterface $paginator
+    ) {
+        $this->paginator = $paginator;
+        $this->blogRepository = $blogRepository;
+    }
+
     /**
      * @Route("/blog", name="blog")
      */
-    public function index(BlogRepository $blogRepository, PaginatorInterface $paginator, Request $request)
+    public function index(Request $request)
     {
         // $articles = $blogRepository->findAll();
         $displayBtn = true;
-        $articles = $paginator->paginate(
-            $blogRepository->findByDate(),
+        $articles = $this->paginator->paginate(
+            $this->blogRepository->findByDate(),
             $request->query->getInt('page', 1),
             6
         );
