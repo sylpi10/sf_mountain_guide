@@ -17,13 +17,13 @@ function backToTop() {
  function changeMenuOnscroll() {
 
   const menu = document.querySelector('nav');
-  if(window.innerWidth > 800){
+  // if(window.innerWidth > 800){
     if (document.body.scrollTop > 360 || document.documentElement.scrollTop > 360) {
       menu.classList.add('scrolled-nav');
     } else {
       menu.classList.remove('scrolled-nav');
     }
-  }
+  // }
  
 }
 
