@@ -2,11 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\NewsLetterRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\NewsLetterRepository;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=NewsLetterRepository::class)
+ * @UniqueEntity(
+ * fields={"email"},
+ * message="Vous avez déjà souscrit à la newsletter avec cet email"
+ * )
  */
 class NewsLetter
 {

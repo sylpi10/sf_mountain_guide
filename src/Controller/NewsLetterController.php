@@ -58,7 +58,8 @@ class NewsLetterController extends AbstractController
 
 
             $email = (new TemplatedEmail())
-                ->from($newsletter->get('email')->getData())
+                // ->from($newsletter->get('email')->getData())
+                ->from("contact@directicimes.com")
                 ->to("syl.pillet@hotmail.fr")
                 // ->to("contact@directicimes.com")
                 ->subject("Nouvel abonné à la newsletter")

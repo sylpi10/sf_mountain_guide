@@ -49,9 +49,10 @@ class GlobalController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // test for robots
+            // honeypot for robots
             if (!empty($_POST['website'])) {
                 return $this->redirectToRoute("home");
+                // if not filled, handle request
             } else {
                 $email = (new TemplatedEmail())
                     ->from($contact->get('email')->getData())
@@ -73,6 +74,10 @@ class GlobalController extends AbstractController
                 $this->manager->flush();
 
                 $this->mailer->send($email);
+
+                /**
+                 * TODO: send email confirmation to client
+                 */
 
                 // $notification->notify($contact);
                 $message = $this->translator->trans("Your email has been send");
