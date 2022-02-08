@@ -59,12 +59,12 @@
 								{% endif %}
 								{% if is_granted('ROLE_ADMIN') %}
 									<li class="nav-item">
-										<a class="nav-link btn btn-info" href="{{path('admin')}}" title="admin">Admin</a>
+										<a class="nav-link ml-4 text-warning" href="{{path('admin')}}" title="admin">Admin</a>
 									</li>
 								{% endif %}
 								{% if app.user %}
 									<li class="nav-item">
-										<a class="nav-link btn btn-danger ml-4" title="logout" href=" {{path('logout')}} ">{% trans %}
+										<a class="nav-link ml-4 text-danger" title="logout" href=" {{path('logout')}} ">{% trans %}
 											Logout
 											{% endtrans %}</a>
 									</li>
