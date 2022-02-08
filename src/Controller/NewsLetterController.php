@@ -15,20 +15,30 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class NewsLetterController extends AbstractController
 {
-    /**
-     * @Route("/newsletter", name="newsletter")
-     */
-    public function index(
-        Request $request,
+    private MailerInterface $mailer;
+    private NewsLetterRepository $newsLetterRepository;
+    private EntityManagerInterface $manager;
+    private TranslatorInterface $translator;
+    public function __costruct(
         MailerInterface $mailer,
         NewsLetterRepository $newsLetterRepository,
         EntityManagerInterface $manager,
         TranslatorInterface $translator
     ) {
+        $this->mailer = $mailer;
+        $this->newsLetterRepository = $newsLetterRepository;
+        $this->manager = $manager;
+        $this->translator = $translator;
+    }
+    /**
+     * @Route("/newsletter", name="newsletter")
+     */
+    public function index(Request $request)
+    {
 
         $formNews = $this->createForm(NewsLetterType::class);
         $newsletter = $formNews->handleRequest($request);
-        $newsletterEntity = $newsLetterRepository->findAll();
+        $newsletterEntity = $this->newsLetterRepository->findAll();
         $displayBtn = false;
         if ($formNews->isSubmitted() && $formNews->isValid()) {
 
@@ -37,8 +47,8 @@ class NewsLetterController extends AbstractController
             $subscriber->setEmail($newsletter->get('email')->getData());
             $subscriber->setFullname($newsletter->get('fullname')->getData());
 
-            $manager->persist($subscriber);
-            $manager->flush();
+            $this->manager->persist($subscriber);
+            $this->manager->flush();
 
             // send email to client who registered 
             $emailToClient = (new TemplatedEmail())
@@ -54,7 +64,7 @@ class NewsLetterController extends AbstractController
                 ]);
 
 
-            $mailer->send($emailToClient);
+            $this->mailer->send($emailToClient);
 
 
             $email = (new TemplatedEmail())
@@ -73,11 +83,11 @@ class NewsLetterController extends AbstractController
                 ]);
 
             //send mail to admin
-            $mailer->send($email);
+            $this->mailer->send($email);
 
 
             // confirmation msg
-            $message = $translator->trans("You have been registered to our newsletter");
+            $message = $this->translator->trans("You have been registered to our newsletter");
             $this->addFlash('success', $message);
 
             // redirection

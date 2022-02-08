@@ -16,7 +16,6 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class GlobalController extends AbstractController
 {
-    private Request $request;
     private MailerInterface $mailer;
     private TranslatorInterface $translator;
     private DisciplineRepository $disciplineRepo;

@@ -15,6 +15,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class DisciplinesController extends AbstractController
 {
+    private DisciplineRepository $disciplineRepo;
+    private MailerInterface $mailer;
+    private TranslatorInterface $translator;
+
+    public function __construct(
+        DisciplineRepository $disciplineRepo,
+        MailerInterface $mailer,
+        TranslatorInterface $translator
+    ) {
+        $this->disciplineRepo = $disciplineRepo;
+        $this->mailer = $mailer;
+        $this->translator = $translator;
+    }
     /**
      * @Route("discipline/{slug}-{id}", name="detail", requirements={"slug": "[a-z0-9\-]*"})
      *
@@ -29,11 +42,8 @@ class DisciplinesController extends AbstractController
      */
     public function detail(
         $id,
-        DisciplineRepository $disciplineRepo,
-        Discipline $discipline,
-        MailerInterface $mailer,
-        TranslatorInterface $translator,
         Request $request,
+        Discipline $discipline,
         string $slug
     ): Response {
 
@@ -44,13 +54,13 @@ class DisciplinesController extends AbstractController
             ], 301);
         }
         $displayBtn = true;
-        $disciplines = $disciplineRepo->findAll();
+        $disciplines = $this->disciplineRepo->findAll();
         // $discipline = $disciplineRepo->findOneById($id);
         $form = $this->createForm(ContactType::class);
 
 
         $contact = $form->handleRequest($request);
-        $disciplines = $disciplineRepo->findAll();
+        $disciplines = $this->disciplineRepo->findAll();
 
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -67,10 +77,10 @@ class DisciplinesController extends AbstractController
                         "form" => $form->createView()
                     ]);
 
-                $mailer->send($email);
+                $this->mailer->send($email);
 
                 // $notification->notify($contact);
-                $message = $translator->trans("Your email has been send");
+                $message = $this->translator->trans("Your email has been send");
 
                 $this->addFlash('success', $message);
                 return $this->redirectToRoute("detail", [

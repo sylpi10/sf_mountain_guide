@@ -47,3 +47,10 @@ $(document).ready(function() {
 $(".alert-success").alert();
 window.setTimeout(function() { $(".alert-success").alert('close'); }, 2000);
 
+
+    $(document).ready(function() {
+        $('.parallax-window').parallax({
+            iosFix: true,
+            androidfix: true 
+        });
+    });

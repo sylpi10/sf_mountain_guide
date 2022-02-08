@@ -11,76 +11,74 @@
 		{% for locale in locales %}
 			{% if locale == app.request.locale %}
 				{# <div class="disciplines {{discipline|replace({" ":" -"})|lower|trim}}" id=""> #}
-				<div class="parallax-window" data-parallax="scroll" data-image-src="../uploads/{{discipline.imageDetail}}">
-					<div class="disciplines {{discipline.slug|lower}}" id="">
-						<div class=" container-fluid">
-							<div class="text-wrapper">
-								<div class="text">
+				<div class="disciplines {{discipline.slug|lower}}" id="" style="background-image:url('../uploads/{{discipline.imageDetail}}')">
+					<div class=" container-fluid">
+						<div class="text-wrapper">
+							<div class="text">
 
-									{% if locale =='fr' %}
-										<h1>{{discipline.title}}</h1>
-									{% endif %}
-									{% if locale =='en' %}
-										<h1>{{discipline.englishTitle}}</h1>
-									{% endif %}
+								{% if locale =='fr' %}
+									<h1>{{discipline.title}}</h1>
+								{% endif %}
+								{% if locale =='en' %}
+									<h1>{{discipline.englishTitle}}</h1>
+								{% endif %}
 
-									<hr class="under-title">
+								<hr class="under-title">
 
-									{% if locale =='fr' %}
-										<div>{{discipline.content|replace({'<h1>': '<h2>', '</h1>': "</h2>"})|raw }}</div>
-									{% endif %}
-									{% if locale =='en' %}
-										<div>{{discipline.englishContent|replace({'<h1>': '<h2>', '</h1>': "</h2>"})|raw }}</div>
-									{% endif %}
+								{% if locale =='fr' %}
+									<div>{{discipline.content|replace({'<h1>': '<h2>', '</h1>': "</h2>"})|raw }}</div>
+								{% endif %}
+								{% if locale =='en' %}
+									<div>{{discipline.englishContent|replace({'<h1>': '<h2>', '</h1>': "</h2>"})|raw }}</div>
+								{% endif %}
 
 
-									<div class="contact-btn">
-										<a href="#contact" class="goto-contact">Réserver</a>
-									</div>
-								</div>
-
-								<div class="info-details">
-									<div class="nb-persons">
-										<i class="fas fa-users"></i>
-										{% if locale == 'fr' %}
-											<span>{{discipline.persNumber|raw}}</span>
-										{% else %}
-											<span>{{discipline.englishNbPers|raw}}</span>
-										{% endif %}
-									</div>
-									<hr>
-									<div class="duration">
-										<i class="far fa-clock"></i>
-										{% if locale == 'fr' %}
-											<span>{{discipline.duration|raw}}</span>
-										{% else %}
-											<span>{{discipline.englishDuration|raw}}</span>
-										{% endif %}
-									</div>
-									<hr>
-									{% if discipline.location %}
-										<div class="place">
-											<i class="fas fa-map-marked-alt"></i>
-											{% if locale == 'fr' %}
-												<span>{{discipline.location|raw}}</span>
-											{% else %}
-												<span>{{discipline.englishLocation|raw}}</span>
-											{% endif %}
-										</div>
-									{% endif %}
-									<hr>
-									<div class="price">
-										<i class="fas fa-tag"></i>
-										{% if locale == 'fr' %}
-											<span>{{discipline.price|raw}}</span>
-										{% else %}
-											<span>{{discipline.englishPrice|raw}}</span>
-										{% endif %}
-									</div>
+								<div class="contact-btn">
+									<a href="#contact" class="goto-contact">Réserver</a>
 								</div>
 							</div>
 
+							<div class="info-details">
+								<div class="nb-persons">
+									<i class="fas fa-users"></i>
+									{% if locale == 'fr' %}
+										<span>{{discipline.persNumber|raw}}</span>
+									{% else %}
+										<span>{{discipline.englishNbPers|raw}}</span>
+									{% endif %}
+								</div>
+								<hr>
+								<div class="duration">
+									<i class="far fa-clock"></i>
+									{% if locale == 'fr' %}
+										<span>{{discipline.duration|raw}}</span>
+									{% else %}
+										<span>{{discipline.englishDuration|raw}}</span>
+									{% endif %}
+								</div>
+								<hr>
+								{% if discipline.location %}
+									<div class="place">
+										<i class="fas fa-map-marked-alt"></i>
+										{% if locale == 'fr' %}
+											<span>{{discipline.location|raw}}</span>
+										{% else %}
+											<span>{{discipline.englishLocation|raw}}</span>
+										{% endif %}
+									</div>
+								{% endif %}
+								<hr>
+								<div class="price">
+									<i class="fas fa-tag"></i>
+									{% if locale == 'fr' %}
+										<span>{{discipline.price|raw}}</span>
+									{% else %}
+										<span>{{discipline.englishPrice|raw}}</span>
+									{% endif %}
+								</div>
+							</div>
 						</div>
+
 					</div>
 				</div>
 			{% endif %}

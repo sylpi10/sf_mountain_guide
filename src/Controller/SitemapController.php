@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Discipline;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,6 +11,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SitemapController extends AbstractController
 {
+    private ManagerRegistry $managerRegistry;
+    public function __construct(ManagerRegistry $managerRegistry)
+    {
+        $this->managerRegistry = $managerRegistry;
+    }
     /**
      * @Route("/sitemap.xml", name="sitemap", defaults={"_format"="xml"})
      */
@@ -29,7 +35,7 @@ class SitemapController extends AbstractController
         $urls[] = ['loc' => $this->generateUrl('blog')];
 
         // add dynamic urls 
-        foreach ($this->getDoctrine()->getRepository(Discipline::class)->findAll() as $discipline) {
+        foreach ($this->managerRegistry->getRepository(Discipline::class)->findAll() as $discipline) {
             $title = [
                 'loc' => $discipline->getTitle()
             ];

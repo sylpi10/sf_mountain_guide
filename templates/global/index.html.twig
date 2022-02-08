@@ -9,23 +9,22 @@
 
 {% block body %}
 
-	<div class="parallax-window" data-parallax="scroll" data-image-src="../../images/bg1.jpg">
-		<div class="hero-area">
-			<h1 class="main-title">{% trans %}
-				Mountaineering, Ski, Rock Climbing
-				{% endtrans %}
-			</h1>
-			<a href="{{path('home', {'_fragment':'disciplines'})}}" class="btn more-link button-link" title="Plus">
-				<i class="fas fa-angle-down"></i>
-			</a>
-		</div>
-
-		<div class="index-notif">
-			{% for msg in app.flashes('success') %}
-				<p class="alert alert-success">{{msg}}</p>
-			{% endfor %}
-		</div>
+	<div class="hero-area">
+		<h1 class="main-title">{% trans %}
+			Mountaineering, Ski, Rock Climbing
+			{% endtrans %}
+		</h1>
+		<a href="{{path('home', {'_fragment':'disciplines'})}}" class="btn more-link button-link" title="Plus">
+			<i class="fas fa-angle-down"></i>
+		</a>
 	</div>
+
+	<div class="index-notif">
+		{% for msg in app.flashes('success') %}
+			<p class="alert alert-success">{{msg}}</p>
+		{% endfor %}
+	</div>
+
 	{# end hero #}
 
 	<!-- // anchor for more link -->
