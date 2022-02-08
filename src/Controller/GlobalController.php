@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Contact;
 use App\Form\ContactType;
 use App\Repository\DisciplineRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
@@ -14,29 +16,47 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class GlobalController extends AbstractController
 {
+    private Request $request;
+    private MailerInterface $mailer;
+    private TranslatorInterface $translator;
+    private DisciplineRepository $disciplineRepo;
+    private AuthenticationUtils $util;
+    private EntityManagerInterface $manager;
+
+    public function __construct(
+        MailerInterface $mailer,
+        TranslatorInterface $translator,
+        DisciplineRepository $disciplineRepo,
+        AuthenticationUtils $util,
+        EntityManagerInterface $manager
+    ) {
+        $this->mailer = $mailer;
+        $this->translator = $translator;
+        $this->disciplineRepo = $disciplineRepo;
+        $this->util = $util;
+        $this->manager = $manager;
+    }
+
     /**
      * @Route("/", name="home")
      */
-    public function index(
-        Request $request,
-        MailerInterface $mailer,
-        TranslatorInterface $translator,
-        DisciplineRepository $disciplineRepo
-    ) {
-        //  = new Contact();
+    public function index(Request $request)
+    {
+        $sentEmail = new Contact();
         $form = $this->createForm(ContactType::class);
         $contact = $form->handleRequest($request);
-        $disciplines = $disciplineRepo->findAll();
+
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            // test for robots
             if (!empty($_POST['website'])) {
                 return $this->redirectToRoute("home");
             } else {
                 $email = (new TemplatedEmail())
                     ->from($contact->get('email')->getData())
-                    ->to("contact@directicimes.com")
-                    // ->to("syl.pillet@hotmail.fr")
+                    // ->to("contact@directicimes.com")
+                    ->to("syl.pillet@hotmail.fr")
                     ->subject("Nouveau Message depuis DirectiCimes")
                     // ->htmlTemplate("global/index.html.twig")
                     ->text($contact->get('message')->getData())
@@ -44,10 +64,18 @@ class GlobalController extends AbstractController
                         "form" => $form->createView(),
                     ]);
 
-                $mailer->send($email);
+                $sentEmail->setName($form->get('name')->getData());
+                $sentEmail->setEmail($form->get('email')->getData());
+                $sentEmail->setMEssage($form->get('message')->getData());
+
+                // persist contact infos
+                $this->manager->persist($sentEmail);
+                $this->manager->flush();
+
+                $this->mailer->send($email);
 
                 // $notification->notify($contact);
-                $message = $translator->trans("Your email has been send");
+                $message = $this->translator->trans("Your email has been send");
 
                 $this->addFlash('success', $message);
                 // return $this->redirect(
@@ -57,6 +85,8 @@ class GlobalController extends AbstractController
             }
         }
 
+        // return every disciplines on home page
+        $disciplines = $this->disciplineRepo->findAll();
         return $this->render('global/index.html.twig', [
             'form' => $form->createView(),
             "disciplines" => $disciplines,
@@ -93,11 +123,11 @@ class GlobalController extends AbstractController
     /**
      * @Route("/login", name="login")
      */
-    public function login(AuthenticationUtils $util)
+    public function login()
     {
         return $this->render('global/login.html.twig', [
-            "lastUserName" => $util->getLastUsername(),
-            "error" => $util->getLastAuthenticationError(),
+            "lastUserName" => $this->util->getLastUsername(),
+            "error" => $this->util->getLastAuthenticationError(),
             "displayBtn" => false
         ]);
     }
