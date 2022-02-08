@@ -56,8 +56,8 @@ class GlobalController extends AbstractController
             } else {
                 $email = (new TemplatedEmail())
                     ->from($contact->get('email')->getData())
-                    // ->to("contact@directicimes.com")
-                    ->to("syl.pillet@hotmail.fr")
+                    ->to("contact@directicimes.com")
+                    // ->to("syl.pillet@hotmail.fr")
                     ->subject("Nouveau Message depuis DirectiCimes")
                     // ->htmlTemplate("global/index.html.twig")
                     ->text($contact->get('message')->getData())

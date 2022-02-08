@@ -46,3 +46,4 @@ $(document).ready(function() {
 // alerts
 $(".alert-success").alert();
 window.setTimeout(function() { $(".alert-success").alert('close'); }, 2000);
+
