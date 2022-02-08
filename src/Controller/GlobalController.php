@@ -78,10 +78,10 @@ class GlobalController extends AbstractController
                 $message = $this->translator->trans("Your email has been send");
 
                 $this->addFlash('success', $message);
-                // return $this->redirect(
-                //     $this->generateUrl('home') . '#top'
-                // );
-                return $this->redirectToRoute("home");
+                return $this->redirect(
+                    $this->generateUrl('home') . '#top'
+                );
+                // return $this->redirectToRoute("home");
             }
         }
 
