@@ -133,7 +133,7 @@
       </trans-unit>
       <trans-unit id="PPWIOgS" resname="This content does not exist">
         <source>This content does not exist</source>
-        <target>Ce contenu n'xiste pas</target>
+        <target>Ce contenu n'existe pas</target>
       </trans-unit>
       <trans-unit id="uQ16l3Z" resname="What appened ?">
         <source>What appened ?</source>
