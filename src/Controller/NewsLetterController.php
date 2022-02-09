@@ -19,7 +19,7 @@ class NewsLetterController extends AbstractController
     private NewsLetterRepository $newsLetterRepository;
     private EntityManagerInterface $manager;
     private TranslatorInterface $translator;
-    public function __costruct(
+    public function __construct(
         MailerInterface $mailer,
         NewsLetterRepository $newsLetterRepository,
         EntityManagerInterface $manager,

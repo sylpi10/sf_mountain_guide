@@ -123,6 +123,46 @@
         <source>Subscribe</source>
         <target>S'abonner</target>
       </trans-unit>
+      <trans-unit id="S_G8K8J" resname="The page you requested does not exist">
+        <source>The page you requested does not exist</source>
+        <target>La page n'existe pas </target>
+      </trans-unit>
+      <trans-unit id="Et5Vkg9" resname="There is no result for your request">
+        <source>There is no result for your request</source>
+        <target>La page que vous avez demandé n'existe pas !!!</target>
+      </trans-unit>
+      <trans-unit id="PPWIOgS" resname="This content does not exist">
+        <source>This content does not exist</source>
+        <target>Ce contenu n'xiste pas</target>
+      </trans-unit>
+      <trans-unit id="uQ16l3Z" resname="What appened ?">
+        <source>What appened ?</source>
+        <target>Que s'est-il passé ?</target>
+      </trans-unit>
+      <trans-unit id="4S5fA8h" resname="If you typed the URL directly, please make sure the spelling is correct.">
+        <source>If you typed the URL directly, please make sure the spelling is correct.</source>
+        <target>Si vous avez tapé l’adresse de ce lien directement, assurez-vous de l’avoir tapée correctement.</target>
+      </trans-unit>
+      <trans-unit id="yWAXKTd" resname="If you clicked on a link to get here, the link is outdated.">
+        <source>If you clicked on a link to get here, the link is outdated.</source>
+        <target>Si vous avez cliqué sur un lien pour arriver là, le lien n’est pas à jour ou la page n’existe plus.</target>
+      </trans-unit>
+      <trans-unit id="93_dkTh" resname="What can you do now ?">
+        <source>What can you do now ?</source>
+        <target>Que faire maintenant ?</target>
+      </trans-unit>
+      <trans-unit id="EUuQCrP" resname="You may find what you are looking for on the top menu.">
+        <source>You may find what you are looking for on the top menu.</source>
+        <target>Vous pourrez retrouver ce que vous cherchiez dans le menu principal.</target>
+      </trans-unit>
+      <trans-unit id="eqfeMnX" resname="Or follow this link to return directly to our Home page :">
+        <source>Or follow this link to return directly to our Home page :</source>
+        <target>Ou suivre ce lien pour retourner directement à la page d'accueil :</target>
+      </trans-unit>
+      <trans-unit id="EdWLCN6" resname="Home page">
+        <source>Home page</source>
+        <target>Page d'accueil</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
