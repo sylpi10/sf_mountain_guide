@@ -12,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 
 class BlogCrudController extends AbstractCrudController
 {
@@ -25,15 +26,15 @@ class BlogCrudController extends AbstractCrudController
         return [
             TextField::new('title'),
             TextField::new('englishTitle'),
-            TextEditorField::new('content'),
-            TextEditorField::new('englishContent'),
+            TextEditorField::new('content')->setFormType(CKEditorType::class),
+            TextEditorField::new('englishContent')->setFormType(CKEditorType::class),
             TextField::new('location'),
-            ImageField::new('image', 'Image')
-                ->onlyOnIndex()
-                ->setBasePath('/uploads'),
-            TextField::new('imageFile')
-                ->onlyOnForms()
-                ->setFormType(VichImageType::class)
+            // ImageField::new('image', 'Image')
+            //     ->onlyOnIndex()
+            //     ->setBasePath('/uploads'),
+            // TextField::new('imageFile')
+            //     ->onlyOnForms()
+            //     ->setFormType(VichImageType::class)
         ];
     }
     public function configureCrud(Crud $crud): Crud
@@ -41,7 +42,8 @@ class BlogCrudController extends AbstractCrudController
         return $crud
             ->setPageTitle('index', 'Articles')
             ->setPageTitle('edit', 'Modifier Un Article')
-            ->setPageTitle('new', 'Créer Un Article');
+            ->setPageTitle('new', 'Créer Un Article')
+            ->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig');
     }
 
     public function configureActions(Actions $actions): Actions
