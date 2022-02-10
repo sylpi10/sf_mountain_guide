@@ -11,7 +11,7 @@
 		{% for locale in locales %}
 			{% if locale == app.request.locale %}
 				{# <div class="disciplines {{discipline|replace({" ":" -"})|lower|trim}}" id=""> #}
-				<div class="disciplines {{discipline.slug|lower}}" id="" style="background-image:url('../uploads/{{discipline.imageDetail}}')">
+				<div data-jarallax data-speed="0.4" class="disciplines jarallax {{discipline.slug|lower}}" id="" style="background-image:url('../uploads/{{discipline.imageDetail}}')">
 					<div class=" container-fluid">
 						<div class="text-wrapper">
 							<div class="text">

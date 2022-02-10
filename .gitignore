@@ -14,8 +14,8 @@
 /var/
 /deploy
 /
-/vendor/*
-/.readme
+vendor/*
+readme.md
 /.htaccess
 ###< symfony/framework-bundle ###
 

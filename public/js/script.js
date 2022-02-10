@@ -2,6 +2,7 @@
 window.onscroll = ()=> {
     backToTop();
       changeMenuOnscroll();
+      // parrallaxOnTitle();
 };
 
 let backTop = document.querySelector('.back-top');
@@ -45,12 +46,15 @@ $(document).ready(function() {
 
 // alerts
 $(".alert-success").alert();
-window.setTimeout(function() { $(".alert-success").alert('close'); }, 2000);
+window.setTimeout(function() { $(".alert-success").alert('close'); }, 2600);
 
+let mainTitle = document.querySelector(".main-title");
+let mainTitleTop = document.querySelector(".main-title").offsetHeight;
 
-    $(document).ready(function() {
-        $('.parallax-window').parallax({
-            iosFix: true,
-            androidfix: true 
-        });
-    });
+// function parrallaxOnTitle() {
+//   if (document.documentElement.scrollTop < 180 || document.body.scrollTop > 180) {
+//   mainTitleTop += 20;
+//   mainTitle.style.marginTop = mainTitleTop + 'px';
+//   console.log(mainTitle.style.marginTop);
+//   }
+// }

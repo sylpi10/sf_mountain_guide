@@ -28,11 +28,6 @@ class BlogCrudController extends AbstractCrudController
             TextEditorField::new('content'),
             TextEditorField::new('englishContent'),
             TextField::new('location'),
-            // ImageField::new('image')
-            //     ->setBasePath('uploads')
-            //     ->setUploadDir('public/uploads')
-            //     ->setUploadedFileNamePattern('[randomhash].[extension]')
-            //     ->setRequired(false)
             ImageField::new('image', 'Image')
                 ->onlyOnIndex()
                 ->setBasePath('/uploads'),

@@ -55,4 +55,10 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Newsletter', 'far fa-paper-plane', NewsLetter::class);
         yield MenuItem::linkToCrud('Mails reçus', 'fas fa-envelope-open-text', Contact::class);
     }
+    // public function configureCrud(): Crud
+    // {
+    //     return Crud::new()
+    //         // add your form theme here
+    //         ->addFormTheme('@BundleName/Form/wysiwyg_widget.html.twig');
+    // }
 }
