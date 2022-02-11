@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\NewsLetterSubscriber;
+use App\Form\NewsLetterSubscriberType;
 use App\Form\NewsLetterType;
 use App\Repository\NewsLetterSubscriberRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -36,7 +37,7 @@ class NewsLetterSubscriberController extends AbstractController
     public function index(Request $request)
     {
 
-        $formNews = $this->createForm(NewsLetterType::class);
+        $formNews = $this->createForm(NewsLetterSubscriberType::class);
         $newsletter = $formNews->handleRequest($request);
         $newsletterEntity = $this->newsLetterRepository->findAll();
         $displayBtn = false;

@@ -163,6 +163,10 @@
         <source>Home page</source>
         <target>Page d'accueil</target>
       </trans-unit>
+      <trans-unit id="Wa9hzN1" resname="I accept data collect (name and email)">
+        <source>I accept data collect (name and email)</source>
+        <target>J'accepte la collecte de mes données (nom et email)</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

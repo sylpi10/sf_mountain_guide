@@ -33,6 +33,10 @@ class NewsLetterSubscriber
      */
     private $email;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isRgpd = false;
 
 
     public function getId(): ?int
@@ -60,6 +64,18 @@ class NewsLetterSubscriber
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getIsRgpd(): ?bool
+    {
+        return $this->isRgpd;
+    }
+
+    public function setIsRgpd(bool $isRgpd): self
+    {
+        $this->isRgpd = $isRgpd;
 
         return $this;
     }

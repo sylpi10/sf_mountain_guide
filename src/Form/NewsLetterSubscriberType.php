@@ -4,12 +4,14 @@ namespace App\Form;
 
 use App\Entity\NewsLetterSubscriber;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Validator\Constraints\IsTrue;
 
-class NewsLetterType extends AbstractType
+class NewsLetterSubscriberType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -19,6 +21,12 @@ class NewsLetterType extends AbstractType
             ])
             ->add('email', EmailType::class, [
                 "label" => false
+            ])
+            ->add('isRgpd', CheckboxType::class, [
+                "label" => false,
+                "constraints" => new IsTrue([
+                    'message' => "vous devez accepter"
+                ])
             ]);
     }
 

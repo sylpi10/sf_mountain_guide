@@ -36,6 +36,13 @@
 				{% endtrans %}</label>
 			{{form_row(form.email, {'attr':{'placeholder': 'mail@gmail.com'}})}}
 
+			<label class="control-label" for="">
+				{% trans %}
+				I accept data collect (name and email)
+				{% endtrans %}
+				{{form_row(form.isRgpd)}}
+			</label>
+
 			<button type="submit" class="btn button-link">
 				<i class=" far fa-paper-plane"></i>
 				{% trans %}
