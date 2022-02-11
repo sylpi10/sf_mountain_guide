@@ -2,59 +2,48 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Blog;
+use App\Entity\NewsLetterSubscriber;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use Vich\UploaderBundle\Form\Type\VichImageType;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
-class BlogCrudController extends AbstractCrudController
+class NewsLetterSubscriberCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return Blog::class;
+        return NewsLetterSubscriber::class;
     }
+
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setPageTitle('index', 'Les abonnés à la newsletter')
+            ->setPageTitle('edit', 'Editer')
+            ->setPageTitle('new', 'Créer');
+    }
+
 
     public function configureFields(string $pageName): iterable
     {
         return [
-            TextField::new('title', 'Titre'),
-            TextField::new('englishTitle', 'Titre anglais'),
-            TextEditorField::new('content', 'Mon texte')->setFormType(CKEditorType::class),
-            TextEditorField::new('englishContent', 'Mon texte en anglais')->setFormType(CKEditorType::class),
-            TextField::new('location', 'Lieu'),
-            // ImageField::new('image', 'Image')
-            //     ->onlyOnIndex()
-            //     ->setBasePath('/uploads'),
-            // TextField::new('imageFile')
-            //     ->onlyOnForms()
-            //     ->setFormType(VichImageType::class)
+            IdField::new('id'),
+            TextField::new('fullname', "Nom Prénom"),
+            TextField::new('email'),
         ];
     }
-    public function configureCrud(Crud $crud): Crud
-    {
-        return $crud
-            ->setPageTitle('index', 'Articles')
-            ->setPageTitle('edit', 'Modifier Un Article')
-            ->setPageTitle('new', 'Créer Un Article')
-            ->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig');
-    }
-
     public function configureActions(Actions $actions): Actions
     {
         return $actions
 
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
-            // ...
-            ->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) {
-                return $action->setIcon('fa fa-plus')->setLabel('Ajouter un Article');
-            })
+            ->remove(Crud::PAGE_INDEX, Action::NEW)
+
+            // ->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) {
+            //     return $action->setIcon('fa fa-plus')->setLabel('Créer');
+            // })
             ->update(Crud::PAGE_INDEX, Action::EDIT, function (Action $action) {
                 return $action->setIcon('fa fa-pencil-alt')->setLabel('Modifier');
             })

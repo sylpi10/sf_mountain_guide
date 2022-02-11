@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\NewsLetter;
+use App\Entity\NewsLetterSubscriber;
 use App\Form\NewsLetterType;
-use App\Repository\NewsLetterRepository;
+use App\Repository\NewsLetterSubscriberRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,15 +13,15 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class NewsLetterController extends AbstractController
+class NewsLetterSubscriberController extends AbstractController
 {
     private MailerInterface $mailer;
-    private NewsLetterRepository $newsLetterRepository;
+    private NewsLetterSubscriberRepository $newsLetterRepository;
     private EntityManagerInterface $manager;
     private TranslatorInterface $translator;
     public function __construct(
         MailerInterface $mailer,
-        NewsLetterRepository $newsLetterRepository,
+        NewsLetterSubscriberRepository $newsLetterRepository,
         EntityManagerInterface $manager,
         TranslatorInterface $translator
     ) {
@@ -43,7 +43,7 @@ class NewsLetterController extends AbstractController
         if ($formNews->isSubmitted() && $formNews->isValid()) {
 
             // push subscriber to db
-            $subscriber = new NewsLetter();
+            $subscriber = new NewsLetterSubscriber();
             $subscriber->setEmail($newsletter->get('email')->getData());
             $subscriber->setFullname($newsletter->get('fullname')->getData());
 

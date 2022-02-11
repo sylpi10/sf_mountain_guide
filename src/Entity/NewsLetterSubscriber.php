@@ -3,18 +3,18 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\NewsLetterRepository;
+use App\Repository\NewsLetterSubscriberRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ORM\Entity(repositoryClass=NewsLetterRepository::class)
+ * @ORM\Entity(repositoryClass=NewsLetterSubscriberRepository::class)
  * @UniqueEntity(
  * fields={"email"},
  * message="Vous avez déjà souscrit à la newsletter avec cet email"
  * )
  */
-class NewsLetter
+class NewsLetterSubscriber
 {
     /**
      * @ORM\Id
@@ -32,6 +32,8 @@ class NewsLetter
      * @ORM\Column(type="string", length=255)
      */
     private $email;
+
+
 
     public function getId(): ?int
     {

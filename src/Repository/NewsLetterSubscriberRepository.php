@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\NewsLetter;
+use App\Entity\NewsLetterSubscriber;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -12,11 +12,11 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method NewsLetter[]    findAll()
  * @method NewsLetter[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class NewsLetterRepository extends ServiceEntityRepository
+class NewsLetterSubscriberRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, NewsLetter::class);
+        parent::__construct($registry, NewsLetterSubscriber::class);
     }
 
     // /**
