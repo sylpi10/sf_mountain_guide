@@ -25,7 +25,7 @@ class NewsLetterSubscriberType extends AbstractType
             ->add('isRgpd', CheckboxType::class, [
                 "label" => false,
                 "constraints" => new IsTrue([
-                    'message' => "vous devez accepter"
+                    'message' => "Vous devez accepter la collecte de vos données personnelles"
                 ])
             ]);
     }
