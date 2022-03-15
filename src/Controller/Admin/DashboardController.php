@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Blog;
 use App\Entity\User;
 use App\Entity\About;
+use App\Entity\Comment;
 use App\Entity\Contact;
 use App\Entity\Discipline;
 use App\Entity\NewsLetterSubscriber;
@@ -54,6 +55,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('About', 'fas fa-address-card', About::class);
         yield MenuItem::linkToCrud('Abonnés à la Newsletter', 'far fa-paper-plane', NewsLetterSubscriber::class);
         yield MenuItem::linkToCrud('Mails reçus', 'fas fa-envelope-open-text', Contact::class);
+        yield MenuItem::linkToCrud('Commentaires', 'fas fa-solid fa-comments', Comment::class);
     }
     // public function configureCrud(): Crud
     // {

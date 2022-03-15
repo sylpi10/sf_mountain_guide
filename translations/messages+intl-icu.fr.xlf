@@ -39,7 +39,7 @@
       </trans-unit>
       <trans-unit id="nWMiwfT" resname="Login">
         <source>Login</source>
-        <target>Login</target>
+        <target>Connexion</target>
       </trans-unit>
       <trans-unit id="OnhpU4i" resname="Home">
         <source>Home</source>
@@ -166,6 +166,78 @@
       <trans-unit id="Wa9hzN1" resname="I accept data collect (name and email)">
         <source>I accept data collect (name and email)</source>
         <target>J'accepte la collecte de mes données (nom et email)</target>
+      </trans-unit>
+      <trans-unit id="a0MUKpj" resname="You have been successfully registered">
+        <source>You have been successfully registered</source>
+        <target>Votre inscription a bien été prise en compte</target>
+      </trans-unit>
+      <trans-unit id="u3I07BJ" resname="Register">
+        <source>Register</source>
+        <target>S'inscrire</target>
+      </trans-unit>
+      <trans-unit id="KzMbw2Q" resname="Posted by">
+        <source>Posted by</source>
+        <target>Posté par</target>
+      </trans-unit>
+      <trans-unit id="zjQiox7" resname="No comment yet">
+        <source>No comment yet</source>
+        <target>Aucun commentaire</target>
+      </trans-unit>
+      <trans-unit id="ZqryVx2" resname="Add a comment">
+        <source>Add a comment</source>
+        <target>Ajouter un commentaire</target>
+      </trans-unit>
+      <trans-unit id="AQirAVQ" resname="You must be logged to post a comment">
+        <source>You must be logged to post a comment</source>
+        <target>Vous devez être connecté pour ajouter un commentaire</target>
+      </trans-unit>
+      <trans-unit id="1w5AoHR" resname="Read the post">
+        <source>Read the post</source>
+        <target>Lire l' article</target>
+      </trans-unit>
+      <trans-unit id="n8cy_PA" resname="Your comment">
+        <source>Your comment</source>
+        <target>Votre commentaire</target>
+      </trans-unit>
+      <trans-unit id="oGWiQ3s" resname="Logged as">
+        <source>Logged as</source>
+        <target>Bienvenue </target>
+      </trans-unit>
+      <trans-unit id="jxw6PPw" resname="Your comment has been submitted, it will be displayed when the administartor validates it">
+        <source>Your comment has been submitted, it will be displayed when the administartor validates it</source>
+        <target>Votre commentaire a bien été enregistré, il s'affichera quand l'administarteur l'aura validé</target>
+      </trans-unit>
+      <trans-unit id="qWnQTsL" resname="User Name">
+        <source>User Name</source>
+        <target>Nom d'utilisateur</target>
+      </trans-unit>
+      <trans-unit id="wpIhDEQ" resname="Confirm Password">
+        <source>Confirm Password</source>
+        <target>Confirmer le mot de passe</target>
+      </trans-unit>
+      <trans-unit id="Z2Pbssn" resname="To get in touch with me">
+        <source>To get in touch with me</source>
+        <target>Pour me contacter</target>
+      </trans-unit>
+      <trans-unit id="swsqI1L" resname="Get to know me">
+        <source>Get to know me</source>
+        <target>Pour mieux me connaître</target>
+      </trans-unit>
+      <trans-unit id="oOqWKeT" resname="See our last adventures">
+        <source>See our last adventures</source>
+        <target>Nos dernières aventures</target>
+      </trans-unit>
+      <trans-unit id="hgM.daT" resname="Create an account">
+        <source>Create an account</source>
+        <target>Créer votre compte</target>
+      </trans-unit>
+      <trans-unit id=".EDfL_w" resname="Login to your account">
+        <source>Login to your account</source>
+        <target>Connectez-vous à votre compte</target>
+      </trans-unit>
+      <trans-unit id="u5fiZud" resname="Subscribe to our Newsletter">
+        <source>Subscribe to our Newsletter</source>
+        <target>Inscrivez-vous à la Newsletter</target>
       </trans-unit>
     </body>
   </file>

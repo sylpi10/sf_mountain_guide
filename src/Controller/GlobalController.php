@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Contact;
+use App\Entity\User;
 use App\Form\ContactType;
+use App\Form\RegisterType;
 use App\Repository\DisciplineRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -12,6 +14,8 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class GlobalController extends AbstractController
@@ -21,19 +25,22 @@ class GlobalController extends AbstractController
     private DisciplineRepository $disciplineRepo;
     private AuthenticationUtils $util;
     private EntityManagerInterface $manager;
+    private UserPasswordHasherInterface $passwordHasher;
 
     public function __construct(
         MailerInterface $mailer,
         TranslatorInterface $translator,
         DisciplineRepository $disciplineRepo,
         AuthenticationUtils $util,
-        EntityManagerInterface $manager
+        EntityManagerInterface $manager,
+        UserPasswordHasherInterface $passwordHasher
     ) {
         $this->mailer = $mailer;
         $this->translator = $translator;
         $this->disciplineRepo = $disciplineRepo;
         $this->util = $util;
         $this->manager = $manager;
+        $this->passwordHasher = $passwordHasher;
     }
 
     /**
@@ -100,29 +107,38 @@ class GlobalController extends AbstractController
 
 
 
-    //   /**
-    //  * @Route("/register", name="register")
-    //  */
-    // public function register(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder) 
-    // {
-    //     $user = new User();
+    /**
+     * @Route("/register", name="register")
+     */
+    public function register(Request $request, EntityManagerInterface $manager)
+    {
+        $user = new User();
 
-    //     $form = $this->createForm(RegisterType::class, $user);
-    //     $form->handleRequest($request);
+        $form = $this->createForm(RegisterType::class, $user);
 
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $passWrdCrypt = $encoder->encodePassword($user, $user->getPassword());
-    //         $user->setPassword($passWrdCrypt);
-    //         $user->setRoles("ROLE_ADMIN");
-    //        $manager->persist($user);
-    //        $manager->flush();
-    //     }
+        $form->handleRequest($request);
 
-    //     return $this->render('global/register.html.twig', [
-    //         'user' => $user,
-    //         'form' => $form->createView()
-    //     ]);
-    // }
+        if ($form->isSubmitted() && $form->isValid()) {
+            // $user = $form->getData();
+            $passWrdCrypt = $this->passwordHasher->hashPassword($user, $user->getPassword());
+            $user->setPassword($passWrdCrypt);
+            $user->setRoles("ROLE_USER");
+            $manager->persist($user);
+            $manager->flush();
+
+            $message = $this->translator->trans("You have been successfully registered");
+            $this->addFlash('success', $message);
+            return new RedirectResponse('/login');
+        }
+
+
+
+        return $this->render('global/register.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+            "displayBtn" => true
+        ]);
+    }
 
     /**
      * @Route("/login", name="login")

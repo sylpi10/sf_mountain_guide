@@ -29,12 +29,12 @@ class BlogCrudController extends AbstractCrudController
             TextEditorField::new('content', 'Mon texte')->setFormType(CKEditorType::class),
             TextEditorField::new('englishContent', 'Mon texte en anglais')->setFormType(CKEditorType::class),
             TextField::new('location', 'Lieu'),
-            // ImageField::new('image', 'Image')
-            //     ->onlyOnIndex()
-            //     ->setBasePath('/uploads'),
-            // TextField::new('imageFile')
-            //     ->onlyOnForms()
-            //     ->setFormType(VichImageType::class)
+            ImageField::new('image', 'Image')
+                ->onlyOnIndex()
+                ->setBasePath('/uploads'),
+            TextField::new('imageFile')
+                ->onlyOnForms()
+                ->setFormType(VichImageType::class)
         ];
     }
     public function configureCrud(Crud $crud): Crud

@@ -21,16 +21,21 @@
 		</head>
 		<body class="{% block body_class %}detail-page{% endblock %}">
 			<header id="top">
-				<nav class="navbar navbar-expand-md navbar-dark menu">
+				<nav class="navbar navbar-expand-lg navbar-dark menu">
 					<div class="container-fluid">
-						<a class="" href="{{path('home')}}">
-							<img src="{{asset('images/logo.png')}}" id="logo" alt="Logo Directicimes" title=" {% trans %} home {% endtrans %} ">
-						</a>
 
-						<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+						<button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 							<span class="navbar-toggler-icon"></span>
 						</button>
+
 						<div class="collapse navbar-collapse navs-wrapper" id="navbarCollapse">
+
+							<div class="logo">
+								<a class="navbar-brand" href="{{path('home')}}">
+									<img src="{{asset('images/logo.png')}}" id="logo" alt="Logo Directicimes" title=" {% trans %} Home {% endtrans %} ">
+								</a>
+							</div>
+
 							<ul class="navbar-nav nav-primary">
 								<li class="nav-item active">
 									<a class="nav-link" href="{{path('home')}}" title="{% trans %} Home {% endtrans %}">
@@ -41,62 +46,70 @@
 									</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link" href="{{path('home', {'_fragment':'contact-form'})}}" title="Contact">Contact</a>
+									<a class="nav-link" href="{{path('home', {'_fragment':'contact-form'})}}" title="{% trans %}To get in touch with me{% endtrans %}">Contact
+									</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link" href="{{path('about')}}" title="{% trans %} About {% endtrans %}">{% trans %}
+									<a class="nav-link" href="{{path('about')}}" title="{% trans %} Get to know me {% endtrans %}">{% trans %}
 										About
 										{% endtrans %}</a>
 								</li>
-
 								<li class="nav-item">
-									<a class="nav-link" href="{{path('blog')}}" title="Blog">Blog</a>
+									<a class="nav-link" href="{{path('blog')}}" title="{% trans %}See our last adventures{% endtrans %}">Blog</a>
 								</li>
-								{% if displayBtn %}
-									<div class="newsletter">
-										<a href="{{path('newsletter')}}" class="btn">Newsletter</a>
-									</div>
-								{% endif %}
+
+
 								{% if is_granted('ROLE_ADMIN') %}
 									<li class="nav-item">
-										<a class="nav-link ml-4 text-warning" href="{{path('admin')}}" title="admin">Admin</a>
-									</li>
-								{% endif %}
-								{% if app.user %}
-									<li class="nav-item">
-										<a class="nav-link ml-4 text-danger" title="logout" href=" {{path('logout')}} ">{% trans %}
-											Logout
-											{% endtrans %}</a>
+										<a class="nav-link text-warning" href="{{path('admin')}}" title="admin">Admin</a>
 									</li>
 								{% endif %}
 
+
+								{% for locale in locales %}
+									{% if locale != app.request.locale %}
+										<li class="nav-item">
+											<a href="{{path('change-locale', {'locale': locale})}}" class="nav-link" title="{% trans %} Passer en Français {% endtrans %}">
+												<img src="{{asset('images/' ~locale~ '.png')}}" alt="{{locale}}" width="24">
+											</a>
+										</li>
+									{% endif %}
+								{% endfor %}
 
 							</ul>
 
 							<div class="right-nav">
-								<ul class="">
-									<li class="nav-item">
-										<a href="https://facebook.com/directicimes/" target="_new" title="Facebook">
-											<i class="fab fa-facebook-f mr-3"></i>
-										</a>
-									</li>
-									<li class="nav-item">
-										<a href="https://instagram.com/directicimes" target="_new" title="Instagram">
-											<i class="fab fa-instagram mr-3"></i>
-										</a>
-										<span>|</span>
-									</li>
 
-									{% for locale in locales %}
-										{% if locale != app.request.locale %}
-											<li class="nav-item">
-												<a href="{{path('change-locale', {'locale': locale})}}" class="nav-link" title="{% trans %} Passer en Français {% endtrans %}">
-													<img src="{{asset('images/' ~locale~ '.png')}}" alt="{{locale}}" width="24">
-												</a>
-											</li>
-										{% endif %}
-									{% endfor %}
-								</ul>
+								{% if not app.user %}
+									<li class="nav-item">
+										<a class="nav-link" href="{{path('register')}}" title="{% trans %} Create an account {% endtrans %}">{% trans %}
+											Register
+											{% endtrans %}</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href="{{path('login')}}" title="{% trans %} Login to your account {% endtrans %}">{% trans %}
+											Login
+											{% endtrans %}</a>
+									</li>
+								{% endif %}
+								{% if displayBtn %}
+									<li class="nav-item">
+										<a class="nav-link" href="{{path('newsletter')}}" title="{% trans %} Subscribe to our Newsletter {% endtrans %}">Newsletter</a>
+									</li>
+								{% endif %}
+								{% if app.user %}
+									<li class="nav-item">
+										<a class="nav-link text-danger" title="logout" href=" {{path('logout')}} ">{% trans %}
+											Logout
+											{% endtrans %}</a>
+									</li>
+								{% endif %}
+								{% if app.user %}
+									<li class="logged-as">
+										<i class="fas fa-solid fa-user"></i>
+										{{app.user}}
+									</li>
+								{% endif %}
 							</div>
 
 						</div>

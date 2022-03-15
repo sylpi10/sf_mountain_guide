@@ -28,22 +28,23 @@ class BlogRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-    // /**
-    //  * @return Blog[] Returns an array of Blog objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('b.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+
+    /**
+     * @return Comment[] Returns an array of Comment objects
+     */
+
+    // public function countIsAccepted()
+    // {
+    //     return $this->createQueryBuilder('c')
+    //         ->select('count(c.isAccepted)')
+    //         ->where('c.isAccepted = :isAccepted')
+    //         ->setParameter('isAccepted', true)
+    //         ->join('')
+    //         ->andWhere('c.post = :val')
+    //         ->setParameter('val', $post)
+    //         ->getQuery()
+    //         ->execute();
+    // }
 
     /*
     public function findOneBySomeField($value): ?Blog

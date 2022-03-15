@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Blog!
+{% endblock %}
+{% block description %}
+	<meta name="description" content="Blog">
+{% endblock %}
+
+{% block body_class %}base-page
+{% endblock %}
+{% block body %}
+	<div class="container blog-container">
+		<div class="mt-5 p-5 article-wrapper">
+
+			<div class="index-notif">
+				{% for msg in app.flashes('success') %}
+					<p class="alert alert-success">{{msg}}</p>
+				{% endfor %}
+			</div>
+
+			<article class="article-details">
+				{% for locale in locales %}
+					{% if locale == app.request.locale %}
+						{% if locale == 'fr' %}
+							<h1>{{article.title|title}}</h1>
+						{% else %}
+							<h1>{{article.englishTitle|title}}</h1>
+						{% endif %}
+						<hr>
+
+						<span class="text-secondary date-loc">
+							<i class="fas fa-calendar-alt"></i>
+							{{ article.createdAt|date("m/d/Y", "Europe/Paris")}},
+							<i class="fas fa-map-marker-alt"></i>
+							{{article.location}}
+						</span>
+						{% if locale == 'fr' %}
+							<p>{{article.content|replace({'<h1>': '<h3>', '</h1>': "</h3>"})|raw }}</p>
+						{% else %}
+							<p>{{article.englishContent|replace({'<h1>': '<h3>', '</h1>': "</h3>"})|raw }}</p>
+						{% endif %}
+
+					{% endif %}
+
+				{% endfor %}
+			</article>
+
+
+			<div class="comments bg-light">
+				{% if acceptedComments %}
+					{% for comment in acceptedComments %}
+						{% if comment.isAccepted %}
+							<div class="comment">
+								<p class="content">{{comment.content}}</p>
+								<p class="comment-infos">
+									{% trans %}Posted by{% endtrans %}:
+									{{comment.author}},
+									<span>{{comment.postedAt|date("m/d/Y", "Europe/Paris")}}</span>
+								</p>
+							</div>
+							<hr>
+						{% endif %}
+
+					{% endfor %}
+				{% else %}
+					<p>
+						{% trans %}No comment yet{% endtrans %}
+					</p>
+				{% endif %}
+
+				{% if app.user %}
+					<div class="add-comment">
+						<h4>
+							{% trans %}Add a comment{% endtrans %}
+						</h4>
+						{{form_start(form)}}
+
+						{{form_row(form.content, {'attr': {'placeholder': 'Your comment'|trans}}
+						)}}
+
+						<input type="submit" value="{% trans %} Send {% endtrans %}" class="btn button-link">
+						{{form_end(form)}}
+					</div>
+				{% else %}
+					<p>{% trans %}You must be logged to post a comment{% endtrans %}</p>
+				{% endif %}
+			</div>
+
+		</div>
+
+
+	</div>
+
+	<div class="" id="">
+		{% include "footer.html.twig" %}
+	</div>
+{% endblock %}

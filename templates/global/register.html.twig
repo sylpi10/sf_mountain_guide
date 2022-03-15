@@ -1,18 +1,29 @@
 {% extends "base.html.twig" %}
 
-{% block title %}register{% endblock %}
-
-{% block pageTitle %}Register{% endblock %}
-
+{% block title %}register
+{% endblock %}
+{% block body_class %}base-page
+{% endblock %}
 {% block body %}
 
-<div class="container mt-5 pt-5">
-
-    
-    {{form_start(form)}}
-    {{form_widget(form)}}
-    <button type="submit" class="btn btn-success">Register</button>
-    {{form_end(form)}}
-    
-</div>
+	<div class="login-container container">
+		<div class="bg-light form-login-wrapper">
+			<h1>{% trans %}Register{% endtrans %}</h1>
+			{{form_start(form)}}
+			<label class="control-label" for="">{% trans %}
+				User Name
+				{% endtrans %}</label>
+			{{form_row(form.username)}}
+			<label class="control-label" for="">{% trans %}
+				Password
+				{% endtrans %}</label>
+			{{form_row(form.password)}}
+			<label class="control-label" for="">{% trans %}
+				Confirm Password
+				{% endtrans %}</label>
+			{{form_row(form.confirmPassword)}}
+			<button type="submit" class="btn btn-success">{% trans %}Register{% endtrans %}</button>
+			{{form_end(form)}}
+		</div>
+	</div>
 {% endblock %}

@@ -15,7 +15,11 @@
 			<h1>
 				Login
 			</h1>
-
+			<div class="index-notif">
+				{% for msg in app.flashes('success') %}
+					<p class="alert alert-success">{{msg}}</p>
+				{% endfor %}
+			</div>
 			{% if error %}
 				<div class="alert alert-danger">
 					{% trans %}

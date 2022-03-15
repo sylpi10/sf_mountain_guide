@@ -44,7 +44,7 @@
 
 		{% for disci in disciplines %}
 			<a
-				href="{{ path('detail', {id: disci.id, slug: disci.slug}) }}" class="discipline" title="details">
+				href="{{ path('detail', {id: disci.id, slug: disci.slug}) }}" class="discipline" title="Détails {{disci}}">
 				{# <div class="text" style="background:url('/images/{{disci.slug}}.jpg') center no-repeat;background-size:cover;"> #}
 				<div class="text" style="background:url('uploads/{{disci.image}}') center no-repeat;background-size:cover;">
 					{% for locale in locales %}

@@ -16,6 +16,7 @@
 			<hr>
 			{% for article in articles %}
 				<div class="article">
+
 					{% for locale in locales %}
 						{% if locale == app.request.locale %}
 							{% if locale == 'fr' %}
@@ -29,17 +30,34 @@
 								<i class="fas fa-map-marker-alt"></i>
 								{{article.location}}
 							</span>
-							{% if locale == 'fr' %}
-								<p>{{article.content|replace({'<h1>': '<h3>', '</h1>': "</h3>"})|raw }}</p>
-							{% else %}
-								<p>{{article.englishContent|replace({'<h1>': '<h3>', '</h1>': "</h3>"})|raw }}</p>
+							<div class="article-content">
+								{% if locale == 'fr' %}
+									<p>{{article.content|replace({'<h1>': '<h3>', '</h1>': "</h3>"})|raw | striptags|slice(0, 320) }}
+										[...]
+									</p>
+								{% else %}
+									<p>{{article.englishContent|replace({'<h1>': '<h3>', '</h1>': "</h3>"})|raw | striptags|slice(0, 320)}}
+										[...]
+									</p>
+								{% endif %}
 							{% endif %}
-						{% endif %}
-					{% endfor %}
 
-					{# <img src="{{asset('uploads/' ~ article.image)}}" class="d-block img-fluid" width="500" height="400"> #}
+						{% endfor %}
+						<img src="{{asset('uploads/' ~ article.image)}}" class="d-block img-fluid" width="140" height="140">
+					</div>
+
+
+					<div class="read-more">
+						<a href="{{ path('blog_detail', {id: article.id, slug: article.slug}) }}" title="details">
+							{% trans %}Read the post{% endtrans %}
+						</a>
+					</div>
+
 				</div>
+
 				<hr class="bg-dark">
+
+
 			{% endfor %}
 
 			<div class="navigation shadow">

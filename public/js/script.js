@@ -17,14 +17,14 @@ function backToTop() {
 
  function changeMenuOnscroll() {
 
-  const menu = document.querySelector('nav');
-  // if(window.innerWidth > 800){
+  const menu = document.querySelector('.base-page nav');
+  if(window.innerWidth > 991){
     if (document.body.scrollTop > 360 || document.documentElement.scrollTop > 360) {
       menu.classList.add('scrolled-nav');
     } else {
       menu.classList.remove('scrolled-nav');
     }
-  // }
+  }
  
 }
 
@@ -50,11 +50,3 @@ window.setTimeout(function() { $(".alert-success").alert('close'); }, 2600);
 
 let mainTitle = document.querySelector(".main-title");
 let mainTitleTop = document.querySelector(".main-title").offsetHeight;
-
-// function parrallaxOnTitle() {
-//   if (document.documentElement.scrollTop < 180 || document.body.scrollTop > 180) {
-//   mainTitleTop += 20;
-//   mainTitle.style.marginTop = mainTitleTop + 'px';
-//   console.log(mainTitle.style.marginTop);
-//   }
-// }
