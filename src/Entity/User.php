@@ -13,7 +13,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(
- * fields= {"username"}
+ * fields= {"username"},
+ *  message="Ce nom d'utilisateur est déjà pris"
  * )
  */
 class User implements UserInterface
