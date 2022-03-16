@@ -148,7 +148,7 @@ class GlobalController extends AbstractController
         return $this->render('global/login.html.twig', [
             "lastUserName" => $this->util->getLastUsername(),
             "error" => $this->util->getLastAuthenticationError(),
-            "displayBtn" => false
+            "displayBtn" => true
         ]);
     }
 
