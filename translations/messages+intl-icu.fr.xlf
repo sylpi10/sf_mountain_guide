@@ -191,7 +191,7 @@
         <source>You must be logged to post a comment</source>
         <target>Vous devez être connecté pour ajouter un commentaire</target>
       </trans-unit>
-      <trans-unit id="1w5AoHR" resname="Read the post">
+      <trans-unit id="CEbu91c" resname="Read the post">
         <source>Read the post</source>
         <target>Lire l' article</target>
       </trans-unit>
@@ -238,6 +238,10 @@
       <trans-unit id="u5fiZud" resname="Subscribe to our Newsletter">
         <source>Subscribe to our Newsletter</source>
         <target>Inscrivez-vous à la Newsletter</target>
+      </trans-unit>
+      <trans-unit id=".pJ7s5T" resname="Book">
+        <source>Book</source>
+        <target>Réserver</target>
       </trans-unit>
     </body>
   </file>

@@ -13,7 +13,7 @@
 	<div class="container blog-container">
 		<div class="mt-5 p-5 article-wrapper">
 
-			<div class="index-notif">
+			<div class="blog-notif">
 				{% for msg in app.flashes('success') %}
 					<p class="alert alert-success">{{msg}}</p>
 				{% endfor %}
@@ -29,9 +29,9 @@
 						{% endif %}
 						<hr>
 
-						<span class="text-secondary date-loc">
+						<span class="date-loc">
 							<i class="fas fa-calendar-alt"></i>
-							{{ article.createdAt|date("m/d/Y", "Europe/Paris")}},
+							{{ article.createdAt|date("d/m/Y", "Europe/Paris")}},
 							<i class="fas fa-map-marker-alt"></i>
 							{{article.location}}
 						</span>
@@ -55,8 +55,8 @@
 								<p class="content">{{comment.content}}</p>
 								<p class="comment-infos">
 									{% trans %}Posted by{% endtrans %}:
-									{{comment.author}},
-									<span>{{comment.postedAt|date("m/d/Y", "Europe/Paris")}}</span>
+									{{comment.author|capitalize}},
+									<span>{{comment.postedAt|date("d/m/Y", "Europe/Paris")}}</span>
 								</p>
 							</div>
 							<hr>

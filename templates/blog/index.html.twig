@@ -24,7 +24,7 @@
 							{% else %}
 								<h2>{{article.englishTitle|title}}</h2>
 							{% endif %}
-							<span class="text-secondary date-loc">
+							<span class="date-loc">
 								<i class="fas fa-calendar-alt"></i>
 								{{ article.createdAt|date("m/d/Y", "Europe/Paris")}},
 								<i class="fas fa-map-marker-alt"></i>
@@ -32,26 +32,36 @@
 							</span>
 							<div class="article-content">
 								{% if locale == 'fr' %}
-									<p>{{article.content|replace({'<h1>': '<h3>', '</h1>': "</h3>"})|raw | striptags|slice(0, 320) }}
-										[...]
+									<p>{{article.content|replace({'<h1>': '<h3>', '</h1>': "</h3>"})|raw | striptags|slice(0, 300) }}
+										<span>
+											<a href="{{ path('blog_detail', {id: article.id, slug: article.slug}) }}" title="details">
+												[...]
+												{% trans %}Read the post{% endtrans %}
+											</a>
+										</span>
 									</p>
 								{% else %}
-									<p>{{article.englishContent|replace({'<h1>': '<h3>', '</h1>': "</h3>"})|raw | striptags|slice(0, 320)}}
-										[...]
+									<p>{{article.englishContent|replace({'<h1>': '<h3>', '</h1>': "</h3>"})|raw | striptags|slice(0, 300)}}
+										<a href="{{ path('blog_detail', {id: article.id, slug: article.slug}) }}" title="details">
+											[...]
+											{% trans %}Read the post{% endtrans %}
+										</a>
 									</p>
 								{% endif %}
 							{% endif %}
 
 						{% endfor %}
-						<img src="{{asset('uploads/' ~ article.image)}}" class="d-block img-fluid" width="140" height="140">
+						{% if article.image %}
+							<img src="{{asset('uploads/' ~ article.image)}}" class="d-block img-fluid" width="140" height="140">
+						{% endif %}
 					</div>
 
 
-					<div class="read-more">
-						<a href="{{ path('blog_detail', {id: article.id, slug: article.slug}) }}" title="details">
-							{% trans %}Read the post{% endtrans %}
-						</a>
-					</div>
+					{# <div class="read-more">
+																																									<a href="{{ path('blog_detail', {id: article.id, slug: article.slug}) }}" title="details">
+																																										{% trans %}Read the post{% endtrans %}
+																																									</a>
+																																								</div> #}
 
 				</div>
 

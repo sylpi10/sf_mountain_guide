@@ -7,6 +7,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
@@ -32,6 +33,7 @@ class NewsLetterSubscriberCrudController extends AbstractCrudController
             IdField::new('id'),
             TextField::new('fullname', "Nom Prénom"),
             TextField::new('email'),
+            BooleanField::new('isRgpd'),
         ];
     }
     public function configureActions(Actions $actions): Actions

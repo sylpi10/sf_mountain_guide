@@ -11,6 +11,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 
@@ -34,7 +36,9 @@ class BlogCrudController extends AbstractCrudController
                 ->setBasePath('/uploads'),
             TextField::new('imageFile')
                 ->onlyOnForms()
-                ->setFormType(VichImageType::class)
+                ->setFormType(VichImageType::class),
+            AssociationField::new('comments', 'Nb de coms')
+                ->onlyOnIndex(),
         ];
     }
     public function configureCrud(Crud $crud): Crud
