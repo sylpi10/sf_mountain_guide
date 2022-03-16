@@ -32,7 +32,7 @@
 							</span>
 							<div class="article-content">
 								{% if locale == 'fr' %}
-									<p>{{article.content|replace({'<h1>': '<h3>', '</h1>': "</h3>"})|raw | striptags|slice(0, 300) }}
+									<p>{{article.content|slice(0, 300)|replace({'<h1>': '<h3>', '</h1>': "</h3>"})|raw }}
 										<span>
 											<a href="{{ path('blog_detail', {id: article.id, slug: article.slug}) }}" title="details">
 												[...]
@@ -41,7 +41,7 @@
 										</span>
 									</p>
 								{% else %}
-									<p>{{article.englishContent|replace({'<h1>': '<h3>', '</h1>': "</h3>"})|raw | striptags|slice(0, 300)}}
+									<p>{{article.englishContent|slice(0, 300)|replace({'<h1>': '<h3>', '</h1>': "</h3>"})|raw}}
 										<a href="{{ path('blog_detail', {id: article.id, slug: article.slug}) }}" title="details">
 											[...]
 											{% trans %}Read the post{% endtrans %}
@@ -58,10 +58,10 @@
 
 
 					{# <div class="read-more">
-																																									<a href="{{ path('blog_detail', {id: article.id, slug: article.slug}) }}" title="details">
-																																										{% trans %}Read the post{% endtrans %}
-																																									</a>
-																																								</div> #}
+																																																																																											<a href="{{ path('blog_detail', {id: article.id, slug: article.slug}) }}" title="details">
+																																																																																												{% trans %}Read the post{% endtrans %}
+																																																																																											</a>
+																																																																																										</div> #}
 
 				</div>
 
