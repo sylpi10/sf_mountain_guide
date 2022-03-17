@@ -5,7 +5,7 @@ To have a running project:
 
     - Clone repo
     - Go to root folder
-    - Provide a valide DATABASE_URL and a valid MAILER_DSN (smtp)
+    - Provide a valide DATABASE_URL and a valid MAILER_DSN (smtp) in the .env file
     - Run composer update
     - Run symfony serve
 
