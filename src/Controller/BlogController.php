@@ -12,6 +12,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -42,8 +43,11 @@ class BlogController extends AbstractController
 
     /**
      * @Route("/blog", name="blog")
+     *
+     * @param Request $request
+     * @return Response
      */
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $displayBtn = true;
         $articles = $this->paginator->paginate(
@@ -55,14 +59,17 @@ class BlogController extends AbstractController
         return $this->render('blog/index.html.twig', [
             'articles' => $articles,
             "displayBtn" => $displayBtn,
-            // 'count' => $count
         ]);
     }
 
     /**
      * @Route("/blog/{slug}-{id}", name="blog_detail", requirements={"slug": "[a-z0-9\-]*"})
+     *
+     * @param Blog $post
+     * @param Request $request
+     * @return Response
      */
-    public function detail(Blog $post, Request $request)
+    public function detail(Blog $post, Request $request): Response
     {
         $comment = new Comment();
         $comment->setPost($post);

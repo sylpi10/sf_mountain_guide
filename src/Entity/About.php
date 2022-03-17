@@ -14,48 +14,57 @@ class About
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @var int
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @var string
      */
-    private $whoTitle;
+    private string $whoTitle;
 
     /**
      * @ORM\Column(type="text")
+     * @var string
      */
-    private $whoText;
+    private string $whoText;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @var string
      */
-    private $whoEnglishTitle;
+    private string $whoEnglishTitle;
 
     /**
      * @ORM\Column(type="text")
+     * @var string
      */
-    private $whoEnglishText;
+    private string $whoEnglishText;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @var string
      */
-    private $whyTitle;
+    private string $whyTitle;
 
     /**
      * @ORM\Column(type="text")
+     * @var string
      */
-    private $whyText;
+    private string $whyText;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @var string
      */
-    private $whyEnglishTitle;
+    private string $whyEnglishTitle;
 
     /**
      * @ORM\Column(type="text")
+     * @var string
      */
-    private $whyEnglishText;
+    private string $whyEnglishText;
 
     public function getId(): ?int
     {

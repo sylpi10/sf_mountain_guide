@@ -3,9 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Contact;
-use App\Entity\User;
 use App\Form\ContactType;
-use App\Form\RegisterType;
 use App\Repository\DisciplineRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -14,39 +12,33 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\HttpFoundation\Response;
 
 class GlobalController extends AbstractController
 {
     private MailerInterface $mailer;
     private TranslatorInterface $translator;
     private DisciplineRepository $disciplineRepo;
-    private AuthenticationUtils $util;
     private EntityManagerInterface $manager;
-    private UserPasswordHasherInterface $passwordHasher;
 
     public function __construct(
         MailerInterface $mailer,
         TranslatorInterface $translator,
         DisciplineRepository $disciplineRepo,
-        AuthenticationUtils $util,
-        EntityManagerInterface $manager,
-        UserPasswordHasherInterface $passwordHasher
+        EntityManagerInterface $manager
     ) {
         $this->mailer = $mailer;
         $this->translator = $translator;
         $this->disciplineRepo = $disciplineRepo;
-        $this->util = $util;
         $this->manager = $manager;
-        $this->passwordHasher = $passwordHasher;
     }
 
     /**
      * @Route("/", name="home")
+     * @param Request $request
+     * @return Response
      */
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $sentEmail = new Contact();
         $form = $this->createForm(ContactType::class);
@@ -81,10 +73,6 @@ class GlobalController extends AbstractController
 
                 $this->mailer->send($email);
 
-                /**
-                 * TODO: send email confirmation to client
-                 */
-
                 // $notification->notify($contact);
                 $message = $this->translator->trans("Your email has been send");
 
@@ -105,62 +93,10 @@ class GlobalController extends AbstractController
         ]);
     }
 
-
-
-    /**
-     * @Route("/register", name="register")
-     */
-    public function register(Request $request, EntityManagerInterface $manager)
-    {
-        $user = new User();
-
-        $form = $this->createForm(RegisterType::class, $user);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            // $user = $form->getData();
-            $passWrdCrypt = $this->passwordHasher->hashPassword($user, $user->getPassword());
-            $user->setPassword($passWrdCrypt);
-            $user->setRoles("ROLE_USER");
-            $manager->persist($user);
-            $manager->flush();
-
-            $message = $this->translator->trans("You have been successfully registered");
-            $this->addFlash('success', $message);
-            return new RedirectResponse('/login');
-        }
-
-
-
-        return $this->render('global/register.html.twig', [
-            'user' => $user,
-            'form' => $form->createView(),
-            "displayBtn" => true
-        ]);
-    }
-
-    /**
-     * @Route("/login", name="login")
-     */
-    public function login()
-    {
-        return $this->render('global/login.html.twig', [
-            "lastUserName" => $this->util->getLastUsername(),
-            "error" => $this->util->getLastAuthenticationError(),
-            "displayBtn" => true
-        ]);
-    }
-
-    /**
-     * @Route("/logout", name="logout")
-     */
-    public function logout()
-    {
-    }
-
     /**
      * @Route("/change-locale/{locale}", name="change-locale")
+     * @param [type] $locale
+     * @param Request $request
      */
     public function changeLocale($locale, Request $request)
     {
