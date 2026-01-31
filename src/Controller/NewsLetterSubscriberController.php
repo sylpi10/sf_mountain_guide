@@ -40,6 +40,19 @@ class NewsLetterSubscriberController extends AbstractController
         $newsletterEntity = $this->newsLetterRepository->findAll();
         $displayBtn = false;
         if ($formNews->isSubmitted() && $formNews->isValid()) {
+            $session = $request->getSession();
+            $honeypot = trim((string) $request->request->get("website", ""));
+            $token = (string) $request->request->get("newsletter_token", "");
+            $formTime = (int) $request->request->get("newsletter_time", 0);
+            $sessionToken = (string) $session->get("newsletter_form_token", "");
+            $now = time();
+            $isTooFast = $formTime > 0 ? ($now - $formTime) < 4 : true;
+            $isTooOld = $formTime > 0 ? ($now - $formTime) > 86400 : true;
+            $tokenInvalid = $token === "" || $token !== $sessionToken;
+
+            if ($honeypot !== "" || $tokenInvalid || $isTooFast || $isTooOld) {
+                return $this->redirectToRoute("home");
+            }
             // push subscriber to db
             $subscriber = new NewsLetterSubscriber();
             $subscriber->setEmail($newsletter->get("email")->getData());
@@ -92,13 +105,29 @@ class NewsLetterSubscriberController extends AbstractController
             $this->addFlash("success", $message);
 
             // redirection
-            return $this->redirectToRoute("home");
+            return $this->redirectToRoute("new");
         }
+
+        [$newsletterToken, $newsletterTime] = $this->refreshNewsletterGuards($request);
 
         return $this->render("news_letter/newsLetter.html.twig", [
             "form" => $formNews->createView(),
             "newsletterEntity" => $newsletterEntity,
             "displayBtn" => $displayBtn,
+            "newsletter_token" => $newsletterToken,
+            "newsletter_time" => $newsletterTime,
         ]);
+    }
+
+    private function refreshNewsletterGuards(Request $request): array
+    {
+        $token = bin2hex(random_bytes(16));
+        $time = time();
+
+        $session = $request->getSession();
+        $session->set("newsletter_form_token", $token);
+        $session->set("newsletter_form_time", $time);
+
+        return [$token, $time];
     }
 }

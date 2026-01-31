@@ -65,7 +65,17 @@ class DisciplinesController extends AbstractController
         $disciplines = $this->disciplineRepo->findAll();
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if (!empty($_POST["website"])) {
+            $session = $request->getSession();
+            $honeypot = trim((string) $request->request->get("website", ""));
+            $token = (string) $request->request->get("contact_token", "");
+            $formTime = (int) $request->request->get("contact_time", 0);
+            $sessionToken = (string) $session->get("contact_form_token", "");
+            $now = time();
+            $isTooFast = $formTime > 0 ? ($now - $formTime) < 4 : true;
+            $isTooOld = $formTime > 0 ? ($now - $formTime) > 86400 : true;
+            $tokenInvalid = $token === "" || $token !== $sessionToken;
+
+            if ($honeypot !== "" || $tokenInvalid || $isTooFast || $isTooOld) {
                 return $this->redirectToRoute("home");
             } else {
                 $email = (new TemplatedEmail())->from($contact->get("email")->getData())->to("contact@directicimes.com", "georgesyn@gmail.com")->subject("Nouveau Message depuis DirectiCimes")
@@ -88,11 +98,27 @@ class DisciplinesController extends AbstractController
             }
         }
 
+        [$contactToken, $contactTime] = $this->refreshContactGuards($request);
+
         return $this->render("disciplines/detail.html.twig", [
             "discipline" => $discipline,
             "disciplines" => $disciplines,
             "form" => $form->createView(),
             "displayBtn" => $displayBtn,
+            "contact_token" => $contactToken,
+            "contact_time" => $contactTime,
         ]);
+    }
+
+    private function refreshContactGuards(Request $request): array
+    {
+        $token = bin2hex(random_bytes(16));
+        $time = time();
+
+        $session = $request->getSession();
+        $session->set("contact_form_token", $token);
+        $session->set("contact_form_time", $time);
+
+        return [$token, $time];
     }
 }

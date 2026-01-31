@@ -24,12 +24,20 @@
 				<hr>
 			</p>
 
+			<div class="contact-notif">
+				{% for msg in app.flashes('success') %}
+					<p class="alert alert-success">{{msg}}</p>
+				{% endfor %}
+			</div>
+
 			<label class="control-label" for="">{% trans %}
 				Your Name
 				{% endtrans %}</label>
 			{{form_row(form.fullname, {'attr':{'placeholder': 'ex:Mike Horn'}})}}
 
-			<input type="text" id="website" name="website"/>
+			<input type="text" id="website" name="website" autocomplete="off" tabindex="-1" aria-hidden="true" style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;">
+			<input type="hidden" name="newsletter_token" value="{{ newsletter_token }}">
+			<input type="hidden" name="newsletter_time" value="{{ newsletter_time }}">
 
 			<label class="control-label" for="">{% trans %}
 				Your Email

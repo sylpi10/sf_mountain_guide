@@ -43,10 +43,20 @@ class GlobalController extends AbstractController
         $sentEmail = new Contact();
         $form = $this->createForm(ContactType::class);
         $contact = $form->handleRequest($request);
+        $session = $request->getSession();
 
         if ($form->isSubmitted() && $form->isValid()) {
             // honeypot for robots
-            if (!empty($_POST["website"])) {
+            $honeypot = trim((string) $request->request->get("website", ""));
+            $token = (string) $request->request->get("contact_token", "");
+            $formTime = (int) $request->request->get("contact_time", 0);
+            $sessionToken = (string) $session->get("contact_form_token", "");
+            $now = time();
+            $isTooFast = $formTime > 0 ? ($now - $formTime) < 4 : true;
+            $isTooOld = $formTime > 0 ? ($now - $formTime) > 86400 : true;
+            $tokenInvalid = $token === "" || $token !== $sessionToken;
+
+            if ($honeypot !== "" || $tokenInvalid || $isTooFast || $isTooOld) {
                 return $this->redirectToRoute("home");
                 // if not filled, handle request
             } else {
@@ -75,10 +85,12 @@ class GlobalController extends AbstractController
                 $message = $this->translator->trans("Your email has been send");
 
                 $this->addFlash("success", $message);
-                return $this->redirect($this->generateUrl("home") . "#top");
-                // return $this->redirectToRoute("home");
+                // return $this->redirect($this->generateUrl("home") . "#top");
+                return $this->redirectToRoute("home");
             }
         }
+
+        [$contactToken, $contactTime] = $this->refreshContactGuards($request);
 
         // return every disciplines on home page
         $disciplines = $this->disciplineRepo->findAll();
@@ -86,6 +98,8 @@ class GlobalController extends AbstractController
             "form" => $form->createView(),
             "disciplines" => $disciplines,
             "displayBtn" => true,
+            "contact_token" => $contactToken,
+            "contact_time" => $contactTime,
         ]);
     }
 
@@ -101,5 +115,17 @@ class GlobalController extends AbstractController
 
         //back to previous page
         return $this->redirect($request->headers->get("referer"));
+    }
+
+    private function refreshContactGuards(Request $request): array
+    {
+        $token = bin2hex(random_bytes(16));
+        $time = time();
+
+        $session = $request->getSession();
+        $session->set("contact_form_token", $token);
+        $session->set("contact_form_time", $time);
+
+        return [$token, $time];
     }
 }
