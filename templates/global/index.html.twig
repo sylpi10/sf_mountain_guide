@@ -6,11 +6,20 @@
 	{% endtrans %}
 {% endblock %}
 
+{% block head_extra %}
+	<link rel="preload" as="image" href="{{asset('images/bg1.webp')}}" type="image/webp">
+	<link rel="preload" as="image" href="{{asset('images/bg1.jpg')}}" type="image/jpeg">
+{% endblock %}
+
 {% block body_class %}base-page
 {% endblock %}
 {% block body %}
 
 	<div data-jarallax data-speed="0.4" class="hero-area jarallax">
+		<picture>
+			<source srcset="{{asset('images/bg1.webp')}}" type="image/webp">
+			<img class="jarallax-img hero-img" src="{{asset('images/bg1.jpg')}}" alt="{% trans %}Mountain landscape in Briançon{% endtrans %}" width="1920" height="1080" fetchpriority="high" decoding="async">
+		</picture>
 		<h1 class="main-title">{% trans %}
 			Mountaineering, Ski, Rock Climbing
 			{% endtrans %}

@@ -1,53 +1,82 @@
-
-window.onscroll = ()=> {
-    backToTop();
-    changeMenuOnscroll();
-      // parrallaxOnTitle();
+window.onscroll = () => {
+  backToTop();
+  changeMenuOnscroll();
+  // parrallaxOnTitle();
 };
 
-let backTop = document.querySelector('.back-top');
+let backTop = document.querySelector(".back-top");
 
 function backToTop() {
-       if (document.body.scrollTop > 180 || document.documentElement.scrollTop > 180) {
-         backTop.style.opacity = "1";
-       } else {
-        backTop.style.opacity = "0";
-       }
- }
+  if (
+    document.body.scrollTop > 180 ||
+    document.documentElement.scrollTop > 180
+  ) {
+    backTop.style.opacity = "1";
+  } else {
+    backTop.style.opacity = "0";
+  }
+}
 
- function changeMenuOnscroll() {
-
-  const menu = document.querySelector('.base-page nav');
-  if(window.innerWidth > 991){
-    if (document.body.scrollTop > 360 || document.documentElement.scrollTop > 360) {
-      menu.classList.add('scrolled-nav');
+function changeMenuOnscroll() {
+  const menu = document.querySelector(".base-page nav");
+  if (window.innerWidth > 991) {
+    if (
+      document.body.scrollTop > 360 ||
+      document.documentElement.scrollTop > 360
+    ) {
+      menu.classList.add("scrolled-nav");
     } else {
-      menu.classList.remove('scrolled-nav');
+      menu.classList.remove("scrolled-nav");
     }
   }
- 
 }
 
 // hide menu onclick
- $(function(){ 
+$(function () {
   let navMain = $(".navbar-collapse"); // avoid dependency on #id
   // "a:not([data-toggle])" - to avoid issues caused
   // when you have dropdown inside navbar
   navMain.on("click", "a:not([data-toggle])", null, function () {
-      navMain.collapse('hide');
+    navMain.collapse("hide");
   });
 });
 
 // menu active link
-$(document).ready(function() {
-  $('a[href$="' + location.pathname + '"]').addClass('active');
+$(document).ready(function () {
+  $('a[href$="' + location.pathname + '"]').addClass("active");
 });
-
-
 
 // alerts
 $(".alert-success").alert();
-window.setTimeout(function() { $(".alert-success").alert('close'); }, 2600);
+window.setTimeout(function () {
+  $(".alert-success").alert("close");
+}, 2600);
 
 let mainTitle = document.querySelector(".main-title");
 let mainTitleTop = document.querySelector(".main-title").offsetHeight;
+
+let jarallaxEnabled = false;
+
+function updateJarallax() {
+  if (typeof jarallax === "undefined") {
+    return;
+  }
+
+  const elements = document.querySelectorAll("[data-jarallax]");
+  if (!elements.length) {
+    return;
+  }
+
+  const shouldEnable = window.innerWidth >= 992;
+
+  if (shouldEnable && !jarallaxEnabled) {
+    jarallax(elements);
+    jarallaxEnabled = true;
+  } else if (!shouldEnable && jarallaxEnabled) {
+    jarallax(elements, "destroy");
+    jarallaxEnabled = false;
+  }
+}
+
+document.addEventListener("DOMContentLoaded", updateJarallax);
+window.addEventListener("resize", updateJarallax);
