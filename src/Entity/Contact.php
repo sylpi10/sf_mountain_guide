@@ -22,7 +22,7 @@ class Contact
      * @ORM\Column(type="string", length=255)
      *
      * @Assert\NotBlank()
-     * @Assert\Length(min=2, max=120)
+     * @Assert\Length(min=2, max=70)
      */
     private $name;
 
@@ -30,6 +30,7 @@ class Contact
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Email()
+     * @Assert\Length(min=3, max=70)
      */
     private $email;
 
