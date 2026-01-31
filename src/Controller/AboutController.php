@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\AboutRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,9 +20,9 @@ class AboutController extends AbstractController
         $about = $aboutRepo->findOneById(1);
         $displayBtn = true;
 
-        return $this->render('about/about.html.twig', [
-            'about' => $about,
-            "displayBtn" => $displayBtn
+        return $this->render("about/about.html.twig", [
+            "about" => $about,
+            "displayBtn" => $displayBtn,
         ]);
     }
 }

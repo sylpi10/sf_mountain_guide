@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
 
 class NewsLetterController extends AbstractController
 {
@@ -22,7 +23,7 @@ class NewsLetterController extends AbstractController
         MailerInterface $mailer,
         NewsLetterRepository $newsLetterRepository,
         EntityManagerInterface $manager,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
     ) {
         $this->mailer = $mailer;
         $this->newsLetterRepository = $newsLetterRepository;
@@ -34,28 +35,28 @@ class NewsLetterController extends AbstractController
      */
     public function index(Request $request)
     {
-
         $formNews = $this->createForm(NewsLetterType::class);
         $newsletter = $formNews->handleRequest($request);
         $newsletterEntity = $this->newsLetterRepository->findAll();
         $displayBtn = false;
         if ($formNews->isSubmitted() && $formNews->isValid()) {
-
             // push subscriber to db
             $subscriber = new NewsLetter();
-            $subscriber->setEmail($newsletter->get('email')->getData());
-            $subscriber->setFullname($newsletter->get('fullname')->getData());
+            $subscriber->setEmail($newsletter->get("email")->getData());
+            $subscriber->setFullname($newsletter->get("fullname")->getData());
 
             $this->manager->persist($subscriber);
             $this->manager->flush();
 
-            // send email to client who registered 
+            // send email to client who registered
             $emailToClient = (new TemplatedEmail())
                 ->from("contact@directicimes.com")
-                ->to($newsletter->get('email')->getData())
+                ->to($newsletter->get("email")->getData())
                 ->subject("Votre abonnement à la newsletter")
                 ->text(
-                    " Bonjour " . $newsletter->get('fullname')->getData() . ".\n Nous avons bien pris en compte votre abonnement à notre newsletter !"
+                    " Bonjour " .
+                        $newsletter->get("fullname")->getData() .
+                        ".\n Nous avons bien pris en compte votre abonnement à notre newsletter !",
                 )
                 ->context([
                     "formNews" => $formNews->createView(),
@@ -63,13 +64,15 @@ class NewsLetterController extends AbstractController
 
             $this->mailer->send($emailToClient);
 
-            $email = (new TemplatedEmail())
-                ->from("contact@directicimes.com")
+            $email = (new TemplatedEmail())->from("contact@directicimes.com")
                 ->to("contact@directicimes.com", "georgesyn@gmail.com")
                 ->subject("Nouvel abonné à la newsletter")
 
                 ->text(
-                    $newsletter->get('fullname')->getData() . " s'est abonné à la newsletter. \nSon email est : " . $newsletter->get('email')->getData() . ' !'
+                    $newsletter->get("fullname")->getData() .
+                        " s'est abonné à la newsletter. \nSon email est : " .
+                        $newsletter->get("email")->getData() .
+                        " !",
                 )
                 ->context([
                     "formNews" => $formNews->createView(),
@@ -78,19 +81,20 @@ class NewsLetterController extends AbstractController
             //send mail to admin
             $this->mailer->send($email);
 
-
             // confirmation msg
-            $message = $this->translator->trans("You have been registered to our newsletter");
-            $this->addFlash('success', $message);
+            $message = $this->translator->trans(
+                "You have been registered to our newsletter",
+            );
+            $this->addFlash("success", $message);
 
             // redirection
             return $this->redirectToRoute("home");
         }
 
-        return $this->render('news_letter/newsLetter.html.twig', [
+        return $this->render("news_letter/newsLetter.html.twig", [
             "form" => $formNews->createView(),
             "newsletterEntity" => $newsletterEntity,
-            "displayBtn" => $displayBtn
+            "displayBtn" => $displayBtn,
         ]);
     }
 }

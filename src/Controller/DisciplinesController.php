@@ -11,6 +11,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
 
 class DisciplinesController extends AbstractController
 {
@@ -21,7 +22,7 @@ class DisciplinesController extends AbstractController
     public function __construct(
         DisciplineRepository $disciplineRepo,
         MailerInterface $mailer,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
     ) {
         $this->disciplineRepo = $disciplineRepo;
         $this->mailer = $mailer;
@@ -43,37 +44,35 @@ class DisciplinesController extends AbstractController
         $id,
         Request $request,
         Discipline $discipline,
-        string $slug
+        string $slug,
     ): Response {
-
         if ($discipline->getSlug() !== $slug) {
-            return $this->redirectToRoute('detail', [
-                'id' => $discipline->getId(),
-                'slug' => $discipline->getSlug()
-            ], 301);
+            return $this->redirectToRoute(
+                "detail",
+                [
+                    "id" => $discipline->getId(),
+                    "slug" => $discipline->getSlug(),
+                ],
+                301,
+            );
         }
         $displayBtn = true;
         $disciplines = $this->disciplineRepo->findAll();
         // $discipline = $disciplineRepo->findOneById($id);
         $form = $this->createForm(ContactType::class);
 
-
         $contact = $form->handleRequest($request);
         $disciplines = $this->disciplineRepo->findAll();
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            if (!empty($_POST['website'])) {
+            if (!empty($_POST["website"])) {
                 return $this->redirectToRoute("home");
             } else {
-                $email = (new TemplatedEmail())
-                    ->from($contact->get('email')->getData())
-                    ->to("contact@directicimes.com", "georgesyn@gmail.com")
-                    ->subject("Nouveau Message depuis DirectiCimes")
+                $email = (new TemplatedEmail())->from($contact->get("email")->getData())->to("contact@directicimes.com", "georgesyn@gmail.com")->subject("Nouveau Message depuis DirectiCimes")
                     // ->htmlTemplate("global/index.html.twig")
-                    ->text($contact->get('message')->getData())
+                    ->text($contact->get("message")->getData())
                     ->context([
-                        "form" => $form->createView()
+                        "form" => $form->createView(),
                     ]);
 
                 $this->mailer->send($email);
@@ -81,19 +80,19 @@ class DisciplinesController extends AbstractController
                 // $notification->notify($contact);
                 $message = $this->translator->trans("Your email has been send");
 
-                $this->addFlash('success', $message);
+                $this->addFlash("success", $message);
                 return $this->redirectToRoute("detail", [
-                    'id' => $id,
-                    'slug' => $slug
+                    "id" => $id,
+                    "slug" => $slug,
                 ]);
             }
         }
 
-        return $this->render('disciplines/detail.html.twig', [
-            'discipline' => $discipline,
-            'disciplines' => $disciplines,
-            'form' => $form->createView(),
-            "displayBtn" => $displayBtn
+        return $this->render("disciplines/detail.html.twig", [
+            "discipline" => $discipline,
+            "disciplines" => $disciplines,
+            "form" => $form->createView(),
+            "displayBtn" => $displayBtn,
         ]);
     }
 }

@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Routing\Annotation\Route;
 
 class BlogController extends AbstractController
 {
@@ -30,7 +31,7 @@ class BlogController extends AbstractController
         EntityManagerInterface $manager,
         CommentRepository $commentRepo,
         Security $security,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
     ) {
         $this->paginator = $paginator;
         $this->blogRepository = $blogRepository;
@@ -51,12 +52,12 @@ class BlogController extends AbstractController
         $displayBtn = true;
         $articles = $this->paginator->paginate(
             $this->blogRepository->findByDate(),
-            $request->query->getInt('page', 1),
-            4
+            $request->query->getInt("page", 1),
+            4,
         );
 
-        return $this->render('blog/index.html.twig', [
-            'articles' => $articles,
+        return $this->render("blog/index.html.twig", [
+            "articles" => $articles,
             "displayBtn" => $displayBtn,
         ]);
     }
@@ -77,25 +78,32 @@ class BlogController extends AbstractController
         // }
         $comment->setPostedAt(new \DateTimeImmutable());
         $comment->setIsAccepted(false);
-        $form = $this->createForm(CommentType::class, $comment)->handleRequest($request);
-
-
+        $form = $this->createForm(CommentType::class, $comment)->handleRequest(
+            $request,
+        );
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->manager->persist($comment);
             $this->manager->flush();
-            $message = $this->translator->trans("Your comment has been submitted, it will be displayed when the administartor validates it");
-            $this->addFlash('success', $message);
-            //without redirection, com will be re-posted on each reload (f5) 
-            return $this->redirectToRoute("blog_detail", ["id" => $post->getId(), 'slug' => $post->getSlug()]);
+            $message = $this->translator->trans(
+                "Your comment has been submitted, it will be displayed when the administartor validates it",
+            );
+            $this->addFlash("success", $message);
+            //without redirection, com will be re-posted on each reload (f5)
+            return $this->redirectToRoute("blog_detail", [
+                "id" => $post->getId(),
+                "slug" => $post->getSlug(),
+            ]);
         }
 
-        $acceptedComments = $this->commentRepo->findByIsAccepted($post->getId());
-        return $this->render('blog/details.html.twig', [
-            'article' => $post,
-            'form' => $form->createView(),
-            'displayBtn' => true,
-            'acceptedComments' => $acceptedComments
+        $acceptedComments = $this->commentRepo->findByIsAccepted(
+            $post->getId(),
+        );
+        return $this->render("blog/details.html.twig", [
+            "article" => $post,
+            "form" => $form->createView(),
+            "displayBtn" => true,
+            "acceptedComments" => $acceptedComments,
         ]);
     }
 }

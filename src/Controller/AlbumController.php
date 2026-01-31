@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/admin")
@@ -21,11 +22,10 @@ class AlbumController extends AbstractController
      */
     public function index(AlbumRepository $albumRepository): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-      
+        $this->denyAccessUnlessGranted("ROLE_ADMIN");
 
-        return $this->render('album/index.html.twig', [ 
-            'albums' => $albumRepository->findAll(),
+        return $this->render("album/index.html.twig", [
+            "albums" => $albumRepository->findAll(),
         ]);
     }
 
@@ -40,20 +40,17 @@ class AlbumController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // get the images
-            $images = $form->get('images')->getData();
+            $images = $form->get("images")->getData();
             foreach ($images as $image) {
                 // new filename
-                $file = md5(uniqid()) . '.' . $image->guessExtension();
+                $file = md5(uniqid()) . "." . $image->guessExtension();
 
                 // copy file to uploads directory
-                $image->move(
-                    $this->getParameter('images_directory'),
-                    $file
-                );
+                $image->move($this->getParameter("images_directory"), $file);
 
                 // stock img name in db
                 $img = new Image();
-                $img ->setName($file);
+                $img->setName($file);
                 $album->addImage($img);
             }
 
@@ -61,12 +58,12 @@ class AlbumController extends AbstractController
             $entityManager->persist($album);
             $entityManager->flush();
 
-            return $this->redirectToRoute('album_index');
+            return $this->redirectToRoute("album_index");
         }
 
-        return $this->render('album/new.html.twig', [
-            'album' => $album,
-            'form' => $form->createView(),
+        return $this->render("album/new.html.twig", [
+            "album" => $album,
+            "form" => $form->createView(),
         ]);
     }
 
@@ -75,8 +72,8 @@ class AlbumController extends AbstractController
      */
     public function show(Album $album): Response
     {
-        return $this->render('album/show.html.twig', [
-            'album' => $album,
+        return $this->render("album/show.html.twig", [
+            "album" => $album,
         ]);
     }
 
@@ -89,32 +86,28 @@ class AlbumController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // get the images
+            $images = $form->get("images")->getData();
+            foreach ($images as $image) {
+                // new filename
+                $file = md5(uniqid()) . "." . $image->guessExtension();
 
-                     // get the images
-                     $images = $form->get('images')->getData();
-                     foreach ($images as $image) {
-                         // new filename
-                         $file = md5(uniqid()) . '.' . $image->guessExtension();
-         
-                         // copy file to uploads directory
-                         $image->move(
-                             $this->getParameter('images_directory'),
-                             $file
-                         );
-         
-                         // stock img name in db
-                         $img = new Image();
-                         $img ->setName($file);
-                         $album->addImage($img);
-                     }
+                // copy file to uploads directory
+                $image->move($this->getParameter("images_directory"), $file);
+
+                // stock img name in db
+                $img = new Image();
+                $img->setName($file);
+                $album->addImage($img);
+            }
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('album_index');
+            return $this->redirectToRoute("album_index");
         }
 
-        return $this->render('album/edit.html.twig', [
-            'album' => $album,
-            'form' => $form->createView(),
+        return $this->render("album/edit.html.twig", [
+            "album" => $album,
+            "form" => $form->createView(),
         ]);
     }
 
@@ -123,38 +116,44 @@ class AlbumController extends AbstractController
      */
     public function delete(Request $request, Album $album): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$album->getId(), $request->request->get('_token'))) {
+        if (
+            $this->isCsrfTokenValid(
+                "delete" . $album->getId(),
+                $request->request->get("_token"),
+            )
+        ) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($album);
             $entityManager->flush();
         }
-        
-        return $this->redirectToRoute('album_index');
+
+        return $this->redirectToRoute("album_index");
     }
-    
+
     /**
      * @Route("/delete/image/{id}", name="delete_img", methods={"DELETE"})
      */
     public function deleteImage(Image $image, Request $request)
     {
         $data = json_decode($request->getContent(), true);
-        
+
         //check if token isvalid
-        if ($this->isCsrfTokenValid('delete'.$image->getId(), $data['_token'])) {
-            
+        if (
+            $this->isCsrfTokenValid("delete" . $image->getId(), $data["_token"])
+        ) {
             // get image name
             $name = $image->getName();
             //del the file
-            unlink($this->getParameter("images_directory").'/'.$name);
+            unlink($this->getParameter("images_directory") . "/" . $name);
             //del from db
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($image);
             $entityManager->flush();
 
             // json Response
-            return new JsonResponse(['success' => 1]);
-        }else{
-            return new JsonResponse(['error' => 'Invalid token'], 400);
+            return new JsonResponse(["success" => 1]);
+        } else {
+            return new JsonResponse(["error" => "Invalid token"], 400);
         }
     }
 }

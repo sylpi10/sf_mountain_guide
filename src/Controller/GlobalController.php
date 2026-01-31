@@ -12,6 +12,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class GlobalController extends AbstractController
 {
@@ -24,7 +25,7 @@ class GlobalController extends AbstractController
         MailerInterface $mailer,
         TranslatorInterface $translator,
         DisciplineRepository $disciplineRepo,
-        EntityManagerInterface $manager
+        EntityManagerInterface $manager,
     ) {
         $this->mailer = $mailer;
         $this->translator = $translator;
@@ -43,28 +44,26 @@ class GlobalController extends AbstractController
         $form = $this->createForm(ContactType::class);
         $contact = $form->handleRequest($request);
 
-
         if ($form->isSubmitted() && $form->isValid()) {
-
             // honeypot for robots
-            if (!empty($_POST['website'])) {
+            if (!empty($_POST["website"])) {
                 return $this->redirectToRoute("home");
                 // if not filled, handle request
             } else {
                 $email = (new TemplatedEmail())
-                    ->from($contact->get('email')->getData())
+                    ->from($contact->get("email")->getData())
                     ->to("contact@directicimes.com", "georgesyn@gmail.com")
                     // ->to("syl.pillet@hotmail.fr")
                     ->subject("Nouveau Message depuis DirectiCimes")
                     // ->htmlTemplate("global/index.html.twig")
-                    ->text($contact->get('message')->getData())
+                    ->text($contact->get("message")->getData())
                     ->context([
                         "form" => $form->createView(),
                     ]);
 
-                $sentEmail->setName($form->get('name')->getData());
-                $sentEmail->setEmail($form->get('email')->getData());
-                $sentEmail->setMessage($form->get('message')->getData());
+                $sentEmail->setName($form->get("name")->getData());
+                $sentEmail->setEmail($form->get("email")->getData());
+                $sentEmail->setMessage($form->get("message")->getData());
 
                 // persist contact infos
                 $this->manager->persist($sentEmail);
@@ -75,20 +74,18 @@ class GlobalController extends AbstractController
                 // $notification->notify($contact);
                 $message = $this->translator->trans("Your email has been send");
 
-                $this->addFlash('success', $message);
-                return $this->redirect(
-                    $this->generateUrl('home') . '#top'
-                );
+                $this->addFlash("success", $message);
+                return $this->redirect($this->generateUrl("home") . "#top");
                 // return $this->redirectToRoute("home");
             }
         }
 
         // return every disciplines on home page
         $disciplines = $this->disciplineRepo->findAll();
-        return $this->render('global/index.html.twig', [
-            'form' => $form->createView(),
+        return $this->render("global/index.html.twig", [
+            "form" => $form->createView(),
             "disciplines" => $disciplines,
-            "displayBtn" => true
+            "displayBtn" => true,
         ]);
     }
 
@@ -100,9 +97,9 @@ class GlobalController extends AbstractController
     public function changeLocale($locale, Request $request)
     {
         //stock lang in session
-        $request->getSession()->set('_locale', $locale);
+        $request->getSession()->set("_locale", $locale);
 
         //back to previous page
-        return $this->redirect($request->headers->get('referer'));
+        return $this->redirect($request->headers->get("referer"));
     }
 }

@@ -24,44 +24,47 @@ class SitemapController extends AbstractController
         // get host name from url
         $hostname = $request->getSchemeAndHttpHost();
 
-        //init url array 
+        //init url array
         $urls = [];
 
-        // add statics urls 
+        // add statics urls
         // $urls[] = $urls->push()
-        $urls[] = ['loc' => $this->generateUrl('home')];
-        $urls[] = ['loc' => $this->generateUrl('about')];
-        $urls[] = ['loc' => $this->generateUrl('login')];
-        $urls[] = ['loc' => $this->generateUrl('blog')];
+        $urls[] = ["loc" => $this->generateUrl("home")];
+        $urls[] = ["loc" => $this->generateUrl("about")];
+        $urls[] = ["loc" => $this->generateUrl("login")];
+        $urls[] = ["loc" => $this->generateUrl("blog")];
 
-        // add dynamic urls 
-        foreach ($this->managerRegistry->getRepository(Discipline::class)->findAll() as $discipline) {
+        // add dynamic urls
+        foreach (
+            $this->managerRegistry->getRepository(Discipline::class)->findAll()
+            as $discipline
+        ) {
             $title = [
-                'loc' => $discipline->getTitle()
+                "loc" => $discipline->getTitle(),
             ];
             $urls[] = [
-                'loc' => $this->generateUrl('detail', [
-                    'slug' => $discipline->getSlug(),
-                    'id' => $discipline->getId()
+                "loc" => $this->generateUrl("detail", [
+                    "slug" => $discipline->getSlug(),
+                    "id" => $discipline->getId(),
                 ]),
-                'title' => $title,
+                "title" => $title,
             ];
         }
         // dd($urls);
 
-        // create response 
+        // create response
         $response = new Response(
-            $this->renderView('sitemap/index.html.twig', [
-                'urls' => $urls,
-                'hostname' => $hostname
+            $this->renderView("sitemap/index.html.twig", [
+                "urls" => $urls,
+                "hostname" => $hostname,
             ]),
-            200
+            200,
         );
 
-        // add headers 
-        $response->headers->set('Content-Type', 'text/xml');
+        // add headers
+        $response->headers->set("Content-Type", "text/xml");
 
-        //send response 
+        //send response
         return $response;
     }
 }
