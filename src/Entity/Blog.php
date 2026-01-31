@@ -90,7 +90,7 @@ class Blog
     private $createdAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="post", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="post", fetch="EAGER", cascade={"remove"})
      */
     private $comments;
 

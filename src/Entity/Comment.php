@@ -23,7 +23,7 @@ class Comment
     private $content;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Blog::class, inversedBy="comments")
+     * @ORM\ManyToOne(targetEntity=Blog::class, inversedBy="comments", fetch="EAGER")
      */
     private $post;
 

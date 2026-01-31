@@ -4,13 +4,11 @@ namespace App\Controller;
 
 use App\Entity\NewsLetterSubscriber;
 use App\Form\NewsLetterSubscriberType;
-use App\Form\NewsLetterType;
 use App\Repository\NewsLetterSubscriberRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -72,7 +70,7 @@ class NewsLetterSubscriberController extends AbstractController
                 // ->from($newsletter->get('email')->getData())
                 ->from("contact@directicimes.com")
                 // ->to("syl.pillet@hotmail.fr")
-                ->to("contact@directicimes.com")
+                ->to("contact@directicimes.com", "georgesyn@gmail.com")
                 ->subject("Nouvel abonné à la newsletter")
                 // ->htmlTemplate("global/index.html.twig")
 

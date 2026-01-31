@@ -9,7 +9,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -54,7 +53,7 @@ class GlobalController extends AbstractController
             } else {
                 $email = (new TemplatedEmail())
                     ->from($contact->get('email')->getData())
-                    ->to("contact@directicimes.com")
+                    ->to("contact@directicimes.com", "georgesyn@gmail.com")
                     // ->to("syl.pillet@hotmail.fr")
                     ->subject("Nouveau Message depuis DirectiCimes")
                     // ->htmlTemplate("global/index.html.twig")

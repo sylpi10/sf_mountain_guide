@@ -10,7 +10,6 @@ use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
@@ -79,12 +78,15 @@ class BlogController extends AbstractController
         $comment->setPostedAt(new \DateTimeImmutable());
         $comment->setIsAccepted(false);
         $form = $this->createForm(CommentType::class, $comment)->handleRequest($request);
+
+
+
         if ($form->isSubmitted() && $form->isValid()) {
             $this->manager->persist($comment);
             $this->manager->flush();
-            //without redirection, com will be re-posted on each reload (f5) 
             $message = $this->translator->trans("Your comment has been submitted, it will be displayed when the administartor validates it");
             $this->addFlash('success', $message);
+            //without redirection, com will be re-posted on each reload (f5) 
             return $this->redirectToRoute("blog_detail", ["id" => $post->getId(), 'slug' => $post->getSlug()]);
         }
 

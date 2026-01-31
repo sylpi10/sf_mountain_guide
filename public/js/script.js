@@ -1,7 +1,7 @@
 
 window.onscroll = ()=> {
     backToTop();
-      changeMenuOnscroll();
+    changeMenuOnscroll();
       // parrallaxOnTitle();
 };
 
@@ -42,6 +42,7 @@ function backToTop() {
 $(document).ready(function() {
   $('a[href$="' + location.pathname + '"]').addClass('active');
 });
+
 
 
 // alerts
