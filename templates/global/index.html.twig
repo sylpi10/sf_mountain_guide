@@ -7,8 +7,9 @@
 {% endblock %}
 
 {% block head_extra %}
-	<link rel="preload" as="image" href="{{asset('images/bg1.webp')}}" type="image/webp">
-	<link rel="preload" as="image" href="{{asset('images/bg1.jpg')}}" type="image/jpeg">
+    <link rel="preload" as="image" href="/images/bg1-mobile-480.webp" media="(max-width: 480px)">
+    <link rel="preload" as="image" href="/images/bg1-mobile.webp" media="(max-width: 768px)">
+    <link rel="preload" as="image" href="/images/bg1-1280.webp" media="(min-width: 769px)">
 {% endblock %}
 
 {% block body_class %}base-page

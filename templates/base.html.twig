@@ -9,8 +9,6 @@
 		{% endblock %}
 		<meta name="keywords" content="directicimes, guide de haute montagne, ski, aplinisme, escalade, aventure, ski, ski hors-piste, ski alpin, ski de randonnée, Briançon">
 		<link rel="icon" type="image/x-icon" href="{{asset('images/favicon.ico')}}">
-		<link rel="preload" as="image" href="/images/bg1-mobile-480.webp" media="(max-width: 768px)">
-		<link rel="preload" as="image" href="/images/bg1-1280.webp" media="(min-width: 769px)">
 
 		<title>
 			{% block title %}
@@ -19,7 +17,7 @@
 				{% endtrans %}
 			{% endblock %}
 		</title>
-		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+		<link rel="preconnect" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 		<link rel="stylesheet" href="{{asset('css/style.css')}}"> {% block stylesheets %}{% endblock %}
 		{% block head_extra %}{% endblock %}
@@ -37,7 +35,7 @@
 
 							<div class="logo">
 								<a class="navbar-brand" href="{{path('home')}}">
-									<img src="{{asset('images/logo.png')}}" id="logo" alt="Logo Directicimes" title=" {% trans %} Home {% endtrans %} ">
+									<img src="{{asset('images/logo.webp')}}" id="logo" alt="Logo Directicimes" title=" {% trans %} Home {% endtrans %} ">
 								</a>
 							</div>
 
