@@ -15,34 +15,49 @@
 {% endblock %}
 {% block body %}
 
-    <div data-jarallax  data-speed="0.4" data-jarallax-img="{{ asset('images/bg1.webp') }}"class="hero-area jarallax">
-        <picture>
-          <source
-            type="image/webp"
-            srcset="
-              {{ asset('images/bg1-mobile.webp') }} 768w,
-              {{ asset('images/bg1.webp') }} 1920w
-            "
-            sizes="100vw"
-          >
-          <img
-            src="{{ asset('images/bg1-mobile.webp') }}"
-            width="1920" height="1080"
-            fetchpriority="high"
-            decoding="async"
-            alt="{% trans %}Mountain landscape in Briançon{% endtrans %}"
-            class="hero-img"
-          >
-        </picture>
+<div class="hero hero-area">
+    <picture>
+      {# Desktop #}
+      <source
+        type="image/webp"
+        media="(min-width: 769px)"
+        srcset="
+          {{ asset('images/bg1-1280.webp') }} 1280w,
+          {{ asset('images/bg1.webp') }} 1920w
+        "
+        sizes="100vw"
+      >
 
-		<h1 class="main-title">{% trans %}
-			Mountaineering, Ski, Rock Climbing
-			{% endtrans %}
-		</h1>
-		<a href="{{path('home', {'_fragment':'disciplines'})}}" class="btn more-link button-link" title="Plus">
-			<i class="fas fa-angle-down"></i>
-		</a>
-	</div>
+      {# Mobile #}
+      <source
+        type="image/webp"
+        media="(max-width: 768px)"
+        srcset="
+          {{ asset('images/bg1-mobile-480.webp') }} 480w,
+          {{ asset('images/bg1-mobile.webp') }} 768w
+        "
+        sizes="100vw"
+      >
+
+      <img
+        src="{{ asset('images/bg1-mobile-480.webp') }}"
+        width="480"
+        height="720"
+        fetchpriority="high"
+        decoding="async"
+        alt="{% trans %}Mountain landscape in Briançon{% endtrans %}"
+        class="hero-img"
+      >
+    </picture>
+
+
+  <div class="hero-content hero-overlay">
+    <h1 class="main-title">{% trans %}Mountaineering, Ski, Rock Climbing{% endtrans %}</h1>
+    <a href="{{ path('home', {'_fragment':'disciplines'}) }}" class="btn more-link button-link" title="Plus">
+      <i class="fas fa-angle-down"></i>
+    </a>
+  </div>
+</div>
 
 	{# end hero #}
 
