@@ -15,11 +15,21 @@
 {% endblock %}
 {% block body %}
 
-	<div data-jarallax data-speed="0.4" class="hero-area jarallax">
-		<picture>
+    <div data-jarallax  data-speed="0.4" data-jarallax-img="{{ asset('images/bg1.webp') }}"class="hero-area jarallax">
+        <picture>
 			<source srcset="{{asset('images/bg1.webp')}}" type="image/webp">
 			<img class="jarallax-img hero-img" src="{{asset('images/bg1.jpg')}}" alt="{% trans %}Mountain landscape in Briançon{% endtrans %}" width="1920" height="1080" fetchpriority="high" decoding="async">
 		</picture>
+        <picture class="hero-mobile">
+            <source srcset="{{ asset('images/bg1-mobile.webp') }}" type="image/webp">
+            <img
+            src="{{ asset('images/bg1-mobile.jpg') }}"
+            alt="{% trans %}Mountain landscape in Briançon{% endtrans %}"
+            width="768" height="1024"
+            decoding="async"
+            >
+        </picture>
+
 		<h1 class="main-title">{% trans %}
 			Mountaineering, Ski, Rock Climbing
 			{% endtrans %}
