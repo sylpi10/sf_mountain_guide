@@ -4,8 +4,8 @@ namespace App\Entity;
 
 use Cocur\Slugify\Slugify;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
 use App\Repository\BlogRepository;
+use Doctrine\ORM\Mapping as ORM;
 use DateTime;
 use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -17,13 +17,10 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  */
 class Blog
 {
-
     public function __construct()
     {
         $this->created_at = new \DateTime();
         $this->updated_at = new \DateTime();
-        $this->blogImages = new ArrayCollection();
-        $this->createdAt = new ArrayCollection();
         $this->comments = new ArrayCollection();
     }
 
@@ -56,8 +53,6 @@ class Blog
      */
     private $imageFile;
 
-
-
     /**
      * @ORM\Column(type="datetime")
      * @var \DateTime
@@ -85,15 +80,9 @@ class Blog
     private $location;
 
     /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="post")
-     */
-    private $createdAt;
-
-    /**
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="post", fetch="EAGER", cascade={"remove"})
      */
     private $comments;
-
 
     public function getImage(): ?string
     {
@@ -124,7 +113,7 @@ class Blog
         // otherwise the event listeners won't be called and the file is lost
         if (null !== $imageFile) {
             // if 'updatedAt' is not defined in your entity, use another property
-            $this->updated_at = new \DateTime('now');
+            $this->updated_at = new \DateTime("now");
         }
         return $this;
     }
@@ -234,28 +223,6 @@ class Blog
         return $this;
     }
 
-    public function addCreatedAt(Comment $createdAt): self
-    {
-        if (!$this->createdAt->contains($createdAt)) {
-            $this->createdAt[] = $createdAt;
-            $createdAt->setPost($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCreatedAt(Comment $createdAt): self
-    {
-        if ($this->createdAt->removeElement($createdAt)) {
-            // set the owning side to null (unless already changed)
-            if ($createdAt->getPost() === $this) {
-                $createdAt->setPost(null);
-            }
-        }
-
-        return $this;
-    }
-
     /**
      * @return Collection|Comment[]
      */
@@ -287,6 +254,6 @@ class Blog
     }
     public function getSlug(): string
     {
-        return (new Slugify())->slugify($this->title);
+        return new Slugify()->slugify($this->title);
     }
 }

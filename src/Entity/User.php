@@ -97,7 +97,7 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getRoles()
+    public function getRoles(): array
     {
         return [$this->roles];
     }
@@ -124,7 +124,7 @@ class User implements UserInterface
         return $this->username;
     }
 
-    public function __tostring()
+    public function __toString()
     {
         return $this->username;
     }

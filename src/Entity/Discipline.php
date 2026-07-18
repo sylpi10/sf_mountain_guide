@@ -4,9 +4,9 @@ namespace App\Entity;
 
 use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\DisciplineRepository;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use App\Repository\DisciplineRepository;
 
 /**
  * @ORM\Entity(repositoryClass=DisciplineRepository::class)
@@ -81,12 +81,11 @@ class Discipline
      */
     private $englishPrice;
 
-
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", name="updated_at")
      * @var \DateTime
      */
-    private $updated_at;
+    private $updatedAt;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -111,7 +110,6 @@ class Discipline
      * @var File|null
      */
     private $imageDetailFile;
-
 
     public function getId(): ?int
     {
@@ -190,7 +188,6 @@ class Discipline
         return $this;
     }
 
-
     public function getEnglishTitle(): ?string
     {
         return $this->englishTitle;
@@ -265,9 +262,8 @@ class Discipline
 
     public function getSlug(): string
     {
-        return (new Slugify())->slugify($this->title);
+        return new Slugify()->slugify($this->title);
     }
-
 
     public function __toString()
     {
@@ -303,7 +299,7 @@ class Discipline
         // otherwise the event listeners won't be called and the file is lost
         if (null !== $imageFile) {
             // if 'updatedAt' is not defined in your entity, use another property
-            $this->updated_at = new \DateTime('now');
+            $this->updatedAt = new \DateTime("now");
         }
         return $this;
     }
@@ -320,7 +316,7 @@ class Discipline
         // otherwise the event listeners won't be called and the file is lost
         if (null !== $imageDetailFile) {
             // if 'updatedAt' is not defined in your entity, use another property
-            $this->updated_at = new \DateTime('now');
+            $this->updatedAt = new \DateTime("now");
         }
         return $this;
     }
@@ -358,18 +354,18 @@ class Discipline
     }
 
     /**
-     * Get the value of updated_at
+     * Get the value of updatedAt
      *
      * @return  \DateTimeInterface
      */
     public function getUpdatedAt(): ?\DateTimeInterface
     {
-        return $this->updated_at;
+        return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updated_at): self
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
     {
-        $this->updated_at = $updated_at;
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
