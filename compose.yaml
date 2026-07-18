@@ -1,0 +1,59 @@
+services:
+    php:
+        build:
+            context: .
+            dockerfile: Dockerfile
+
+        container_name: directicimes-php
+
+        working_dir: /app
+
+        volumes:
+            - .:/app
+
+        environment:
+            APP_ENV: dev
+            DATABASE_URL: "mysql://app:app@db:3306/directicimes?serverVersion=8.4"
+
+        ports:
+            - "8000:8000"
+
+        command: php -S 0.0.0.0:8000 -t public
+
+        depends_on:
+            - db
+
+    db:
+        image: mysql:8.4
+
+        container_name: directicimes-db
+
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: directicimes
+            MYSQL_USER: app
+            MYSQL_PASSWORD: app
+
+        ports:
+            - "3307:3306"
+
+        volumes:
+            - db_data:/var/lib/mysql
+
+    phpmyadmin:
+        image: phpmyadmin:latest
+
+        container_name: directicimes-phpmyadmin
+
+        environment:
+            PMA_HOST: db
+            PMA_PORT: 3306
+
+        ports:
+            - "8080:80"
+
+        depends_on:
+            - db
+
+volumes:
+    db_data:
