@@ -33,6 +33,10 @@ deploy:
 		php bin/console cache:clear --env=prod \
 	"
 
+deploy-test:
+	rsync -av --itemize-changes --dry-run ./ $(SERVER_USER)@$(SERVER_HOST):~/$(SERVER_PATH) \
+		$(RSYNC_EXCLUDES)
+
 up:
 	docker compose up -d
 
