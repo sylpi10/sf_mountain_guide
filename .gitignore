@@ -4,6 +4,7 @@
 /.env.local
 /.env.local.php
 /.env.*.local
+/.env.deploy
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
 /public/uploads/
@@ -24,3 +25,4 @@ info.md
 .phpunit.result.cache
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
+/.node_modules
