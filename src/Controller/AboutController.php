@@ -17,7 +17,8 @@ class AboutController extends AbstractController
      */
     public function about(AboutRepository $aboutRepo): Response
     {
-        $about = $aboutRepo->findOneById(1);
+        // $about = $aboutRepo->findOneById(1);
+        $about = $aboutRepo->findOneAbout();
         $displayBtn = true;
 
         return $this->render("about/about.html.twig", [
