@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+// use Symfony\Component\PasswordHasher\PasswordHasherInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -17,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *  message="Ce nom d'utilisateur est déjà pris"
  * )
  */
-class User implements UserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
      * @ORM\Id
@@ -114,10 +116,10 @@ class User implements UserInterface
         # code...
     }
 
-    public function getSalt()
-    {
-        # code...
-    }
+    // public function getSalt()
+    // {
+    //     # code...
+    // }
 
     public function getUserIdentifier(): string
     {

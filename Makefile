@@ -24,7 +24,7 @@ RSYNC_EXCLUDES = \
 	--exclude public/bundles/
 
 deploy:
-	rsync -av --itemize-changes --dry-run ./ $(SERVER_USER)@$(SERVER_HOST):~/$(SERVER_PATH) \
+	rsync -av --itemize-changes ./ $(SERVER_USER)@$(SERVER_HOST):~/$(SERVER_PATH) \
 		$(RSYNC_EXCLUDES)
 
 	ssh $(SERVER_USER)@$(SERVER_HOST) "\
