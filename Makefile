@@ -20,10 +20,11 @@ RSYNC_EXCLUDES = \
 	--exclude Makefile \
 	--exclude Dockerfile \
 	--exclude compose.yml \
-	--exclude tests/
+	--exclude tests/ \
+	--exclude public/bundles/
 
 deploy:
-	rsync -av --dry-run ./ $(SERVER_USER)@$(SERVER_HOST):~/$(SERVER_PATH) \
+	rsync -av --itemize-changes --dry-run ./ $(SERVER_USER)@$(SERVER_HOST):~/$(SERVER_PATH) \
 		$(RSYNC_EXCLUDES)
 
 	ssh $(SERVER_USER)@$(SERVER_HOST) "\
