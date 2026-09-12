@@ -1,0 +1,96 @@
+#contact-form {
+    margin-top: 180px;
+}
+#website {
+    display: none;
+}
+.contact {
+    z-index: 600;
+    width: 100%;
+    padding-top: 80px;
+    position: relative;
+    background-color: #fff;
+    color: #333;
+    margin: 0;
+}
+.contact .contact-infos {
+    width: 80%;
+    display: flex;
+    justify-content: space-around;
+    margin: auto;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.contact .contact-infos p {
+    font-size: 1.25rem;
+    min-width: 280px;
+    width: 60%;
+    color: $second-color;
+}
+.contact .contact-infos img {
+    border-radius: 50%;
+    border: solid 1px navy;
+}
+.contact-form {
+    padding: 40px;
+    width: 74%;
+    margin: auto;
+    .btn.button-link {
+        background-color: $base-color;
+        height: 48px;
+        width: fit-content;
+        min-width: 240px;
+        color: #fff;
+        text-transform: uppercase;
+        font-weight: bold;
+        margin: auto;
+        transition: all ease 0.4s;
+        &:hover {
+            background-color: $second-color;
+            border-color: #fff;
+            min-width: 256px;
+        }
+    }
+}
+.contact-notif {
+    position: relative;
+    width: 90%;
+    margin: 16px auto;
+    z-index: 999;
+}
+.contact-form form {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    margin: 30px auto;
+    background-color: #f3f7fa;
+    padding: 60px;
+    border-radius: 12px;
+}
+@media screen and (max-width: 860px) {
+    .contact-form {
+        width: 90%;
+        padding: 30px;
+    }
+    .contact-form form {
+        width: 90%;
+        padding: 40px 30px;
+    }
+    .contact-infos {
+        width: 100%;
+    }
+}
+@media screen and (max-width: 600px) {
+    .contact-form {
+        width: 100%;
+        padding: 20px;
+    }
+    .contact-form form {
+        width: 100%;
+        padding: 20px;
+    }
+    .contact-infos p {
+        min-width: 280px;
+        font-size: 1rem;
+    }
+}

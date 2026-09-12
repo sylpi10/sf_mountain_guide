@@ -1,0 +1,130 @@
+@font-face {
+    font-family: "Share Tech";
+    src: url("../fonts/Share_Tech/ShareTech-Regular.ttf");
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "onderneming";
+    src: url("../fonts/onderneming/Onderneming.ttf");
+    font-display: swap;
+}
+
+$base-color: #2733a0;
+$base-lighter: #414dba;
+$second-color: rgb(11, 11, 37);
+$accent-color: #ff9f1c;
+$accent-color-dark: #e8890a;
+$transition-fast: 0.25s ease;
+$transition-base: 0.4s ease;
+
+html {
+    scroll-behavior: smooth;
+}
+body {
+    /* background-color: rgb(52, 58, 64); */
+    background-color: $base-lighter;
+}
+
+/* titles */
+h1,
+h2 {
+    // font-family: "Share Tech", sans-serif;
+    font-family: "onderneming", sans-serif;
+    /* color: rgb(108, 108, 233); */
+}
+
+h2 {
+    color: rgb(9, 9, 82);
+}
+
+.back-top {
+    position: fixed;
+    top: 90%;
+    left: 88%;
+    font-size: 2rem;
+    z-index: 999;
+    opacity: 0;
+    transition: all $transition-base;
+    color: $accent-color;
+    border-radius: 50%;
+    &:hover {
+        color: $accent-color-dark;
+    }
+}
+
+a:hover {
+    text-decoration: none !important;
+}
+
+.login-container {
+    padding-top: 200px;
+}
+.form-login-wrapper {
+    padding: 80px;
+}
+
+/* .index-notif {
+    position: absolute;
+    z-index: 999;
+    top: 50%;
+    left: 20%;
+} */
+
+.error-container {
+    min-height: 80vh;
+    padding-top: 140px;
+    .error-content {
+        background-color: #fff;
+        margin-top: 60px;
+        padding: 50px 80px;
+        .title-wrapper {
+            display: flex;
+            width: 100%;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            figure {
+                border-radius: 20px;
+                height: 260px;
+                overflow: hidden;
+            }
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            width: 46%;
+            svg {
+                width: 30px;
+                margin-top: -5px;
+            }
+        }
+        h3 {
+            margin-top: 40px;
+        }
+        ul {
+            margin-top: 20px;
+        }
+        a {
+            color: $base-color;
+        }
+    }
+}
+
+.form-login-wrapper {
+    border-radius: 10px;
+    .login {
+        background-color: #2733a0;
+        color: #fff;
+    }
+}
+
+@import "about.scss";
+@import "contact.scss";
+@import "details-discipline.scss";
+@import "blog.scss";
+@import "subscribe.scss";
+@import "menu.scss";
+@import "disciplines.scss";
+@import "hero-area.scss";
+@import "footer.scss";

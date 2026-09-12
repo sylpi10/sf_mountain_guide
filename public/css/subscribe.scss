@@ -1,0 +1,19 @@
+.newsletter-container {
+  padding-top: 140px;
+  min-height: 100vh;
+}
+.subscribe-form {
+  // margin-top: 200px;
+  width: 100%;
+  h2 {
+    margin-bottom: 40px;
+  }
+  .button-link {
+    align-self: center;
+    margin-top: 30px;
+    width: 200px;
+    i {
+      margin-right: 10px;
+    }
+  }
+}

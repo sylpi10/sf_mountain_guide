@@ -1,0 +1,248 @@
+/* detail discipline page */
+
+.detail-page .menu {
+    background-color: $second-color;
+    position: fixed;
+    // height: 90px;
+    .navs-wrapper {
+        .logo {
+            height: 70px;
+            width: 20%;
+            margin-top: -8px;
+            @media screen and (max-width: 991px) {
+                margin-top: -44px;
+            }
+            #logo {
+                width: 70px;
+                height: 70px;
+            }
+        }
+    }
+}
+/*details*/
+.disciplines {
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 40% 20%;
+}
+
+.disciplines > .container-fluid {
+    color: #fff;
+    min-height: 100vh;
+    h1 {
+        text-transform: uppercase;
+        text-align: center;
+        color: #fff;
+        color: $second-color;
+        font-size: 2.7rem;
+        padding-top: 130px;
+    }
+    h2 {
+        color: #fff;
+        color: #333;
+        font-family: "Share Tech";
+    }
+    .text-wrapper {
+        width: 82%;
+        display: flex;
+        margin: 0 auto;
+        align-items: flex-start;
+        overflow: hidden;
+    }
+    .text {
+        margin: 0 auto;
+        font-size: 1.1rem;
+        width: 58%;
+        min-height: 100vh;
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        font-family: "montserrat";
+        font-size: 1.2rem;
+        // background-image: linear-gradient(
+        //   rgba(6, 6, 29, 0.3),
+        //   rgba(6, 6, 29, 0.6),
+        //   rgba(6, 6, 29, 0.9)
+        // );
+        color: #000;
+        background-color: rgba(255, 255, 255, 0.8);
+    }
+}
+
+.disciplines .under-title {
+    width: 50%;
+    margin: 30px auto;
+    background-color: rgba(255, 255, 255, 0.56);
+}
+
+.disciplines > .container-fluid .contact-btn {
+    width: 200px;
+    margin: 60px auto;
+    text-align: center;
+    z-index: 900;
+    position: relative;
+    font-size: 1rem;
+}
+.contact-btn a {
+    text-decoration: none;
+    text-transform: uppercase;
+    color: #fff;
+    width: 100%;
+    padding: 8px 30px;
+    border-radius: 8px;
+    background-color: $base-color;
+    border: solid 2px $base-color;
+    transition: all 0.6s ease;
+    z-index: 900;
+    font-weight: bold;
+}
+.contact-btn a:hover {
+    background-color: $second-color;
+    border-color: #fff;
+}
+.escalade {
+    background-position: 20%;
+}
+
+/* banner on the right with details */
+.info-details {
+    padding: 30px 14px;
+    font-family: "montserrat";
+    width: 300px;
+    position: fixed;
+    right: 0;
+    z-index: 2;
+    margin-right: 40px;
+    margin-top: 78px;
+    /* background-color:rgba(11, 11, 37, .6); */
+    background-image: linear-gradient(
+        rgba(6, 6, 29, 0.7),
+        rgba(6, 6, 29, 0.6),
+        rgba(6, 6, 29, 0.58)
+    );
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    color: rgba(11, 11, 37, 1);
+    color: #fff;
+    text-align: center;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+.info-details div {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    margin: 20px 8px;
+}
+.info-details i {
+    font-size: 2rem;
+    align-self: center;
+}
+.info-details span {
+    align-self: center;
+    margin-left: 14px;
+}
+.info-details hr {
+    opacity: 0.07;
+    width: 60%;
+}
+
+/* the links below detail .discipline */
+.list-details {
+    z-index: 800 !important;
+    background-color: rgb(11, 11, 37);
+    background-color: $base-lighter;
+    position: relative;
+    margin: 0;
+    padding: 100px;
+}
+.list-details .disciplines-list {
+    z-index: 999 !important;
+    width: 66%;
+}
+
+@media screen and (max-width: 1260px) {
+    .disciplines > .container-fluid .text-wrapper {
+        margin-left: 0px;
+        width: 64%;
+        min-width: 400px;
+        flex-wrap: wrap;
+    }
+    .disciplines > .container-fluid .text-wrapper .text {
+        width: 100%;
+    }
+    .info-details {
+        margin-right: 12px;
+    }
+}
+@media screen and (max-width: 1000px) {
+    .info-details {
+        margin-top: 120px;
+    }
+}
+@media screen and (max-width: 860px) {
+    .disciplines {
+        background-position: center;
+        background-attachment: scroll;
+        background-size: cover;
+    }
+    .ski {
+        background-position: center;
+    }
+    .escalade {
+        background-position: 26%;
+    }
+    .disciplines > .container-fluid {
+        width: 100%;
+        padding: 0;
+    }
+    .disciplines > .container-fluid .text-wrapper {
+        margin: 0;
+        text-align: center;
+        width: 100%;
+        min-width: 300px;
+    }
+    .disciplines > .container-fluid .text-wrapper .text {
+        width: 100%;
+        font-size: 1.1rem;
+    }
+
+    .disciplines > .container-fluid h1 {
+        margin-top: 40px;
+        margin-bottom: 30px;
+    }
+
+    .info-details {
+        position: relative;
+        margin: auto;
+        z-index: 800;
+        margin: 50px auto;
+    }
+    .list-details {
+        padding: 70px 40px;
+    }
+    .list-details .disciplines-list {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 560px) {
+    .disciplines > .container-fluid .text-wrapper {
+        padding: 0;
+    }
+    .disciplines > .container-fluid .text-wrapper .text {
+        width: 100%;
+        font-size: 1.1rem;
+        // margin-top: 260px;
+    }
+}
+
+hr {
+    background-color: #fff;
+    width: 75%;
+    margin: auto;
+    opacity: 0.2;
+}

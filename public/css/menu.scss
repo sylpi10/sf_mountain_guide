@@ -1,0 +1,135 @@
+/* NAV BAR*/
+.menu {
+    position: absolute;
+    width: 100%;
+    z-index: 999;
+    .logo {
+        width: 20%;
+        #logo {
+            width: 110px;
+            height: 110px;
+            // left: 10%;
+            // top: 42px;
+        }
+    }
+
+    .nav-primary {
+        margin: auto;
+        justify-self: center;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+    }
+
+    ul {
+        padding: 6px;
+    }
+}
+.right-nav {
+    background-color: $second-color;
+    width: 20%;
+    min-width: 300px;
+    align-self: center;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    li {
+        list-style-type: none;
+        a {
+            color: #fff;
+            transition: color $transition-fast;
+            &:hover {
+                color: $accent-color;
+            }
+        }
+    }
+    .logged-as {
+        color: #fff;
+        margin-top: 6px;
+        margin-right: 20px;
+        text-transform: capitalize;
+    }
+}
+
+/*nav responsive*/
+@media screen and (max-width: 1200px) {
+    .nav-primary {
+        margin-left: -200px;
+    }
+}
+@media screen and (max-width: 991px) {
+    .menu {
+        background-color: $second-color;
+        position: fixed;
+        .logo {
+            height: 70px;
+            width: 70px;
+            margin-top: -44px;
+            #logo {
+                width: 70px;
+                height: 70px;
+            }
+        }
+        ul.navbar-nav {
+            width: 100%;
+            li a.nav-link {
+                width: 100%;
+                text-align: center;
+                &.active,
+                &:hover {
+                    background-color: #fff;
+                    color: $second-color !important;
+                    font-weight: bold !important;
+                }
+            }
+        }
+        .right-nav {
+            width: 100%;
+            border-top: solid 1px #fcfcfc;
+            li a:hover,
+            li a:active {
+                color: $second-color !important;
+                font-weight: bold !important;
+            }
+        }
+    }
+}
+
+.scrolled-nav {
+    position: fixed;
+    background-color: $second-color;
+    width: 100%;
+    transition: all ease-out 0.4s;
+    z-index: 999;
+    height: 90px;
+    .logo {
+        height: 70px;
+        margin-top: -8px;
+        #logo {
+            width: 70px;
+            height: 70px;
+        }
+    }
+    ul li a {
+        color: #fff !important;
+    }
+}
+
+// nav menu
+nav ul li a {
+    text-transform: uppercase;
+    color: #fff !important;
+    border-bottom: solid 1px transparent;
+    font-weight: 300 !important;
+    min-width: 100px;
+    text-align: center;
+    transition: border-color $transition-fast;
+}
+
+nav ul li a:hover {
+    border-bottom: solid 1px $accent-color !important;
+}
+
+nav ul li .active {
+    border-bottom: solid 1px $accent-color !important;
+}

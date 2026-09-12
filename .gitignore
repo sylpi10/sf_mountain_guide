@@ -8,7 +8,6 @@
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
 /public/uploads/
-/public/css/*.scss
 /public/css/style.css.map
 /src/.preload.php
 .sass-cache/

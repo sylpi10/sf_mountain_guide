@@ -1,0 +1,49 @@
+.main-about {
+  width: 100%;
+  color: #fff;
+  padding: 80px;
+  .about-container {
+    margin-top: 140px;
+    height: 100%;
+    h1,
+    h2 {
+      text-transform: uppercase;
+      font-size: 1.7rem;
+      color: #fff;
+    }
+  }
+  .about-me {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 100%;
+    align-items: flex-start;
+    height: 100%;
+    .about-text {
+      min-width: 300px;
+      height: 100%;
+      flex: 1;
+      padding-right: 40px;
+    }
+    .about-pic {
+      min-width: 320px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      img {
+        margin-top: 30px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .main-about {
+    width: 90%;
+    margin: auto;
+    padding: 5px;
+    .about-text {
+      padding-right: 0;
+    }
+  }
+}

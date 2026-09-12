@@ -1,0 +1,120 @@
+#disciplines {
+    margin-bottom: 100px;
+}
+
+.disciplines-list {
+    z-index: 888;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    width: 100%;
+    text-align: center;
+    .presentation {
+        color: #fff;
+        margin: auto;
+        font-size: 1.28rem;
+        width: 60%;
+        border-radius: 10px;
+        padding: 18px;
+    }
+}
+
+.discipline {
+    width: 45%;
+    height: 250px;
+    margin: 20px auto;
+    overflow: hidden;
+    color: #fff;
+    min-width: 360px;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    transition:
+        transform $transition-base,
+        box-shadow $transition-base;
+}
+
+.discipline:hover,
+.discipline:focus {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+}
+
+.text {
+    position: relative;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    transition: transform 0.6s ease;
+}
+.text > h3 {
+    position: relative;
+    z-index: 2;
+    transition:
+        border-color $transition-fast,
+        color $transition-fast;
+}
+.discipline:hover .text,
+.discipline:focus .text {
+    transform: scale(1.06);
+}
+.discipline:hover .text > h3,
+.discipline:focus .text > h3 {
+    color: $accent-color;
+}
+.discipline .text {
+    background-size: contain;
+}
+
+.text:before {
+    content: "";
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: linear-gradient(
+        to top,
+        rgba(14, 11, 44, 0.75) 0%,
+        rgba(14, 11, 44, 0.15) 60%
+    );
+    transition: background $transition-base;
+}
+
+.discipline:hover .text:before,
+.discipline:focus .text:before {
+    background-color: rgba(14, 11, 44, 0.75);
+}
+@media screen and (max-width: 768px) {
+    .disciplines-list {
+        width: 80%;
+        .presentation {
+            width: 90%;
+            background-color: transparent;
+        }
+    }
+    nav ul li a {
+        width: 200px;
+        text-align: left;
+    }
+}
+@media screen and (max-width: 500px) {
+    .disciplines-list {
+        width: 100%;
+    }
+    .discipline {
+        width: 100%;
+        min-width: 200px;
+        height: 180px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    #disciplines {
+        display: none;
+    }
+}
