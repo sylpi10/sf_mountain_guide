@@ -46,8 +46,8 @@ class NewsLetterController extends AbstractController
             $formTime = (int) $request->request->get("newsletter_time", 0);
             $sessionToken = (string) $session->get("newsletter_form_token", "");
             $now = time();
-            $isTooFast = $formTime > 0 ? ($now - $formTime) < 4 : true;
-            $isTooOld = $formTime > 0 ? ($now - $formTime) > 86400 : true;
+            $isTooFast = $formTime > 0 ? $now - $formTime < 4 : true;
+            $isTooOld = $formTime > 0 ? $now - $formTime > 86400 : true;
             $tokenInvalid = $token === "" || $token !== $sessionToken;
 
             if ($honeypot !== "" || $tokenInvalid || $isTooFast || $isTooOld) {
@@ -62,7 +62,7 @@ class NewsLetterController extends AbstractController
             $this->manager->flush();
 
             // send email to client who registered
-            $emailToClient = (new TemplatedEmail())
+            $emailToClient = new TemplatedEmail()
                 ->from("contact@directicimes.com")
                 ->to($newsletter->get("email")->getData())
                 ->subject("Votre abonnement à la newsletter")
@@ -77,7 +77,8 @@ class NewsLetterController extends AbstractController
 
             $this->mailer->send($emailToClient);
 
-            $email = (new TemplatedEmail())->from("contact@directicimes.com")
+            $email = new TemplatedEmail()
+                ->from("contact@directicimes.com")
                 ->to("contact@directicimes.com", "georgesyn@gmail.com")
                 // ->to("syl.pillet@hotmail.fr")
                 ->subject("Nouvel abonné à la newsletter")
@@ -105,7 +106,9 @@ class NewsLetterController extends AbstractController
             return $this->redirectToRoute("newsletter");
         }
 
-        [$newsletterToken, $newsletterTime] = $this->refreshNewsletterGuards($request);
+        [$newsletterToken, $newsletterTime] = $this->refreshNewsletterGuards(
+            $request,
+        );
 
         return $this->render("news_letter/newsLetter.html.twig", [
             "form" => $formNews->createView(),

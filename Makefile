@@ -49,8 +49,11 @@ bash:
 cc:
 	docker compose exec php php bin/console cache:clear
 
-composer:
+composer i:
 	docker compose exec php composer install
+
+migrations:
+	docker compose exec php php bin/console doctrine:migrations:migrate
 
 logs:
 	docker compose logs -f

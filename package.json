@@ -1,0 +1,9 @@
+{
+    "devDependencies": {
+        "sass": "^1.101.0"
+    },
+    "scripts": {
+        "sass": "sass public/css/style.scss public/css/style.css --style=compressed",
+        "sass:watch": "sass --watch public/css/style.scss:public/css/style.css --style=compressed"
+    }
+}

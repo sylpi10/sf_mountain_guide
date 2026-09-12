@@ -1,7 +1,10 @@
 # Directicimes
 
+Site web, symfony, docker + make
+
 ## Requirements
 
+- Make
 - Docker
 - Docker Compose
 
@@ -9,13 +12,19 @@
 
 ```bash
 git clone <repo>
+
 cd <<project_dir>>
-docker compose up -d --build
 
-docker compose exec php composer install
+make up build ou docker compose up -d --build
 
+make composer i ou docker compose exec php composer install
+
+make migrations
+ou
 docker compose exec php php bin/console doctrine:migrations:migrate
 
 #optionnel : charger les fixtures
+# make fixtures
+ou
 docker compose exec php php bin/console doctrine:fixtures:load
 ```
