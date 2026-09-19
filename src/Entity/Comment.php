@@ -4,41 +4,27 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=CommentRepository::class)
- */
+#[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: 'text')]
     private $content;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Blog::class, inversedBy="comments", fetch="EAGER")
-     */
+    #[ORM\ManyToOne(targetEntity: Blog::class, inversedBy: 'comments', fetch: 'EAGER')]
     private $post;
 
-    /**
-     * @ORM\Column(type="datetime_immutable")
-     */
+    #[ORM\Column(type: 'datetime_immutable')]
     private $postedAt;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="comments")
-     */
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'comments')]
     private $author;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
+    #[ORM\Column(type: 'boolean', nullable: true)]
     private $isAccepted;
 
     public function getId(): ?int

@@ -7,36 +7,23 @@ use App\Repository\NewsLetterSubscriberRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-/**
- * @ORM\Entity(repositoryClass=NewsLetterSubscriberRepository::class)
- * @UniqueEntity(
- * fields={"email"},
- * message="Vous avez déjà souscrit à la newsletter avec cet email"
- * )
- */
+#[ORM\Entity(repositoryClass: NewsLetterSubscriberRepository::class)]
+#[UniqueEntity(fields: ['email'], message: 'Vous avez déjà souscrit à la newsletter avec cet email')]
 class NewsLetterSubscriber
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\Length(min=2, max=70)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\Length(min: 2, max: 70)]
     private $fullname;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $email;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private $isRgpd = false;
 
 

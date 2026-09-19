@@ -12,14 +12,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/admin")
- */
+#[Route(path: "/admin")]
 class AlbumController extends AbstractController
 {
-    /**
-     * @Route("/", name="album_index", methods={"GET"})
-     */
+    #[Route(path: "/", name: "album_index", methods: ["GET"])]
     public function index(AlbumRepository $albumRepository): Response
     {
         $this->denyAccessUnlessGranted("ROLE_ADMIN");
@@ -29,9 +25,7 @@ class AlbumController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/new", name="album_new", methods={"GET","POST"})
-     */
+    #[Route(path: "/new", name: "album_new", methods: ["GET", "POST"])]
     public function new(Request $request): Response
     {
         $album = new Album();
@@ -67,9 +61,7 @@ class AlbumController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="album_show", methods={"GET"})
-     */
+    #[Route(path: "/{id}", name: "album_show", methods: ["GET"])]
     public function show(Album $album): Response
     {
         return $this->render("album/show.html.twig", [
@@ -77,9 +69,7 @@ class AlbumController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/edit", name="album_edit", methods={"GET","POST"})
-     */
+    #[Route(path: "/{id}/edit", name: "album_edit", methods: ["GET", "POST"])]
     public function edit(Request $request, Album $album): Response
     {
         $form = $this->createForm(AlbumType::class, $album);
@@ -111,9 +101,7 @@ class AlbumController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="album_delete", methods={"DELETE"})
-     */
+    #[Route(path: "/{id}", name: "album_delete", methods: ["DELETE"])]
     public function delete(Request $request, Album $album): Response
     {
         if (
@@ -130,9 +118,13 @@ class AlbumController extends AbstractController
         return $this->redirectToRoute("album_index");
     }
 
-    /**
-     * @Route("/delete/image/{id}", name="delete_img", methods={"DELETE"})
-     */
+    #[
+        Route(
+            path: "/delete/image/{id}",
+            name: "delete_img",
+            methods: ["DELETE"],
+        ),
+    ]
     public function deleteImage(Image $image, Request $request)
     {
         $data = json_decode($request->getContent(), true);

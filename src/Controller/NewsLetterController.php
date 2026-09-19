@@ -30,9 +30,7 @@ class NewsLetterController extends AbstractController
         $this->manager = $manager;
         $this->translator = $translator;
     }
-    /**
-     * @Route("/newsletter", name="newsletter")
-     */
+    #[Route(path: '/newsletter', name: 'newsletter')]
     public function index(Request $request)
     {
         $formNews = $this->createForm(NewsLetterType::class);

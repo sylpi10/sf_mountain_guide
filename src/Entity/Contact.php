@@ -6,39 +6,28 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ContactRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass=ContactRepository::class)
- */
+#[ORM\Entity(repositoryClass: ContactRepository::class)]
 class Contact
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     *
-     * @Assert\NotBlank()
-     * @Assert\Length(min=2, max=70)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 70)]
     private $name;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
-     * @Assert\Email()
-     * @Assert\Length(min=3, max=70)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Email]
+    #[Assert\Length(min: 3, max: 70)]
     private $email;
 
-    /**
-     * @ORM\Column(type="text")
-     * @Assert\NotBlank()
-     * @Assert\Length(min=10)
-     */
+    #[ORM\Column(type: 'text')]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 10)]
     private $message;
 
     public function getId(): ?int

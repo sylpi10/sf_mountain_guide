@@ -27,12 +27,12 @@ class RegisterController extends AbstractController
     }
 
     /**
-     * @Route("/register", name="register")
      *
      * @param Request $request
      * @param EntityManagerInterface $manager
      * @return Response
      */
+    #[Route(path: '/register', name: 'register')]
     public function register(
         Request $request,
         EntityManagerInterface $manager,

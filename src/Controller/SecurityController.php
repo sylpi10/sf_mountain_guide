@@ -9,15 +9,17 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SecurityController extends AbstractController
 {
+    private AuthenticationUtils $util;
+
     public function __construct(AuthenticationUtils $util)
     {
         $this->util = $util;
     }
 
     /**
-     * @Route("/login", name="login")
      * @return Response
      */
+    #[Route(path: '/login', name: 'login')]
     public function login(): Response
     {
         return $this->render("global/login.html.twig", [
@@ -32,8 +34,6 @@ class SecurityController extends AbstractController
         // }
     }
 
-    /**
-     * @Route("/logout", name="logout")
-     */
+    #[Route(path: '/logout', name: 'logout')]
     public function logout() {}
 }

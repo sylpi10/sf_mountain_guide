@@ -5,65 +5,63 @@ namespace App\Entity;
 use App\Repository\AboutRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=AboutRepository::class)
- */
+#[ORM\Entity(repositoryClass: AboutRepository::class)]
 class About
 {
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
      * @var int
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private int $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
      * @var string
      */
+    #[ORM\Column(type: 'string', length: 255)]
     private string $whoTitle;
 
     /**
-     * @ORM\Column(type="text")
      * @var string
      */
+    #[ORM\Column(type: 'text')]
     private string $whoText;
 
     /**
-     * @ORM\Column(type="string", length=255)
      * @var string
      */
+    #[ORM\Column(type: 'string', length: 255)]
     private string $whoEnglishTitle;
 
     /**
-     * @ORM\Column(type="text")
      * @var string
      */
+    #[ORM\Column(type: 'text')]
     private string $whoEnglishText;
 
     /**
-     * @ORM\Column(type="string", length=255)
      * @var string
      */
+    #[ORM\Column(type: 'string', length: 255)]
     private string $whyTitle;
 
     /**
-     * @ORM\Column(type="text")
      * @var string
      */
+    #[ORM\Column(type: 'text')]
     private string $whyText;
 
     /**
-     * @ORM\Column(type="string", length=255)
      * @var string
      */
+    #[ORM\Column(type: 'string', length: 255)]
     private string $whyEnglishTitle;
 
     /**
-     * @ORM\Column(type="text")
      * @var string
      */
+    #[ORM\Column(type: 'text')]
     private string $whyEnglishText;
 
     public function getId(): ?int

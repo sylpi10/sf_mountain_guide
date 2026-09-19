@@ -10,11 +10,11 @@ use Symfony\Component\HttpFoundation\Response;
 class AboutController extends AbstractController
 {
     /**
-     * @Route("/about", name="about")
      *
      * @param AboutRepository $aboutRepo
      * @return Response
      */
+    #[Route(path: '/about', name: 'about')]
     public function about(AboutRepository $aboutRepo): Response
     {
         // $about = $aboutRepo->findOneById(1);

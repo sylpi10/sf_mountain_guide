@@ -7,51 +7,33 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=AlbumRepository::class)
- */
+#[ORM\Entity(repositoryClass: AlbumRepository::class)]
 class Album
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $title;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private $content;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="album", orphanRemoval=true, cascade={"persist"})
-     */
+    #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'album', orphanRemoval: true, cascade: ['persist'])]
     private $images;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $location;
 
-    /**
-     * @ORM\Column(type="date", nullable=true)
-     */
+    #[ORM\Column(type: 'date', nullable: true)]
     private $date;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $englishTitle;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: 'text')]
     private $englishContent;
 
     public function __construct()

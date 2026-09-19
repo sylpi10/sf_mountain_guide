@@ -43,11 +43,11 @@ class BlogController extends AbstractController
     }
 
     /**
-     * @Route("/blog", name="blog")
      *
      * @param Request $request
      * @return Response
      */
+    #[Route(path: '/blog', name: 'blog')]
     public function index(Request $request): Response
     {
         $displayBtn = true;
@@ -64,12 +64,12 @@ class BlogController extends AbstractController
     }
 
     /**
-     * @Route("/blog/{slug}-{id}", name="blog_detail", requirements={"slug": "[a-z0-9\-]*"})
      *
      * @param Blog $post
      * @param Request $request
      * @return Response
      */
+    #[Route(path: '/blog/{slug}-{id}', name: 'blog_detail', requirements: ['slug' => '[a-z0-9\-]*'])]
     public function detail(Blog $post, Request $request): Response
     {
         $comment = new Comment();

@@ -9,9 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PhotosController extends AbstractController
 {
-    /**
-     * @Route("/photos", name="photos")
-     */
+    #[Route(path: '/photos', name: 'photos')]
     public function pictures(AlbumRepository $albumRepository, Request $request)
     {
         // $request->getSession()->set('_locale', $locale);

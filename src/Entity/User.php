@@ -12,45 +12,28 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass=UserRepository::class)
- * @UniqueEntity(
- * fields= {"username"},
- *  message="Ce nom d'utilisateur est déjà pris"
- * )
- */
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity(fields: ['username'], message: "Ce nom d'utilisateur est déjà pris")]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $username;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $password;
 
-    /**
-     * @Assert\EqualTo(propertyPath="password", message="Les mots de passe ne correspondent pas")
-     */
+    #[Assert\EqualTo(propertyPath: 'password', message: 'Les mots de passe ne correspondent pas')]
     private $confirmPassword;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $roles;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="author", cascade={"remove"})
-     */
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'author', cascade: ['remove'])]
     private $comments;
 
     public function __construct()
@@ -111,7 +94,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         # code...
     }

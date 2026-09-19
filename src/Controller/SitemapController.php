@@ -16,9 +16,7 @@ class SitemapController extends AbstractController
     {
         $this->managerRegistry = $managerRegistry;
     }
-    /**
-     * @Route("/sitemap.xml", name="sitemap", defaults={"_format"="xml"})
-     */
+    #[Route(path: '/sitemap.xml', name: 'sitemap', defaults: ['_format' => 'xml'])]
     public function index(Request $request)
     {
         // get host name from url

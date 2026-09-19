@@ -29,7 +29,6 @@ class DisciplinesController extends AbstractController
         $this->translator = $translator;
     }
     /**
-     * @Route("discipline/{slug}-{id}", name="detail", requirements={"slug": "[a-z0-9\-]*"})
      *
      * @param [type] $id
      * @param DisciplineRepository $disciplineRepo
@@ -40,6 +39,7 @@ class DisciplinesController extends AbstractController
      * @param string $slug
      * @return Response
      */
+    #[Route(path: 'discipline/{slug}-{id}', name: 'detail', requirements: ['slug' => '[a-z0-9\-]*'])]
     public function detail(
         $id,
         Request $request,

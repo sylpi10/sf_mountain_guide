@@ -5,110 +5,76 @@ namespace App\Entity;
 use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Vich\UploaderBundle\Mapping\Attribute as Vich;
 use App\Repository\DisciplineRepository;
 
-/**
- * @ORM\Entity(repositoryClass=DisciplineRepository::class)
- * @Vich\Uploadable
- */
+#[Vich\Uploadable]
+#[ORM\Entity(repositoryClass: DisciplineRepository::class)]
 class Discipline
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $title;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: 'text')]
     private $content;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: 'text')]
     private $persNumber;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $duration;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private $location;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: 'text')]
     private $price;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $englishTitle;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: 'text')]
     private $englishContent;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: 'text')]
     private $englishNbPers;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $englishDuration;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private $englishLocation;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $englishPrice;
 
     /**
-     * @ORM\Column(type="datetime", name="updated_at")
      * @var \DateTime
      */
+    #[ORM\Column(type: 'datetime', name: 'updated_at')]
     private $updatedAt;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
      * @var string|null;
      */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $image;
 
-    /**
-     * @Vich\UploadableField(mapping="discipline_images", fileNameProperty="image")
-     * @var File|null
-     */
+    #[Vich\UploadableField(mapping: 'discipline_images', fileNameProperty: 'image')]
     private $imageFile;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
      * @var string|null;
      */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $imageDetail;
 
-    /**
-     * @Vich\UploadableField(mapping="discipline_images_detail", fileNameProperty="imageDetail")
-     * @var File|null
-     */
+    #[Vich\UploadableField(mapping: 'discipline_images_detail', fileNameProperty: 'imageDetail')]
     private $imageDetailFile;
 
     public function getId(): ?int
@@ -262,7 +228,7 @@ class Discipline
 
     public function getSlug(): string
     {
-        return new Slugify()->slugify($this->title);
+        return (new Slugify())->slugify($this->title);
     }
 
     public function __toString()
@@ -292,7 +258,7 @@ class Discipline
      * @param File $imageFile
      * @return void
      */
-    public function setImageFile(File $imageFile = null)
+    public function setImageFile(?File $imageFile = null)
     {
         $this->imageFile = $imageFile;
         // It is required that at least one field changes if you are using Doctrine,
@@ -309,7 +275,7 @@ class Discipline
      * @param File $image_detailFile
      * @return void
      */
-    public function setImageDetailFile(File $imageDetailFile = null)
+    public function setImageDetailFile(?File $imageDetailFile = null)
     {
         $this->imageDetailFile = $imageDetailFile;
         // It is required that at least one field changes if you are using Doctrine,

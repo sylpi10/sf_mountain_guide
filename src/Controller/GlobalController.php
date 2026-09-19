@@ -34,10 +34,10 @@ class GlobalController extends AbstractController
     }
 
     /**
-     * @Route("/", name="home")
      * @param Request $request
      * @return Response
      */
+    #[Route(path: '/', name: 'home')]
     public function index(Request $request): Response
     {
         $sentEmail = new Contact();
@@ -104,10 +104,10 @@ class GlobalController extends AbstractController
     }
 
     /**
-     * @Route("/change-locale/{locale}", name="change-locale")
      * @param [type] $locale
      * @param Request $request
      */
+    #[Route(path: '/change-locale/{locale}', name: 'change-locale')]
     public function changeLocale($locale, Request $request)
     {
         //stock lang in session

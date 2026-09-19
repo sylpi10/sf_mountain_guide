@@ -9,12 +9,10 @@ use Doctrine\ORM\Mapping as ORM;
 use DateTime;
 use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Vich\UploaderBundle\Mapping\Attribute as Vich;
 
-/**
- * @ORM\Entity(repositoryClass=BlogRepository::class)
- * @Vich\Uploadable
- */
+#[Vich\Uploadable]
+#[ORM\Entity(repositoryClass: BlogRepository::class)]
 class Blog
 {
     public function __construct()
@@ -24,64 +22,45 @@ class Blog
         $this->comments = new ArrayCollection();
     }
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $title;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: 'text')]
     private $content;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
      * @var string|null;
      */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $image;
 
-    /**
-     * @Vich\UploadableField(mapping="blog_images", fileNameProperty="image")
-     * @var File|null
-     */
+    #[Vich\UploadableField(mapping: 'blog_images', fileNameProperty: 'image')]
     private $imageFile;
 
     /**
-     * @ORM\Column(type="datetime")
      * @var \DateTime
      */
+    #[ORM\Column(type: 'datetime')]
     private $updated_at;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: 'datetime')]
     private $created_at;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $englishTitle;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private $englishContent;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $location;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="post", fetch="EAGER", cascade={"remove"})
-     */
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'post', fetch: 'EAGER', cascade: ['remove'])]
     private $comments;
 
     public function getImage(): ?string
@@ -106,7 +85,7 @@ class Blog
      * @param File $imageFile
      * @return void
      */
-    public function setImageFile(File $imageFile = null)
+    public function setImageFile(?File $imageFile = null)
     {
         $this->imageFile = $imageFile;
         // It is required that at least one field changes if you are using Doctrine,
@@ -254,6 +233,6 @@ class Blog
     }
     public function getSlug(): string
     {
-        return new Slugify()->slugify($this->title);
+        return (new Slugify())->slugify($this->title);
     }
 }
