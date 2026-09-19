@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 {% block title %}
-	{{discipline}}
+	{% if app.request.locale == 'fr' %}{{ discipline.title }}{% else %}{{ discipline.englishTitle }}{% endif %} - Directicimes
 {% endblock %}
 {% block description %}
-	<meta name="description" content="Détails de la discipline {{discipline}}">
+	{% if app.request.locale == 'fr' %}{{ discipline.content|plain_text }}{% else %}{{ discipline.englishContent|plain_text }}{% endif %}
 {% endblock %}
 
 {% block body %}

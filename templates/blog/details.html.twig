@@ -1,11 +1,13 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	Blog!
+	{% if app.request.locale == 'fr' %}{{ article.title|title }}{% else %}{{ article.englishTitle|title }}{% endif %} - Directicimes
 {% endblock %}
 {% block description %}
-	<meta name="description" content="Blog">
+	{% if app.request.locale == 'fr' %}{{ article.content|plain_text }}{% else %}{{ article.englishContent|plain_text }}{% endif %}
 {% endblock %}
+{% block og_type %}article{% endblock %}
+{% block og_image %}{% if article.image %}{{ site_url ~ asset('uploads/' ~ article.image) }}{% else %}{{ parent() }}{% endif %}{% endblock %}
 
 {% block body_class %}base-page
 {% endblock %}

@@ -6,9 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     {# Description (155–160 chars idéal) #}
-    {% block description %}
-      <meta name="description" content="Guide de haute montagne à Briançon (Hautes-Alpes 05) : alpinisme, escalade, ski de randonnée, cascade de glace. Sorties sur mesure et sécurité.">
-    {% endblock %}
+    {% set page_description %}{% block description %}Guide de haute montagne à Briançon (Hautes-Alpes 05) : alpinisme, escalade, ski de randonnée, cascade de glace. Sorties sur mesure et sécurité.{% endblock %}{% endset %}
+    {% set page_description = page_description|striptags|trim|replace({'\n': ' '})|slice(0, 160) %}
+    <meta name="description" content="{{ page_description }}">
+    {% block robots %}{% endblock %}
 
 		<title>
 			{% block title %}
@@ -19,12 +20,16 @@
 		</title>
 		{% set canonical_page = app.request.query.get('page') %}
 		<link rel="canonical" href="{{ site_url ~ app.request.pathInfo ~ (canonical_page and canonical_page > 1 ? '?page=' ~ canonical_page : '') }}">
-		<meta property="og:type" content="website">
+		<meta property="og:type" content="{% block og_type %}website{% endblock %}">
 		<meta property="og:site_name" content="Directicimes">
 		<meta property="og:locale" content="{{ app.request.locale == 'en' ? 'en_GB' : 'fr_FR' }}">
 		<meta property="og:url" content="{{ site_url ~ app.request.pathInfo }}">
 		<meta property="og:title" content="{{ block('title')|striptags|trim }}">
-		<meta property="og:image" content="{{ site_url ~ asset('images/bg1-1280.webp') }}">
+		<meta property="og:description" content="{{ page_description }}">
+		<meta property="og:image" content="{% block og_image %}{{ site_url ~ asset('images/bg1-1280.webp') }}{% endblock %}">
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:title" content="{{ block('title')|striptags|trim }}">
+		<meta name="twitter:description" content="{{ page_description }}">
 		<script type="application/ld+json">
 		{
 			"@context": "https://schema.org",
@@ -123,7 +128,7 @@
 											{% endtrans %}</a>
 									</li>
 								{% endif %}
-								{% if displayBtn %}
+								{% if displayBtn|default(false) %}
 									<li class="nav-item">
 										<a class="nav-link" href="{{path('newsletter')}}" title="{% trans %} Subscribe to our Newsletter {% endtrans %}">Newsletter</a>
 									</li>
