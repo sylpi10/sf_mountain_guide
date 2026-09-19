@@ -32,9 +32,9 @@
 						<hr>
 
 						<span class="date-loc">
-							<i class="fas fa-calendar-alt"></i>
+							{{ icon('calendar') }}
 							{{ article.createdAt|date("d/m/Y", "Europe/Paris")}},
-							<i class="fas fa-map-marker-alt"></i>
+							{{ icon('map-marker') }}
 							{{article.location}}
 						</span>
 						{% if locale == 'fr' %}

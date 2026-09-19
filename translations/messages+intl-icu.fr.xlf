@@ -53,6 +53,10 @@
         <source>Logout</source>
         <target>Déconnexion</target>
       </trans-unit>
+      <trans-unit id="tgNav01" resname="Toggle navigation">
+        <source>Toggle navigation</source>
+        <target>Afficher le menu</target>
+      </trans-unit>
       <trans-unit id="nQF96xL" resname="Back to Top">
         <source>Back to Top</source>
         <target>Haut de Page</target>

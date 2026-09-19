@@ -40,7 +40,7 @@
 
 							<div class="info-details">
 								<div class="nb-persons">
-									<i class="fas fa-users"></i>
+									{{ icon('users') }}
 									{% if locale == 'fr' %}
 										<span>{{discipline.persNumber|raw}}</span>
 									{% else %}
@@ -49,7 +49,7 @@
 								</div>
 								<hr>
 								<div class="duration">
-									<i class="far fa-clock"></i>
+									{{ icon('clock') }}
 									{% if locale == 'fr' %}
 										<span>{{discipline.duration|raw}}</span>
 									{% else %}
@@ -59,7 +59,7 @@
 								<hr>
 								{% if discipline.location %}
 									<div class="place">
-										<i class="fas fa-map-marked-alt"></i>
+										{{ icon('map') }}
 										{% if locale == 'fr' %}
 											<span>{{discipline.location|raw}}</span>
 										{% else %}
@@ -69,7 +69,7 @@
 								{% endif %}
 								<hr>
 								<div class="price">
-									<i class="fas fa-tag"></i>
+									{{ icon('tag') }}
 									{% if locale == 'fr' %}
 										<span>{{discipline.price|raw}}</span>
 									{% else %}

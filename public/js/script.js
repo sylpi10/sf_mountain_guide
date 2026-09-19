@@ -31,29 +31,71 @@ function changeMenuOnscroll() {
   }
 }
 
+// mobile menu
+const navToggler = document.querySelector(".navbar-toggler");
+const navCollapse = document.querySelector(".navbar-collapse");
+
+function setMenu(open) {
+  navCollapse.classList.toggle("show", open);
+  navToggler.setAttribute("aria-expanded", open);
+}
+
+navToggler.addEventListener("click", () => {
+  setMenu(!navCollapse.classList.contains("show"));
+});
+
 // hide menu onclick
-$(function () {
-  let navMain = $(".navbar-collapse"); // avoid dependency on #id
-  // "a:not([data-toggle])" - to avoid issues caused
-  // when you have dropdown inside navbar
-  navMain.on("click", "a:not([data-toggle])", null, function () {
-    navMain.collapse("hide");
-  });
+navCollapse.addEventListener("click", (e) => {
+  if (e.target.closest("a")) {
+    setMenu(false);
+  }
 });
 
 // menu active link
-$(document).ready(function () {
-  $('a[href$="' + location.pathname + '"]').addClass("active");
+document.querySelectorAll(`a[href$="${location.pathname}"]`).forEach((a) => {
+  a.classList.add("active");
 });
 
 // alerts
-$(".alert-success").alert();
-window.setTimeout(function () {
-  $(".alert-success").alert("close");
-}, 2600);
+document.querySelectorAll(".alert-success").forEach((alert) => {
+  window.setTimeout(() => {
+    alert.classList.add("fade-out");
+    alert.addEventListener("transitionend", () => alert.remove());
+  }, 2600);
+});
 
-let mainTitle = document.querySelector(".main-title");
-let mainTitleTop = document.querySelector(".main-title").offsetHeight;
+// carousels (photos)
+document.querySelectorAll(".carousel").forEach((carousel) => {
+  const items = [...carousel.querySelectorAll(".carousel-item")];
+  let current = items.findIndex((item) => item.classList.contains("active"));
+  let timer;
+
+  function show(index) {
+    items[current].classList.remove("active");
+    current = (index + items.length) % items.length;
+    items[current].classList.add("active");
+  }
+
+  function autoplay() {
+    clearInterval(timer);
+    if (items.length > 1) {
+      timer = setInterval(() => show(current + 1), 5000);
+    }
+  }
+
+  carousel.querySelector(".carousel-control-prev")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    show(current - 1);
+    autoplay();
+  });
+  carousel.querySelector(".carousel-control-next")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    show(current + 1);
+    autoplay();
+  });
+  autoplay();
+});
+
 
 let jarallaxEnabled = false;
 
