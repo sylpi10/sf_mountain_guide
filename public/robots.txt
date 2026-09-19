@@ -2,3 +2,5 @@ User-agent: *
 Disallow: /admin/
 Disallow: /login/
 Disallow: /change-locale/en/
+
+Sitemap: https://directicimes.com/sitemap.xml

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Blog;
 use App\Entity\Discipline;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,7 +30,6 @@ class SitemapController extends AbstractController
         // $urls[] = $urls->push()
         $urls[] = ["loc" => $this->generateUrl("home")];
         $urls[] = ["loc" => $this->generateUrl("about")];
-        $urls[] = ["loc" => $this->generateUrl("login")];
         $urls[] = ["loc" => $this->generateUrl("blog")];
 
         // add dynamic urls
@@ -48,7 +48,22 @@ class SitemapController extends AbstractController
                 "title" => $title,
             ];
         }
-        // dd($urls);
+
+        foreach (
+            $this->managerRegistry->getRepository(Blog::class)->findAll()
+            as $post
+        ) {
+            $url = [
+                "loc" => $this->generateUrl("blog_detail", [
+                    "slug" => $post->getSlug(),
+                    "id" => $post->getId(),
+                ]),
+            ];
+            if ($post->getUpdatedAt()) {
+                $url["lastmod"] = $post->getUpdatedAt()->format("Y-m-d");
+            }
+            $urls[] = $url;
+        }
 
         // create response
         $response = new Response(

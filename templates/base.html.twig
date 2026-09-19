@@ -2,6 +2,7 @@
 <html lang="{{ app.request.locale|default('fr') }}">
   <head>
     <meta charset="UTF-8">
+    <meta name="google-site-verification" content="t01FJSVSZtLHENopAufACNFJq6S9ejlLoqxpdm9Ztm8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     {# Description (155–160 chars idéal) #}
@@ -16,6 +17,32 @@
 				{% endtrans %}
 			{% endblock %}
 		</title>
+		{% set canonical_page = app.request.query.get('page') %}
+		<link rel="canonical" href="{{ site_url ~ app.request.pathInfo ~ (canonical_page and canonical_page > 1 ? '?page=' ~ canonical_page : '') }}">
+		<meta property="og:type" content="website">
+		<meta property="og:site_name" content="Directicimes">
+		<meta property="og:locale" content="{{ app.request.locale == 'en' ? 'en_GB' : 'fr_FR' }}">
+		<meta property="og:url" content="{{ site_url ~ app.request.pathInfo }}">
+		<meta property="og:title" content="{{ block('title')|striptags|trim }}">
+		<meta property="og:image" content="{{ site_url ~ asset('images/bg1-1280.webp') }}">
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "LocalBusiness",
+			"@id": "{{ site_url }}/#guide",
+			"name": "Directicimes",
+			"url": "{{ site_url }}/",
+			"image": "{{ site_url ~ asset('images/logo_big.webp') }}",
+			"description": "Guide de haute montagne à Briançon : alpinisme, escalade, ski de randonnée, cascade de glace.",
+			"address": {
+				"@type": "PostalAddress",
+				"addressLocality": "Briançon",
+				"addressRegion": "Hautes-Alpes",
+				"addressCountry": "FR"
+			},
+			"areaServed": ["Briançon", "Hautes-Alpes"]
+		}
+		</script>
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 		<link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}">
