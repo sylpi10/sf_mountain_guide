@@ -107,14 +107,14 @@ class GlobalController extends AbstractController
      * @param [type] $locale
      * @param Request $request
      */
-    #[Route(path: '/change-locale/{locale}', name: 'change-locale')]
+    #[Route(path: '/change-locale/{locale}', name: 'change-locale', requirements: ['locale' => 'en|fr'])]
     public function changeLocale($locale, Request $request)
     {
         //stock lang in session
         $request->getSession()->set("_locale", $locale);
 
-        //back to previous page
-        return $this->redirect($request->headers->get("referer"));
+        //back to previous page, or home if no referer (e.g. direct/crawler request)
+        return $this->redirect($request->headers->get("referer") ?: $this->generateUrl('home'));
     }
 
     private function refreshContactGuards(Request $request): array
