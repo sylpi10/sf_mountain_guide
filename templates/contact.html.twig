@@ -22,7 +22,7 @@
 	</div>
 
 	{{form_start(form)}}
-	<label class="control-label" for="">{% trans %}
+	<label class="control-label" for="contact_name">{% trans %}
 		Your Name
 		{% endtrans %}</label>
 	{{form_row(form.name, {'attr':{'placeholder': 'ex:Mike Horn'}})}}
@@ -31,11 +31,11 @@
 	<input type="hidden" name="contact_token" value="{{ contact_token }}">
 	<input type="hidden" name="contact_time" value="{{ contact_time }}">
 
-	<label class="control-label" for="">{% trans %}
+	<label class="control-label" for="contact_email">{% trans %}
 		Your Email
 		{% endtrans %}</label>
 	{{form_row(form.email, {'attr':{'placeholder': 'mail@gmail.com'}})}}
-	<label class="control-label" for="">{% trans %}
+	<label class="control-label" for="contact_message">{% trans %}
 		Your Message
 		{% endtrans %}</label>
 	{{form_row(form.message)}}
