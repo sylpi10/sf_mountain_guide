@@ -74,7 +74,12 @@
 			},
 		}|json_encode(constant('JSON_UNESCAPED_UNICODE') b-or constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_HEX_TAG'))|raw }}
 		</script>
-		<link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}">
+		{# favicon : SVG net à toutes les tailles, ICO 16/32/48 en repli (Google exige un multiple de 48 px) #}
+		<link rel="icon" href="{{ asset('favicon.ico') }}" sizes="48x48">
+		<link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
+		<link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
+		<link rel="manifest" href="{{ asset('site.webmanifest') }}">
+		<meta name="theme-color" content="#0b0b25">
 		<link rel="stylesheet" href="{{asset('css/style.css')}}"> {% block stylesheets %}{% endblock %}
 
 		{% block head_extra %}{% endblock %}
