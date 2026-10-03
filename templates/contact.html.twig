@@ -11,7 +11,12 @@
 			See you real soon !
 			{% endtrans %}
 		</p>
-		<img src="{{asset('images/profile.webp')}}" alt="profile image" width="216" height="216">
+		{% set profile = site_image('contact') %}
+		{% if profile %}
+			<img src="{{ profile.src }}" srcset="{{ profile.srcset }}" sizes="216px" alt="{{ profile.alt ?: 'profile image' }}" width="216" height="216" loading="lazy">
+		{% else %}
+			<img src="{{asset('images/profile.webp')}}" alt="profile image" width="216" height="216">
+		{% endif %}
 	</div>
 
 

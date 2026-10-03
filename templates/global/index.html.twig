@@ -6,10 +6,19 @@
 	{% endtrans %}
 {% endblock %}
 
+{% block og_image %}{% set hero = site_image('hero') %}{{ site_url ~ (hero ? hero.src : asset('images/bg1-1280.webp')) }}{% endblock %}
+
 {% block head_extra %}
+  {% set hero = site_image('hero') %}
+  {% if hero %}
+    {% set hero_mobile = site_image('hero_mobile') ?? hero %}
+    <link rel="preload" as="image" imagesrcset="{{ hero_mobile.srcset }}" imagesizes="100vw" media="(max-width: 768px)">
+    <link rel="preload" as="image" imagesrcset="{{ hero.srcset }}" imagesizes="100vw" media="(min-width: 769px)">
+  {% else %}
     <link rel="preload" as="image" href="/images/bg1-mobile-480.webp" media="(max-width: 480px)">
     <link rel="preload" as="image" href="/images/bg1-mobile.webp" media="(max-width: 768px)">
     <link rel="preload" as="image" href="/images/bg1-1280.webp" media="(min-width: 769px)">
+  {% endif %}
 {% endblock %}
 
 {% block body_class %}base-page
@@ -17,6 +26,23 @@
 {% block body %}
 
 <div class="hero hero-area">
+  {% set hero = site_image('hero') %}
+  {% if hero %}
+    {% set hero_mobile = site_image('hero_mobile') ?? hero %}
+    <picture>
+      <source type="image/webp" media="(min-width: 769px)" srcset="{{ hero.srcset }}" sizes="100vw">
+      <source type="image/webp" media="(max-width: 768px)" srcset="{{ hero_mobile.srcset }}" sizes="100vw">
+      <img
+        src="{{ hero_mobile.src }}"
+        width="{{ hero_mobile.width }}"
+        height="{{ hero_mobile.height }}"
+        fetchpriority="high"
+        decoding="async"
+        alt="{{ hero.alt ?: 'Mountain landscape in Briançon'|trans }}"
+        class="hero-img"
+      >
+    </picture>
+  {% else %}
     <picture>
       {# Desktop #}
       <source
@@ -50,6 +76,7 @@
         class="hero-img"
       >
     </picture>
+  {% endif %}
 
 
   <div class="hero-content hero-overlay">

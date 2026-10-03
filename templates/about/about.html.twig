@@ -34,8 +34,17 @@
 					{% endfor %}
 				</div>
 				<div class="about-pic">
-					<img src="{{asset('images/about-me.jpg')}}" alt="Photo de guide de montagne en falaise" class="img-fluid shadow" width="500">
-					<img src="{{asset('images/about-me3.jpg')}}" alt="Photo de guide de montagne en campement" class="img-fluid shadow" width="500">
+					{% for slot, fallback in {
+						about_1: {src: asset('images/about-me.jpg'), alt: 'Photo de guide de montagne en falaise'},
+						about_2: {src: asset('images/about-me3.jpg'), alt: 'Photo de guide de montagne en campement'},
+					} %}
+						{% set pic = site_image(slot) %}
+						{% if pic %}
+							<img src="{{ pic.src }}" srcset="{{ pic.srcset }}" sizes="(max-width: 540px) 100vw, 500px" alt="{{ pic.alt ?: fallback.alt }}" class="img-fluid shadow" width="500" height="{{ (500 * pic.height / pic.width)|round }}">
+						{% else %}
+							<img src="{{ fallback.src }}" alt="{{ fallback.alt }}" class="img-fluid shadow" width="500">
+						{% endif %}
+					{% endfor %}
 				</div>
 			</div>
 
