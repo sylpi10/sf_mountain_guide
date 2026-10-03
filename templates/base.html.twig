@@ -7,7 +7,8 @@
 
     {# Description (155–160 chars idéal) #}
     {% set page_description %}{% block description %}{% trans %}IFMGA mountain guide in Briançon: mountaineering, ski touring, rock and ice climbing in the Écrins, Clarée and Queyras. Tailor-made trips for all levels.{% endtrans %}{% endblock %}{% endset %}
-    {% set page_description = page_description|striptags|trim|replace({'\n': ' '})|slice(0, 160) %}
+    {# plain_text : retire les balises, décode les entités (sinon double échappement : l&amp;#039;aise), coupe à 160 #}
+    {% set page_description = page_description|plain_text(160) %}
     <meta name="description" content="{{ page_description }}">
     {% block robots %}{% endblock %}
 

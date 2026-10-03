@@ -19,7 +19,8 @@ class TextExtension extends AbstractExtension
      */
     public function plainText(?string $html, int $length = 160): string
     {
-        $text = (string) $html;
+        // espace avant chaque balise : "</h3><p>Vous" ne doit pas donner "…vigilanceVous"
+        $text = preg_replace('/<[^>]*>/', ' $0', (string) $html) ?? (string) $html;
         for ($i = 0; $i < 3; $i++) {
             $text = html_entity_decode(strip_tags($text), ENT_QUOTES | ENT_HTML5, 'UTF-8');
         }

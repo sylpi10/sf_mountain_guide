@@ -44,6 +44,13 @@ class DisciplineCrudController extends AbstractCrudController
         return [
             TextField::new('title', 'Nom de discipline'),
             TextField::new('englishTitle', 'Nom de discipline en anglais'),
+            TextField::new('seoTitle', 'Titre Google')
+                ->setHelp('Titre de l\'onglet et du lien dans les résultats Google : activité + lieu, 60 caractères max. Si vide : « Nom - Directicimes ».')
+                ->setMaxLength(70)
+                ->onlyOnForms(),
+            TextField::new('seoTitleEn', 'Titre Google en anglais')
+                ->setHelp('Si vide, le titre Google FR est utilisé.')
+                ->onlyOnForms(),
             TextEditorField::new('content', 'Description de l\'activité'),
             TextEditorField::new('englishContent', 'Description en anglais'),
             TextEditorField::new('persNumber', 'Nombre de participants')->onlyOnForms(),

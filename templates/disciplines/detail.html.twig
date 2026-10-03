@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 {% block title %}
-	{% if app.request.locale == 'fr' %}{{ discipline.title }}{% else %}{{ discipline.englishTitle }}{% endif %} - Directicimes
+	{% set seo_title = (app.request.locale == 'en' ? discipline.seoTitleEn : null) ?: discipline.seoTitle %}
+	{% if seo_title %}{{ seo_title }}{% elseif app.request.locale == 'fr' %}{{ discipline.title }} - Directicimes{% else %}{{ discipline.englishTitle }} - Directicimes{% endif %}
 {% endblock %}
 {% block description %}
 	{% if app.request.locale == 'fr' %}{{ discipline.content|plain_text }}{% else %}{{ discipline.englishContent|plain_text }}{% endif %}

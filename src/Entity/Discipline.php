@@ -38,6 +38,13 @@ class Discipline
     #[ORM\Column(type: 'string', length: 255)]
     private $englishTitle;
 
+    // titre de l'onglet / du lien dans Google (sinon « Nom - Directicimes »)
+    #[ORM\Column(type: 'string', length: 70, nullable: true)]
+    private $seoTitle;
+
+    #[ORM\Column(type: 'string', length: 70, nullable: true)]
+    private $seoTitleEn;
+
     #[ORM\Column(type: 'text')]
     private $englishContent;
 
@@ -162,6 +169,30 @@ class Discipline
     public function setEnglishTitle(string $englishTitle): self
     {
         $this->englishTitle = $englishTitle;
+
+        return $this;
+    }
+
+    public function getSeoTitle(): ?string
+    {
+        return $this->seoTitle;
+    }
+
+    public function setSeoTitle(?string $seoTitle): self
+    {
+        $this->seoTitle = $seoTitle;
+
+        return $this;
+    }
+
+    public function getSeoTitleEn(): ?string
+    {
+        return $this->seoTitleEn;
+    }
+
+    public function setSeoTitleEn(?string $seoTitleEn): self
+    {
+        $this->seoTitleEn = $seoTitleEn;
 
         return $this;
     }
