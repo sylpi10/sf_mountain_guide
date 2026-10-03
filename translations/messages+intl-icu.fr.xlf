@@ -307,6 +307,26 @@
         <source>Last updated:</source>
         <target>Dernière mise à jour :</target>
       </trans-unit>
+      <trans-unit id="area_0" resname="Ski &amp; mountain guide in Serre Chevalier and Montgenèvre">
+        <source>Ski &amp; mountain guide in Serre Chevalier and Montgenèvre</source>
+        <target>Guide ski &amp; haute montagne à Serre Chevalier, Montgenèvre</target>
+      </trans-unit>
+      <trans-unit id="area_1" resname="IFMGA mountain guide in Briançon: off-piste skiing and ski touring in Serre Chevalier, Montgenèvre and the Clarée valley. Tailor-made days for all levels.">
+        <source>IFMGA mountain guide in Briançon: off-piste skiing and ski touring in Serre Chevalier, Montgenèvre and the Clarée valley. Tailor-made days for all levels.</source>
+        <target>Guide de haute montagne UIAGM à Briançon : ski hors-piste et ski de rando à Serre Chevalier, Montgenèvre et dans la vallée de la Clarée. Sorties sur mesure.</target>
+      </trans-unit>
+      <trans-unit id="area_2" resname="Activities">
+        <source>Activities</source>
+        <target>Activités</target>
+      </trans-unit>
+      <trans-unit id="area_3" resname="Other areas:">
+        <source>Other areas:</source>
+        <target>Autres secteurs :</target>
+      </trans-unit>
+      <trans-unit id="area_4" resname="Areas:">
+        <source>Areas:</source>
+        <target>Secteurs :</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

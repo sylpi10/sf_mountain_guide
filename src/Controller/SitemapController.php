@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Blog;
 use App\Entity\Discipline;
 use App\Entity\LegalPage;
+use App\Entity\AreaPage;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,6 +39,12 @@ class SitemapController extends AbstractController
             as $legalPage
         ) {
             $urls[] = ["loc" => $this->generateUrl("legal_page", ["slug" => $legalPage->getSlug()])];
+        }
+        foreach (
+            $this->managerRegistry->getRepository(AreaPage::class)->findBy(["isPublished" => true])
+            as $areaPage
+        ) {
+            $urls[] = ["loc" => $this->generateUrl("area_page", ["slug" => $areaPage->getSlug()])];
         }
 
         // add dynamic urls

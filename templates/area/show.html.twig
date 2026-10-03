@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ (app.request.locale == 'en' ? page.titleEn : null) ?: page.title }} - Directicimes
+{% endblock %}
+{% block description %}
+	{{ (app.request.locale == 'en' ? page.metaDescriptionEn : null) ?: page.metaDescription ?: page.title }}
+{% endblock %}
+{% block body_class %}base-page
+{% endblock %}
+{% block body %}
+	{% set is_en = app.request.locale == 'en' %}
+
+	<main class="legal-page area-page">
+		<div class="container legal-container">
+			<h1>{{ (is_en ? page.titleEn : null) ?: page.title }}</h1>
+
+			{# l'éditeur de l'admin ne produit que des <h1> : on les passe en <h2> sous le titre de page #}
+			<div class="legal-content">
+				{{ ((is_en ? page.contentEn : null) ?: page.content)|replace({'<h1>': '<h2>', '</h1>': '</h2>'})|raw }}
+			</div>
+
+			<h2 class="area-title">{% trans %}Activities{% endtrans %}</h2>
+			<ul class="pricing-list">
+				{% for disci in disciplines %}
+					<li>
+						<a class="pricing-item" href="{{ path('detail', {id: disci.id, slug: disci.slug}) }}">
+							<h3>{{ is_en ? disci.englishTitle : disci.title }}</h3>
+							<span class="pricing-item-more">{% trans %}See the activity{% endtrans %}</span>
+						</a>
+					</li>
+				{% endfor %}
+			</ul>
+
+			{% set other_areas = area_pages()|filter(area => area.slug != page.slug) %}
+			{% if other_areas %}
+				<p class="area-others">
+					{% trans %}Other areas:{% endtrans %}
+					{% for area in other_areas %}
+						<a href="{{ path('area_page', {slug: area.slug}) }}">{{ area.name }}</a>{{ not loop.last ? ', ' }}
+					{% endfor %}
+				</p>
+			{% endif %}
+
+			<div class="pricing-cta">
+				<p>{% trans %}A project in mind? I will send you a personalised quote.{% endtrans %}</p>
+				<a class="btn more-link" href="{{ path('home', {'_fragment': 'contact-form'}) }}">{% trans %}Contact me{% endtrans %}</a>
+				<p class="area-prices"><a href="{{ path('pricing') }}">{% trans %}See all prices{% endtrans %}</a></p>
+			</div>
+		</div>
+	</main>
+
+	<div>
+		{% include "footer.html.twig" %}
+	</div>
+{% endblock %}

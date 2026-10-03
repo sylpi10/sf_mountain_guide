@@ -1,0 +1,66 @@
+<?php
+
+namespace App\Controller\Admin;
+
+use App\Entity\AreaPage;
+use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+
+class AreaPageCrudController extends AbstractCrudController
+{
+    public static function getEntityFqcn(): string
+    {
+        return AreaPage::class;
+    }
+
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setEntityLabelInSingular('Page secteur')
+            ->setEntityLabelInPlural('Pages secteurs')
+            ->setPageTitle('index', 'Pages secteurs (référencement local)')
+            ->setPageTitle('edit', fn (AreaPage $page) => 'Modifier : ' . $page->getName())
+            ->setHelp('index', 'Une page par secteur, pour apparaître sur les recherches du type « guide Serre Chevalier ». Chaque texte doit rester unique (pas de copier-coller entre secteurs).')
+            ->setHelp('edit', 'La page n\'est visible sur le site (et dans le footer) qu\'une fois « Publiée » cochée.')
+            ->setDefaultSort(['id' => 'ASC']);
+    }
+
+    // secteurs fixes, créés par migration
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions->disable(Action::NEW, Action::DELETE);
+    }
+
+    public function configureFields(string $pageName): iterable
+    {
+        $metaHelp = 'Texte affiché sous le lien dans Google : 150 à 160 caractères, avec le nom du secteur.';
+
+        return [
+            TextField::new('name', 'Secteur')->setHelp('Nom court, utilisé dans le footer.'),
+            BooleanField::new('isPublished', 'Publiée'),
+            TextField::new('title', 'Titre H1 (FR)')->setHelp('Ex. : Guide de ski à Serre Chevalier. Sert aussi de titre de l\'onglet et de lien dans Google.'),
+            TextField::new('titleEn', 'Titre H1 (EN)')->onlyOnForms(),
+            TextareaField::new('metaDescription', 'Description Google (FR)')->setHelp($metaHelp)->onlyOnForms(),
+            TextareaField::new('metaDescriptionEn', 'Description Google (EN)')->onlyOnForms(),
+            TextEditorField::new('content', 'Texte de la page (FR)')->onlyOnForms(),
+            TextEditorField::new('contentEn', 'Texte de la page (EN)')
+                ->setHelp('Si vide, le texte FR est affiché.')
+                ->onlyOnForms(),
+            DateTimeField::new('updatedAt', 'Modifiée le')->hideOnForm(),
+        ];
+    }
+
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        $entityInstance->setUpdatedAt(new \DateTimeImmutable());
+        parent::updateEntity($entityManager, $entityInstance);
+    }
+}

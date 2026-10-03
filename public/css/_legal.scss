@@ -41,3 +41,32 @@
         padding-top: 120px;
     }
 }
+
+// pages secteurs (mêmes bases que les pages légales)
+.area-page {
+    .area-title {
+        margin: 3rem 0 1.5rem;
+        text-align: center;
+        font-family: "Share Tech", sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    .pricing-item {
+        justify-content: space-between;
+    }
+    .area-others {
+        margin-top: 2rem;
+        text-align: center;
+        a {
+            color: $base-color;
+            text-decoration: underline;
+        }
+    }
+    .area-prices {
+        margin-top: 1rem;
+        a {
+            color: $base-color;
+            text-decoration: underline;
+        }
+    }
+}

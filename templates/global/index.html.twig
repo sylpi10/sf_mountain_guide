@@ -1,9 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	{% trans %}
-	High Mountain guide
-	{% endtrans %}
+	{% trans %}Ski & mountain guide in Serre Chevalier and Montgenèvre{% endtrans %}
+{% endblock %}
+{% block description %}
+	{% trans %}IFMGA mountain guide in Briançon: off-piste skiing and ski touring in Serre Chevalier, Montgenèvre and the Clarée valley. Tailor-made days for all levels.{% endtrans %}
 {% endblock %}
 
 {% block og_image %}{% set hero = site_image('hero') %}{{ site_url ~ (hero ? hero.src : asset('images/bg1-1280.webp')) }}{% endblock %}

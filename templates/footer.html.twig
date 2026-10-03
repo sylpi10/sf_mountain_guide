@@ -5,21 +5,24 @@
 			<div class="footer-infos">
 				<p>Yoann Georges</p>
 				<p>Guide de Haute Montagne</p>
-				{% if legal_pages() %}
-					<span class="footer-legal">
-						{% for legal in legal_pages() %}
-							<a href="{{ path('legal_page', {slug: legal.slug}) }}">{{ (app.request.locale == 'en' ? legal.titleEn : null) ?: legal.title }}</a>
+
+				{% if area_pages() %}
+					<div class="footer-areas">
+						{% trans %}Areas:{% endtrans %}
+						{% for area in area_pages() %}
+							<a href="{{ path('area_page', {slug: area.slug}) }}" title="{{ (app.request.locale == 'en' ? area.titleEn : null) ?: area.title }}">{{ area.name }}</a>
 						{% endfor %}
-					</span>
+					</div>
 				{% endif %}
+
 
 			</div>
 			<div class="img">
 				<img src="{{asset('images/logo-uiagm.webp')}}" alt="Logo uiagm" width="110">
 				<img src="{{asset('images/logo.webp')}}" alt="Logo Directicimes" width="110">
 			</div>
-			<div class="coords">
-				<ul>
+			<div class="coords-infos">
+				<ul class="coords">
 					<li>
 						{{ icon('map-marker') }}
 						Briançon</li>
@@ -44,6 +47,14 @@
 						</div>
 					</li>
 				</ul>
+
+				{% if legal_pages() %}
+					<span class="footer-legal">
+						{% for legal in legal_pages() %}
+							<a href="{{ path('legal_page', {slug: legal.slug}) }}">{{ (app.request.locale == 'en' ? legal.titleEn : null) ?: legal.title }}</a>
+						{% endfor %}
+					</span>
+				{% endif %}
 			</div>
 		</div>
 		<div class="footer-copyright">
