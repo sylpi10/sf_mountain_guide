@@ -22,6 +22,11 @@ class SecurityController extends AbstractController
     #[Route(path: '/login', name: 'login')]
     public function login(): Response
     {
+        // déjà connecté : inutile de réafficher le formulaire
+        if ($this->getUser()) {
+            return $this->redirectToRoute($this->isGranted('ROLE_ADMIN') ? 'admin' : 'home');
+        }
+
         return $this->render("global/login.html.twig", [
             "lastUserName" => $this->util->getLastUsername(),
             "error" => $this->util->getLastAuthenticationError(),

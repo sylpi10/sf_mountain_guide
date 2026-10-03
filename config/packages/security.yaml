@@ -25,6 +25,7 @@ security:
             form_login:
                 login_path: login
                 check_path: login
+                success_handler: App\Security\LoginSuccessHandler
             # possibility to change with email & pw with:
             # username_parameter: email
             # password_parameter: password
