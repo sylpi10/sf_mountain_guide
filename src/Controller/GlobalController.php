@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,7 +38,7 @@ class GlobalController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    #[Route(path: '/', name: 'home')]
+    #[Route(path: "/", name: "home")]
     public function index(Request $request): Response
     {
         $sentEmail = new Contact();
@@ -52,18 +53,21 @@ class GlobalController extends AbstractController
             $formTime = (int) $request->request->get("contact_time", 0);
             $sessionToken = (string) $session->get("contact_form_token", "");
             $now = time();
-            $isTooFast = $formTime > 0 ? ($now - $formTime) < 4 : true;
-            $isTooOld = $formTime > 0 ? ($now - $formTime) > 86400 : true;
+            $isTooFast = $formTime > 0 ? $now - $formTime < 4 : true;
+            $isTooOld = $formTime > 0 ? $now - $formTime > 86400 : true;
             $tokenInvalid = $token === "" || $token !== $sessionToken;
 
             if ($honeypot !== "" || $tokenInvalid || $isTooFast || $isTooOld) {
                 return $this->redirectToRoute("home");
                 // if not filled, handle request
             } else {
-                $email = (new TemplatedEmail())
-                    ->from($contact->get("email")->getData())
+                $email = new TemplatedEmail()
+                    // expéditeur = notre domaine (SPF/DMARC), le visiteur en reply-to
+                    ->from(
+                        new Address("contact@directicimes.com", "DirectiCimes"),
+                    )
+                    ->replyTo($contact->get("email")->getData())
                     ->to("contact@directicimes.com", "georgesyn@gmail.com")
-                    // ->to("syl.pillet@hotmail.fr")
                     ->subject("Nouveau Message depuis DirectiCimes")
                     // ->htmlTemplate("global/index.html.twig")
                     ->text($contact->get("message")->getData())
@@ -107,14 +111,22 @@ class GlobalController extends AbstractController
      * @param [type] $locale
      * @param Request $request
      */
-    #[Route(path: '/change-locale/{locale}', name: 'change-locale', requirements: ['locale' => 'en|fr'])]
+    #[
+        Route(
+            path: "/change-locale/{locale}",
+            name: "change-locale",
+            requirements: ["locale" => "en|fr"],
+        ),
+    ]
     public function changeLocale($locale, Request $request)
     {
         //stock lang in session
         $request->getSession()->set("_locale", $locale);
 
         //back to previous page, or home if no referer (e.g. direct/crawler request)
-        return $this->redirect($request->headers->get("referer") ?: $this->generateUrl('home'));
+        return $this->redirect(
+            $request->headers->get("referer") ?: $this->generateUrl("home"),
+        );
     }
 
     private function refreshContactGuards(Request $request): array

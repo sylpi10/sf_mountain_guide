@@ -30,6 +30,14 @@ class Contact
     #[Assert\Length(min: 10)]
     private $message;
 
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private $receivedAt;
+
+    public function __construct()
+    {
+        $this->receivedAt = new \DateTimeImmutable();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -65,6 +73,17 @@ class Contact
     public function setEmail(?string $email): Contact
     {
         $this->email = $email;
+        return $this;
+    }
+
+    public function getReceivedAt(): ?\DateTimeImmutable
+    {
+        return $this->receivedAt;
+    }
+
+    public function setReceivedAt(?\DateTimeImmutable $receivedAt): Contact
+    {
+        $this->receivedAt = $receivedAt;
         return $this;
     }
 }
