@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Blog;
 use App\Entity\Discipline;
+use App\Entity\LegalPage;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,6 +33,12 @@ class SitemapController extends AbstractController
         $urls[] = ["loc" => $this->generateUrl("about")];
         $urls[] = ["loc" => $this->generateUrl("pricing")];
         $urls[] = ["loc" => $this->generateUrl("blog")];
+        foreach (
+            $this->managerRegistry->getRepository(LegalPage::class)->findBy(["isPublished" => true])
+            as $legalPage
+        ) {
+            $urls[] = ["loc" => $this->generateUrl("legal_page", ["slug" => $legalPage->getSlug()])];
+        }
 
         // add dynamic urls
         foreach (

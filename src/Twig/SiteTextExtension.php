@@ -4,6 +4,7 @@ namespace App\Twig;
 
 use App\Repository\SiteTextRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Contracts\Service\ResetInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -11,7 +12,7 @@ use Twig\TwigFunction;
  * site_text('home_intro') : paragraphes du texte dans la langue courante
  * (repli sur le FR si l'EN est vide), ou [] si aucun texte en base.
  */
-class SiteTextExtension extends AbstractExtension
+class SiteTextExtension extends AbstractExtension implements ResetInterface
 {
     private ?array $siteTexts = null;
 
@@ -19,6 +20,12 @@ class SiteTextExtension extends AbstractExtension
         private SiteTextRepository $repository,
         private RequestStack $requestStack,
     ) {
+    }
+
+    // vide le cache mémoire entre deux requêtes (workers longs, tests)
+    public function reset(): void
+    {
+        $this->siteTexts = null;
     }
 
     public function getFunctions(): array

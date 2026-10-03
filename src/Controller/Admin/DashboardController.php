@@ -13,6 +13,7 @@ use App\Entity\SiteText;
 use App\Entity\Discipline;
 use App\Entity\NewsLetterSubscriber;
 use App\Entity\PricingPage;
+use App\Entity\LegalPage;
 // use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -61,6 +62,7 @@ class DashboardController extends AbstractDashboardController
             About::class,
         );
         yield MenuItem::linkToCrud("Tarifs", "fas fa-euro-sign", PricingPage::class);
+        yield MenuItem::linkToCrud("CGV / pages légales", "fas fa-file-contract", LegalPage::class);
         yield MenuItem::linkToCrud(
             "Images du site",
             "fas fa-image",

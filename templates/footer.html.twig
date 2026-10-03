@@ -5,6 +5,14 @@
 			<div class="footer-infos">
 				<p>Yoann Georges</p>
 				<p>Guide de Haute Montagne</p>
+				{% if legal_pages() %}
+					<span class="footer-legal">
+						{% for legal in legal_pages() %}
+							<a href="{{ path('legal_page', {slug: legal.slug}) }}">{{ (app.request.locale == 'en' ? legal.titleEn : null) ?: legal.title }}</a>
+						{% endfor %}
+					</span>
+				{% endif %}
+
 			</div>
 			<div class="img">
 				<img src="{{asset('images/logo-uiagm.webp')}}" alt="Logo uiagm" width="110">

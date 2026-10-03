@@ -303,6 +303,10 @@
         <source>Mountain guide prices in Briançon: mountaineering, rock climbing, ski touring and ice climbing, per day or half-day. Personalised quote on request.</source>
         <target>Tarifs de guide de haute montagne à Briançon : alpinisme, escalade, ski de randonnée et cascade de glace, à la journée ou à la demi-journée. Devis personnalisé sur demande.</target>
       </trans-unit>
+      <trans-unit id="legal_updated" resname="Last updated:">
+        <source>Last updated:</source>
+        <target>Dernière mise à jour :</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

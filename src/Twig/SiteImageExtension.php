@@ -6,6 +6,7 @@ use App\Entity\SiteImage;
 use App\Repository\SiteImageRepository;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Contracts\Service\ResetInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -13,7 +14,7 @@ use Twig\TwigFunction;
  * site_image('hero') : src, srcset, width, height, alt de l'image uploadée,
  * ou null si aucune image (le template garde alors son image statique).
  */
-class SiteImageExtension extends AbstractExtension
+class SiteImageExtension extends AbstractExtension implements ResetInterface
 {
     private ?array $siteImages = null;
 
@@ -22,6 +23,12 @@ class SiteImageExtension extends AbstractExtension
         private RequestStack $requestStack,
         #[Autowire('%kernel.project_dir%/public')] private string $publicDir,
     ) {
+    }
+
+    // vide le cache mémoire entre deux requêtes (workers longs, tests)
+    public function reset(): void
+    {
+        $this->siteImages = null;
     }
 
     public function getFunctions(): array
