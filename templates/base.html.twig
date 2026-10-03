@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     {# Description (155–160 chars idéal) #}
-    {% set page_description %}{% block description %}Guide de haute montagne à Briançon (Hautes-Alpes 05) : alpinisme, escalade, ski de randonnée, cascade de glace. Sorties sur mesure et sécurité.{% endblock %}{% endset %}
+    {% set page_description %}{% block description %}{% trans %}IFMGA mountain guide in Briançon: mountaineering, ski touring, rock and ice climbing in the Écrins, Clarée and Queyras. Tailor-made trips for all levels.{% endtrans %}{% endblock %}{% endset %}
     {% set page_description = page_description|striptags|trim|replace({'\n': ' '})|slice(0, 160) %}
     <meta name="description" content="{{ page_description }}">
     {% block robots %}{% endblock %}
@@ -30,23 +30,49 @@
 		<meta name="twitter:card" content="summary_large_image">
 		<meta name="twitter:title" content="{{ block('title')|striptags|trim }}">
 		<meta name="twitter:description" content="{{ page_description }}">
+		{# Données structurées : nom, adresse, téléphone alignés sur la fiche Google Business Profile ;
+		   la description reprend le texte de présentation modifiable en admin #}
+		{% set guide_description = site_text('home_intro')|join(' ') ?: page_description %}
 		<script type="application/ld+json">
-		{
-			"@context": "https://schema.org",
-			"@type": "LocalBusiness",
-			"@id": "{{ site_url }}/#guide",
-			"name": "Directicimes",
-			"url": "{{ site_url }}/",
-			"image": "{{ site_url ~ asset('images/logo_big.webp') }}",
-			"description": "Guide de haute montagne à Briançon : alpinisme, escalade, ski de randonnée, cascade de glace.",
-			"address": {
-				"@type": "PostalAddress",
-				"addressLocality": "Briançon",
-				"addressRegion": "Hautes-Alpes",
-				"addressCountry": "FR"
+		{{ {
+			'@context': 'https://schema.org',
+			'@type': 'SportsActivityLocation',
+			'@id': site_url ~ '/#guide',
+			'name': 'Yoann GEORGES - Guide de Haute Montagne - directicimes',
+			'alternateName': 'Directicimes',
+			'url': site_url ~ '/',
+			'image': site_url ~ asset('images/logo_big.webp'),
+			'logo': site_url ~ asset('images/logo_big.webp'),
+			'description': guide_description,
+			'telephone': contact_phone|replace({' ': ''}),
+			'address': {
+				'@type': 'PostalAddress',
+				'streetAddress': '12D Rue des 4 Vents',
+				'addressLocality': 'Villar-Saint-Pancrace',
+				'postalCode': '05100',
+				'addressRegion': 'Hautes-Alpes',
+				'addressCountry': 'FR',
 			},
-			"areaServed": ["Briançon", "Hautes-Alpes"]
-		}
+			'openingHoursSpecification': {
+				'@type': 'OpeningHoursSpecification',
+				'dayOfWeek': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+				'opens': '00:00',
+				'closes': '23:59',
+			},
+			'areaServed': ['Briançon', 'Massif des Écrins', 'Vallée de la Clarée', 'Serre Chevalier', 'Queyras', 'Hautes-Alpes'],
+			'knowsAbout': ['Alpinisme', 'Ski de randonnée', 'Ski hors-piste', 'Escalade', 'Grandes voies', 'Cascade de glace'],
+			'sameAs': ['https://facebook.com/directicimes/', 'https://instagram.com/directicimes'],
+			'founder': {
+				'@type': 'Person',
+				'name': 'Yoann Georges',
+				'jobTitle': 'Guide de haute montagne',
+				'hasCredential': {
+					'@type': 'EducationalOccupationalCredential',
+					'credentialCategory': 'Diplôme de guide de haute montagne UIAGM / IFMGA',
+					'recognizedBy': {'@type': 'Organization', 'name': "École nationale de ski et d'alpinisme (ENSA)"},
+				},
+			},
+		}|json_encode(constant('JSON_UNESCAPED_UNICODE') b-or constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_HEX_TAG'))|raw }}
 		</script>
 		<link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}">
 		<link rel="stylesheet" href="{{asset('css/style.css')}}"> {% block stylesheets %}{% endblock %}

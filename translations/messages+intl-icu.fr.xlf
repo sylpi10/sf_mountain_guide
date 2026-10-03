@@ -251,6 +251,26 @@
         <source>Discover the activities</source>
         <target>Découvrir les activités</target>
       </trans-unit>
+      <trans-unit id="meta_description_default" resname="IFMGA mountain guide in Briançon: mountaineering, ski touring, rock and ice climbing in the Écrins, Clarée and Queyras. Tailor-made trips for all levels.">
+        <source>IFMGA mountain guide in Briançon: mountaineering, ski touring, rock and ice climbing in the Écrins, Clarée and Queyras. Tailor-made trips for all levels.</source>
+        <target>Guide de haute montagne UIAGM à Briançon : alpinisme, ski de rando, escalade et cascade de glace dans les Écrins, la Clarée et le Queyras. Sorties sur mesure.</target>
+      </trans-unit>
+      <trans-unit id="whatsapp_prefer" resname="Prefer WhatsApp?">
+        <source>Prefer WhatsApp?</source>
+        <target>Plutôt WhatsApp ?</target>
+      </trans-unit>
+      <trans-unit id="whatsapp_cta" resname="Chat on WhatsApp">
+        <source>Chat on WhatsApp</source>
+        <target>Discuter sur WhatsApp</target>
+      </trans-unit>
+      <trans-unit id="whatsapp_prefill" resname="Hello, I would like some information about your mountain trips.">
+        <source>Hello, I would like some information about your mountain trips.</source>
+        <target>Bonjour, je souhaiterais des informations sur vos sorties en montagne.</target>
+      </trans-unit>
+      <trans-unit id="whatsapp_or" resname="or use the form below">
+        <source>or use the form below</source>
+        <target>ou utilisez le formulaire ci-dessous</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
