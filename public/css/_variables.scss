@@ -1,0 +1,16 @@
+// Variables partagées : à charger avec @use "variables" as *;
+@use "sass:color";
+
+// couleurs
+$base-color: #2733a0;
+$text-color: #1f2433;
+$bg-soft: #f4f6fa;
+$border-soft: #e3e7ef;
+$bg-brand-soft: color.mix($base-color, #fff, 8%); // fond de section teinté de la couleur du site
+$second-color: rgb(11, 11, 37);
+$accent-color: #ff9f1c;
+$accent-color-dark: #e8890a;
+
+// transitions
+$transition-fast: 0.25s ease;
+$transition-base: 0.4s ease;

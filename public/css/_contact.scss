@@ -1,5 +1,8 @@
+@use "variables" as *;
+
 #contact-form {
-    margin-top: 180px;
+    // ancre du lien "Contact" : ne pas finir sous le menu fixe
+    scroll-margin-top: 90px;
 }
 #website {
     display: none;
@@ -9,7 +12,7 @@
     width: 100%;
     padding-top: 80px;
     position: relative;
-    background-color: #fff;
+    background-color: $bg-brand-soft;
     color: #333;
     margin: 0;
 }
@@ -35,22 +38,6 @@
     padding: 40px;
     width: 74%;
     margin: auto;
-    .btn.button-link {
-        background-color: $base-color;
-        height: 48px;
-        width: fit-content;
-        min-width: 240px;
-        color: #fff;
-        text-transform: uppercase;
-        font-weight: bold;
-        margin: auto;
-        transition: all ease 0.4s;
-        &:hover {
-            background-color: $second-color;
-            border-color: #fff;
-            min-width: 256px;
-        }
-    }
 }
 .contact-notif {
     position: relative;
@@ -63,10 +50,67 @@
     flex-direction: column;
     width: 90%;
     margin: 30px auto;
-    background-color: #f3f7fa;
+    background-color: #fff;
+    border: 1px solid $border-soft;
+    box-shadow: 0 12px 32px rgba($second-color, 0.08);
     padding: 60px;
     border-radius: 12px;
 }
+
+/* formulaires */
+.form-group {
+    margin-bottom: 1rem;
+}
+.form-control {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + 0.75rem + 2px);
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition:
+        border-color 0.15s ease-in-out,
+        box-shadow 0.15s ease-in-out;
+    &:focus {
+        color: #495057;
+        border-color: #80bdff;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+}
+textarea.form-control {
+    height: auto;
+}
+.form-check {
+    position: relative;
+    display: block;
+    padding-left: 1.25rem;
+}
+.form-check-input {
+    position: absolute;
+    margin-top: 0.3rem;
+    margin-left: -1.25rem;
+}
+.form-check-label {
+    margin-bottom: 0;
+}
+.is-invalid {
+    border-color: #dc3545;
+}
+.invalid-feedback {
+    display: block;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 80%;
+    color: #dc3545;
+}
+
 @media screen and (max-width: 860px) {
     .contact-form {
         width: 90%;

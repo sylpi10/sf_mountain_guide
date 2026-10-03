@@ -1,6 +1,8 @@
+@use "variables" as *;
+
 .main-about {
   width: 100%;
-  color: #fff;
+  color: $text-color;
   padding: 80px;
   .about-container {
     margin-top: 140px;
@@ -9,7 +11,7 @@
     h2 {
       text-transform: uppercase;
       font-size: 1.7rem;
-      color: #fff;
+      color: $second-color;
     }
   }
   .about-me {

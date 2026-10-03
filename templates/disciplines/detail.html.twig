@@ -32,10 +32,7 @@
 									<div>{{discipline.englishContent|replace({'<h1>': '<h2>', '</h1>': "</h2>"})|raw }}</div>
 								{% endif %}
 
-
-								<div class="contact-btn">
-									<a href="#contact" class="goto-contact">{% trans %}Book{% endtrans %}</a>
-								</div>
+								<a href="#contact" class="btn contact-btn goto-contact">{% trans %}Book{% endtrans %}</a>
 							</div>
 
 							<div class="info-details">
@@ -91,7 +88,7 @@
 			{% for disci in disciplines %}
 				{% if disci.id != discipline.id %}
 					<a href="{{ path('detail', {'id': disci.id, slug: disci.slug}) }}" title="details" class="discipline">
-						<div class="text" style="background:url('../uploads/{{disci.image}}') center no-repeat;background-size:cover;">
+						<div class="discipline-title" style="background:url('../uploads/{{disci.image}}') center no-repeat;background-size:cover;">
 							{% for locale in locales %}
 								{% if locale == app.request.locale %}
 									{% if locale =='fr' %}

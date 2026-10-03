@@ -1,3 +1,5 @@
+@use "variables" as *;
+
 /* detail discipline page */
 
 .detail-page .menu {
@@ -49,24 +51,30 @@
         margin: 0 auto;
         align-items: flex-start;
         overflow: hidden;
-    }
-    .text {
-        margin: 0 auto;
-        font-size: 1.1rem;
-        width: 58%;
-        min-height: 100vh;
-        padding: 30px;
-        display: flex;
-        flex-direction: column;
-        font-family: "montserrat";
-        font-size: 1.2rem;
-        // background-image: linear-gradient(
-        //   rgba(6, 6, 29, 0.3),
-        //   rgba(6, 6, 29, 0.6),
-        //   rgba(6, 6, 29, 0.9)
-        // );
-        color: #000;
-        background-color: rgba(255, 255, 255, 0.8);
+        .text {
+            margin: 0 auto;
+            font-size: 1.1rem;
+            width: 58%;
+            min-height: 100vh;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            font-family: "montserrat";
+            font-size: 1.2rem;
+            backdrop-filter: blur(5px);
+            color: #000;
+            background-color: rgba(255, 255, 255, 0.7);
+            .btn.contact-btn {
+                margin-top: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #fff;
+                &:hover {
+                    color: #fff;
+                }
+            }
+        }
     }
 }
 
@@ -76,31 +84,6 @@
     background-color: rgba(255, 255, 255, 0.56);
 }
 
-.disciplines > .container-fluid .contact-btn {
-    width: 200px;
-    margin: 60px auto;
-    text-align: center;
-    z-index: 900;
-    position: relative;
-    font-size: 1rem;
-}
-.contact-btn a {
-    text-decoration: none;
-    text-transform: uppercase;
-    color: #fff;
-    width: 100%;
-    padding: 8px 30px;
-    border-radius: 8px;
-    background-color: $base-color;
-    border: solid 2px $base-color;
-    transition: all 0.6s ease;
-    z-index: 900;
-    font-weight: bold;
-}
-.contact-btn a:hover {
-    background-color: $second-color;
-    border-color: #fff;
-}
 .escalade {
     background-position: 20%;
 }
@@ -153,8 +136,7 @@
 /* the links below detail .discipline */
 .list-details {
     z-index: 800 !important;
-    background-color: rgb(11, 11, 37);
-    background-color: $base-lighter;
+    background-color: #fff;
     position: relative;
     margin: 0;
     padding: 100px;

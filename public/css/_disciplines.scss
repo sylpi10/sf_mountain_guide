@@ -1,3 +1,5 @@
+@use "variables" as *;
+
 #disciplines {
     margin-bottom: 100px;
 }
@@ -10,9 +12,18 @@
     flex-wrap: wrap;
     margin: 0 auto;
     width: 100%;
+    max-width: 1124px;
     text-align: center;
+    // accueil : fond pleine largeur pour détacher la section du bloc contact
+    .home-page & {
+        background-color: $bg-soft;
+        box-shadow: 0 0 0 100vmax $bg-soft;
+        clip-path: inset(0 -100vmax);
+        margin-bottom: 0 !important;
+        padding-bottom: 80px;
+    }
     .presentation {
-        color: #fff;
+        color: $text-color;
         margin: auto;
         font-size: 1.28rem;
         width: 60%;
@@ -41,7 +52,7 @@
     box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
 }
 
-.text {
+.discipline-title {
     position: relative;
     justify-content: center;
     width: 100%;
@@ -50,26 +61,26 @@
     align-items: center;
     transition: transform 0.6s ease;
 }
-.text > h3 {
+.discipline-title > h3 {
     position: relative;
     z-index: 2;
     transition:
         border-color $transition-fast,
         color $transition-fast;
 }
-.discipline:hover .text,
-.discipline:focus .text {
+.discipline:hover .discipline-title,
+.discipline:focus .discipline-title {
     transform: scale(1.06);
 }
-.discipline:hover .text > h3,
-.discipline:focus .text > h3 {
+.discipline:hover .discipline-title > h3,
+.discipline:focus .discipline-title > h3 {
     color: $accent-color;
 }
-.discipline .text {
+.discipline .discipline-title {
     background-size: contain;
 }
 
-.text:before {
+.discipline-title:before {
     content: "";
     z-index: 1;
     height: 100%;
@@ -85,8 +96,8 @@
     transition: background $transition-base;
 }
 
-.discipline:hover .text:before,
-.discipline:focus .text:before {
+.discipline:hover .discipline-title:before,
+.discipline:focus .discipline-title:before {
     background-color: rgba(14, 11, 44, 0.75);
 }
 @media screen and (max-width: 768px) {

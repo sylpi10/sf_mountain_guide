@@ -1,0 +1,107 @@
+/* navbar */
+.navbar {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    > .container-fluid {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+.navbar-brand {
+    display: inline-block;
+    padding-top: 0.3125rem;
+    padding-bottom: 0.3125rem;
+    margin-right: 1rem;
+    font-size: 1.25rem;
+    line-height: inherit;
+    white-space: nowrap;
+}
+.navbar-nav {
+    display: flex;
+    flex-direction: column;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+}
+.nav-link {
+    display: block;
+    padding: 0.5rem 1rem;
+}
+.navbar-collapse {
+    flex-basis: 100%;
+    flex-grow: 1;
+    align-items: center;
+    display: none;
+    &.show {
+        display: block;
+    }
+}
+.navbar-dark {
+    .navbar-brand,
+    .navbar-brand:hover {
+        color: #fff;
+    }
+    .navbar-nav .nav-link {
+        color: rgba(255, 255, 255, 0.5);
+        &:hover {
+            color: rgba(255, 255, 255, 0.75);
+        }
+    }
+    .navbar-nav .nav-item.active > .nav-link,
+    .navbar-nav .nav-link.active {
+        color: #fff;
+    }
+}
+.navbar-toggler {
+    padding: 0.25rem 0.75rem;
+    font-size: 1.25rem;
+    line-height: 1;
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.25rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+.navbar-toggler-icon {
+    display: inline-block;
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: middle;
+    content: "";
+    background: 50% / 100% 100% no-repeat
+        url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.5%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+@media (max-width: 991.98px) {
+    .navbar > .container-fluid {
+        padding-right: 0;
+        padding-left: 0;
+    }
+}
+@media (min-width: 992px) {
+    .navbar {
+        flex-flow: row nowrap;
+        justify-content: flex-start;
+        > .container-fluid {
+            flex-wrap: nowrap;
+        }
+    }
+    .navbar-nav {
+        flex-direction: row;
+        .nav-link {
+            padding-right: 0.5rem;
+            padding-left: 0.5rem;
+        }
+    }
+    .navbar-collapse {
+        display: flex !important;
+        flex-basis: auto;
+    }
+    .navbar-toggler {
+        display: none;
+    }
+}

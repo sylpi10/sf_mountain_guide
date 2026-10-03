@@ -1,0 +1,140 @@
+@use "variables" as *;
+
+@font-face {
+    font-family: "Share Tech";
+    src: url("../fonts/Share_Tech/ShareTech-Regular.ttf");
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "onderneming";
+    src: url("../fonts/onderneming/Onderneming.ttf");
+    font-display: swap;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+body {
+    background-color: #fff;
+    color: $text-color;
+}
+
+/* sans hero, le menu (transparent, texte blanc) a besoin d'un fond */
+.base-page:not(.home-page) .menu {
+    background-color: $second-color;
+}
+
+/* titles */
+h1,
+h2 {
+    // font-family: "Share Tech", sans-serif;
+    font-family: "onderneming", sans-serif;
+    /* color: rgb(108, 108, 233); */
+}
+
+h1,
+h2 {
+    color: $second-color;
+}
+
+.back-top {
+    position: fixed;
+    top: 90%;
+    left: 94%;
+    font-size: 2rem;
+    z-index: 999;
+    opacity: 0;
+    transition: all $transition-base;
+    color: $accent-color;
+    border-radius: 50%;
+    &:hover {
+        color: $accent-color-dark;
+    }
+}
+
+a:hover {
+    text-decoration: none !important;
+}
+
+.login-container {
+    padding-top: 200px;
+}
+.form-login-wrapper {
+    padding: 80px;
+}
+
+.btn.button-link,
+.contact-btn {
+    background-color: $base-color;
+    height: 48px;
+    width: fit-content;
+    min-width: 240px;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin: auto;
+    cursor: pointer;
+    transition: all ease 0.4s;
+    &:hover {
+        background-color: $second-color;
+        border-color: #fff;
+        min-width: 256px;
+    }
+}
+
+/* .index-notif {
+    position: absolute;
+    z-index: 999;
+    top: 50%;
+    left: 20%;
+} */
+
+.error-container {
+    min-height: 80vh;
+    padding-top: 140px;
+    .error-content {
+        background-color: #fff;
+        margin-top: 60px;
+        padding: 50px 80px;
+        .title-wrapper {
+            display: flex;
+            width: 100%;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            figure {
+                border-radius: 20px;
+                height: 260px;
+                overflow: hidden;
+            }
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            width: 46%;
+            svg {
+                width: 30px;
+                margin-top: -5px;
+            }
+        }
+        h3 {
+            margin-top: 40px;
+        }
+        ul {
+            margin-top: 20px;
+        }
+        a {
+            color: $base-color;
+        }
+    }
+}
+
+.form-login-wrapper {
+    border-radius: 10px;
+    border: 1px solid $border-soft;
+    .login {
+        background-color: #2733a0;
+        color: #fff;
+    }
+}
