@@ -20,6 +20,14 @@
 	</div>
 
 
+	<div class="contact-whatsapp">
+		<a class="btn btn-whatsapp" href="https://wa.me/{{ contact_phone|replace({' ': '', '+': ''}) }}?text={{ 'Hello, I would like some information about your mountain trips.'|trans|url_encode }}" target="_blank" rel="noopener">
+			{{ icon('whatsapp') }}
+			{% trans %}Chat on WhatsApp{% endtrans %}
+		</a>
+		<p class="contact-whatsapp-or">{% trans %}or use the form below{% endtrans %}</p>
+	</div>
+
 	<div class="contact-notif">
 		{% for msg in app.flashes('success') %}
 			<p class="alert alert-success">{{msg}}</p>

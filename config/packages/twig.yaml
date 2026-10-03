@@ -4,3 +4,5 @@ twig:
     globals: 
         locales: '%app.locales%'
         site_url: 'https://directicimes.com'
+        # numéro affiché (footer) ; tel: et WhatsApp en sont dérivés
+        contact_phone: '+33 6 45 98 45 68'
