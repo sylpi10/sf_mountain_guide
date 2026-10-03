@@ -271,6 +271,38 @@
         <source>or use the form below</source>
         <target>ou utilisez le formulaire ci-dessous</target>
       </trans-unit>
+      <trans-unit id="pricing_0" resname="See my prices">
+        <source>See my prices</source>
+        <target>Voir mes tarifs</target>
+      </trans-unit>
+      <trans-unit id="pricing_1" resname="Prices">
+        <source>Prices</source>
+        <target>Tarifs</target>
+      </trans-unit>
+      <trans-unit id="pricing_2" resname="See all prices">
+        <source>See all prices</source>
+        <target>Voir tous les tarifs</target>
+      </trans-unit>
+      <trans-unit id="pricing_3" resname="Prices by activity">
+        <source>Prices by activity</source>
+        <target>Tarifs par activité</target>
+      </trans-unit>
+      <trans-unit id="pricing_4" resname="See the activity">
+        <source>See the activity</source>
+        <target>Voir l'activité</target>
+      </trans-unit>
+      <trans-unit id="pricing_5" resname="A project in mind? I will send you a personalised quote.">
+        <source>A project in mind? I will send you a personalised quote.</source>
+        <target>Un projet en tête ? Je vous envoie un devis personnalisé.</target>
+      </trans-unit>
+      <trans-unit id="pricing_6" resname="Contact me">
+        <source>Contact me</source>
+        <target>Me contacter</target>
+      </trans-unit>
+      <trans-unit id="pricing_7" resname="Mountain guide prices in Briançon: mountaineering, rock climbing, ski touring and ice climbing, per day or half-day. Personalised quote on request.">
+        <source>Mountain guide prices in Briançon: mountaineering, rock climbing, ski touring and ice climbing, per day or half-day. Personalised quote on request.</source>
+        <target>Tarifs de guide de haute montagne à Briançon : alpinisme, escalade, ski de randonnée et cascade de glace, à la journée ou à la demi-journée. Devis personnalisé sur demande.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

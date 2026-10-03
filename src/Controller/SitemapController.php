@@ -30,6 +30,7 @@ class SitemapController extends AbstractController
         // $urls[] = $urls->push()
         $urls[] = ["loc" => $this->generateUrl("home")];
         $urls[] = ["loc" => $this->generateUrl("about")];
+        $urls[] = ["loc" => $this->generateUrl("pricing")];
         $urls[] = ["loc" => $this->generateUrl("blog")];
 
         // add dynamic urls

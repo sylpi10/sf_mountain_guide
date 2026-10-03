@@ -12,6 +12,7 @@ use App\Entity\SiteImage;
 use App\Entity\SiteText;
 use App\Entity\Discipline;
 use App\Entity\NewsLetterSubscriber;
+use App\Entity\PricingPage;
 // use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -59,6 +60,7 @@ class DashboardController extends AbstractDashboardController
             "fas fa-address-card",
             About::class,
         );
+        yield MenuItem::linkToCrud("Tarifs", "fas fa-euro-sign", PricingPage::class);
         yield MenuItem::linkToCrud(
             "Images du site",
             "fas fa-image",

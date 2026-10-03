@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{% trans %}Prices{% endtrans %} - {% trans %}High Mountain guide{% endtrans %}
+{% endblock %}
+{% block description %}
+	{% trans %}Mountain guide prices in Briançon: mountaineering, rock climbing, ski touring and ice climbing, per day or half-day. Personalised quote on request.{% endtrans %}
+{% endblock %}
+{% block body_class %}base-page
+{% endblock %}
+{% block body %}
+	{% set is_en = app.request.locale == 'en' %}
+
+	<main class="pricing-page">
+		<div class="container pricing-container">
+			<h1>{% trans %}Prices{% endtrans %}</h1>
+
+			{% set season = pricing ? ((is_en ? pricing.seasonEn : null) ?: pricing.season) : null %}
+			{% if season %}
+				<p class="pricing-season">{{ season }}</p>
+			{% endif %}
+
+			{% set content = pricing ? ((is_en ? pricing.contentEn : null) ?: pricing.content) : null %}
+			{% if content %}
+				<div class="pricing-content">{{ content|raw }}</div>
+			{% endif %}
+
+			<h2>{% trans %}Prices by activity{% endtrans %}</h2>
+			<ul class="pricing-list">
+				{% for disci in disciplines %}
+					<li>
+						<a class="pricing-item" href="{{ path('detail', {id: disci.id, slug: disci.slug}) }}">
+							<h3>{{ is_en ? disci.englishTitle : disci.title }}</h3>
+							<div class="pricing-item-price">
+								{{ icon('tag') }}
+								<div>{{ (is_en ? disci.englishPrice : disci.price)|raw }}</div>
+							</div>
+							<span class="pricing-item-more">{% trans %}See the activity{% endtrans %}</span>
+						</a>
+					</li>
+				{% endfor %}
+			</ul>
+
+			<div class="pricing-cta">
+				<p>{% trans %}A project in mind? I will send you a personalised quote.{% endtrans %}</p>
+				<a class="btn more-link" href="{{ path('home', {'_fragment': 'contact-form'}) }}">{% trans %}Contact me{% endtrans %}</a>
+			</div>
+		</div>
+	</main>
+
+	<div>
+		{% include "footer.html.twig" %}
+	</div>
+{% endblock %}

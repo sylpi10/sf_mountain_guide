@@ -1,0 +1,104 @@
+@use "variables" as *;
+
+// page /tarifs
+.pricing-page {
+    padding: 180px 0 80px;
+    color: $text-color;
+    h1 {
+        text-transform: uppercase;
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+    h2 {
+        margin: 3rem 0 1.5rem;
+        text-align: center;
+        // onderneming n'a pas les capitales accentuées (É)
+        font-family: "Share Tech", sans-serif;
+        font-size: 2rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+}
+.pricing-container {
+    max-width: 960px;
+}
+.pricing-season {
+    text-align: center;
+    color: $base-color;
+    font-weight: 700;
+    font-size: 1.15rem;
+}
+.pricing-content {
+    margin-top: 2rem;
+    font-size: 1.1rem;
+    line-height: 1.7;
+}
+
+.pricing-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+    padding: 0;
+    list-style: none;
+}
+.pricing-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    height: 100%;
+    padding: 24px;
+    border: 1px solid $border-soft;
+    border-radius: 12px;
+    background-color: $bg-soft;
+    color: $text-color;
+    transition:
+        transform $transition-base,
+        box-shadow $transition-base;
+    h3 {
+        margin: 0;
+        font-family: "Share Tech", sans-serif;
+        font-size: 1.5rem;
+        color: $second-color;
+    }
+    &:hover,
+    &:focus-visible {
+        color: $text-color;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 24px rgba($second-color, 0.12);
+    }
+}
+.pricing-item-price {
+    display: flex;
+    gap: 0.6rem;
+    align-items: baseline;
+    flex: 1;
+    .icon {
+        flex-shrink: 0;
+        color: $base-color;
+    }
+    p {
+        margin: 0;
+    }
+}
+.pricing-item-more {
+    color: $base-color;
+    font-weight: 700;
+    &::after {
+        content: " →";
+    }
+}
+
+.pricing-cta {
+    margin-top: 3rem;
+    text-align: center;
+    p {
+        font-size: 1.15rem;
+        margin: 0;
+    }
+}
+
+@media screen and (max-width: 991px) {
+    .pricing-page {
+        padding-top: 120px;
+    }
+}
