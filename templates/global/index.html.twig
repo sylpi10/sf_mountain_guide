@@ -95,11 +95,13 @@
 	{# // disciplines section #}
 
 	<main class="disciplines-list container">
-		<p class="presentation">
-			{% trans %}
-			Montain Guide in Briançon, I have many mountain activities to show you:
-			{% endtrans %}
-		</p>
+		<div class="presentation">
+			{% for paragraph in site_text('home_intro') %}
+				<p>{{ paragraph|nl2br }}</p>
+			{% else %}
+				<p>{% trans %}Montain Guide in Briançon, I have many mountain activities to show you:{% endtrans %}</p>
+			{% endfor %}
+		</div>
 
 		{% for disci in disciplines %}
 			<a
