@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Entity\About;
 use App\Entity\Comment;
 use App\Entity\Contact;
+use App\Entity\ContactRecipient;
 use App\Entity\SiteImage;
 use App\Entity\SiteText;
 use App\Entity\Discipline;
@@ -77,6 +78,11 @@ class DashboardController extends AbstractDashboardController
             "Mails reçus",
             "fas fa-envelope-open-text",
             Contact::class,
+        );
+        yield MenuItem::linkToCrud(
+            "Destinataires des mails",
+            "fas fa-at",
+            ContactRecipient::class,
         );
         yield MenuItem::linkToCrud("Blog", "fas fa-newspaper", Blog::class);
         yield MenuItem::linkToCrud(

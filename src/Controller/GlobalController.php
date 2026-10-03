@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Contact;
 use App\Form\ContactType;
+use App\Repository\ContactRecipientRepository;
 use App\Repository\DisciplineRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -17,21 +18,27 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GlobalController extends AbstractController
 {
+    // si aucun destinataire actif en admin, pour ne jamais perdre un message
+    private const FALLBACK_RECIPIENT = "contact@directicimes.com";
+
     private MailerInterface $mailer;
     private TranslatorInterface $translator;
     private DisciplineRepository $disciplineRepo;
     private EntityManagerInterface $manager;
+    private ContactRecipientRepository $recipientRepo;
 
     public function __construct(
         MailerInterface $mailer,
         TranslatorInterface $translator,
         DisciplineRepository $disciplineRepo,
         EntityManagerInterface $manager,
+        ContactRecipientRepository $recipientRepo,
     ) {
         $this->mailer = $mailer;
         $this->translator = $translator;
         $this->disciplineRepo = $disciplineRepo;
         $this->manager = $manager;
+        $this->recipientRepo = $recipientRepo;
     }
 
     /**
@@ -67,7 +74,11 @@ class GlobalController extends AbstractController
                         new Address("contact@directicimes.com", "DirectiCimes"),
                     )
                     ->replyTo($contact->get("email")->getData())
-                    ->to("contact@directicimes.com", "georgesyn@gmail.com")
+                    ->to(
+                        ...($this->recipientRepo->findActiveEmails() ?: [
+                            self::FALLBACK_RECIPIENT,
+                        ]),
+                    )
                     ->subject("Nouveau Message depuis DirectiCimes")
                     // ->htmlTemplate("global/index.html.twig")
                     ->text($contact->get("message")->getData())
