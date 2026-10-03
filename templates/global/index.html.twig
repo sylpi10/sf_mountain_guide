@@ -81,8 +81,8 @@
 
   <div class="hero-content hero-overlay">
     <h1 class="main-title">{% trans %}Mountaineering, Ski, Rock Climbing{% endtrans %}</h1>
-    <a href="{{ path('home', {'_fragment':'disciplines'}) }}" class="btn more-link button-link" title="Voir les disciplines">
-      {{ icon('angle-down') }}
+    <a href="{{ path('home', {'_fragment':'disciplines'}) }}" class="btn more-link">
+      {% trans %}Discover the activities{% endtrans %}
     </a>
   </div>
 </div>
@@ -94,7 +94,7 @@
 
 	{# // disciplines section #}
 
-	<main class="disciplines-list container my-lg-5 pt-lg-5 home-hr">
+	<main class="disciplines-list container">
 		<p class="presentation">
 			{% trans %}
 			Montain Guide in Briançon, I have many mountain activities to show you:

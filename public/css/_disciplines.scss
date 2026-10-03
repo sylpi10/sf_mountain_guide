@@ -1,7 +1,8 @@
 @use "variables" as *;
 
+// ancre du bouton du hero
 #disciplines {
-    margin-bottom: 100px;
+    scroll-margin-top: 90px;
 }
 
 .disciplines-list {
@@ -14,6 +15,7 @@
     width: 100%;
     max-width: 1124px;
     text-align: center;
+    padding-top: 60px;
     // accueil : fond pleine largeur pour détacher la section du bloc contact
     .home-page & {
         background-color: $bg-soft;
@@ -126,6 +128,6 @@
 
 @media screen and (max-width: 768px) {
     #disciplines {
-        display: none;
+        margin-bottom: 30px;
     }
 }

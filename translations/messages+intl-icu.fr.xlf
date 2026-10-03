@@ -247,6 +247,10 @@
         <source>Book</source>
         <target>Réserver</target>
       </trans-unit>
+      <trans-unit id="hero_cta" resname="Discover the activities">
+        <source>Discover the activities</source>
+        <target>Découvrir les activités</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
