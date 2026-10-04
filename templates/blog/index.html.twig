@@ -50,7 +50,7 @@
 
 						{% endfor %}
 						{% if article.image %}
-							<img src="{{asset('uploads/' ~ article.image)}}" class="d-block img-fluid" width="140" height="140">
+							<img src="{{asset('uploads/' ~ article.image)}}" alt="{{article.title|title }}" class="d-block img-fluid" width="140" height="140">
 						{% endif %}
 					</div>
 
