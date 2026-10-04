@@ -335,6 +335,10 @@
         <source>About Yoann Georges, mountain guide in Briançon</source>
         <target>À propos : Yoann Georges, guide de haute montagne à Briançon</target>
       </trans-unit>
+      <trans-unit id="newsletter_title" resname="Directicimes newsletter: news from your guide in Briançon">
+        <source>Directicimes newsletter: news from your guide in Briançon</source>
+        <target>Newsletter Directicimes : actus de votre guide à Briançon</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
