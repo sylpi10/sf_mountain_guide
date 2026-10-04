@@ -24,6 +24,11 @@ DirectoryIndex index.php
     RewriteCond %{HTTP_HOST} ^www\.directicimes\.com$ [NC]
     RewriteRule ^(.*)$ https://directicimes.com/$1 [R=301,L]
 
+    # http -> https, AVANT la réécriture vers index.php : sinon http://directicimes.com/
+    # redirige vers https://directicimes.com/index.php (chaîne de 2 redirections)
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
     # Determine the RewriteBase automatically and set it as environment variable.
     # If you are using Apache aliases to do mass virtual hosting or installed the
     # project in a subdirectory, the base path will be prepended to allow proper
@@ -66,12 +71,6 @@ DirectoryIndex index.php
         # and the generated links can still be used.
         # RedirectTemp cannot be used instead
     </IfModule>
-</IfModule>
-
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteCond %{HTTP:X-Forwarded-Proto} !https
-    RewriteRule (.*) https://%{HTTP_HOST}/$1 [R=301,L]
 </IfModule>
 
 <files *.html>
