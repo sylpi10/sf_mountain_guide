@@ -27,7 +27,7 @@
         padding: 6px;
     }
 }
-.right-nav {
+ul.right-nav {
     background-color: $second-color;
     width: 20%;
     min-width: 300px;
@@ -40,8 +40,10 @@
         a {
             color: #fff;
             transition: color $transition-fast;
+            font-size: 0.8rem;
             &:hover {
                 color: $accent-color;
+                text-decoration: none;
             }
         }
     }
@@ -118,20 +120,17 @@
 }
 
 // nav menu
-nav ul li a {
+nav ul.navbar-nav li a {
     text-transform: uppercase;
-    color: #fff !important;
+    color: #fff;
     border-bottom: solid 1px transparent;
-    font-weight: 300 !important;
+    font-weight: 400 !important;
     min-width: 100px;
     text-align: center;
     transition: border-color $transition-fast;
-}
-
-nav ul li a:hover {
-    border-bottom: solid 1px $accent-color !important;
-}
-
-nav ul li .active {
-    border-bottom: solid 1px $accent-color !important;
+    &:hover,
+    &:active {
+        border-bottom: solid 1px $text-color;
+        font-weight: bold;
+    }
 }

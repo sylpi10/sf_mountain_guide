@@ -147,8 +147,7 @@
 
 							</ul>
 
-							<div class="right-nav">
-
+							<ul class="right-nav">
 								{% if not app.user %}
 									<li class="nav-item">
 										<a class="nav-link" href="{{path('login')}}" title="{% trans %} Login to your account {% endtrans %}">{% trans %}
@@ -179,15 +178,14 @@
 										{{app.user}}
 									</li>
 								{% endif %}
-							</div>
-
+							</ul>
 						</div>
 					</div>
 				</nav>
 			</header>
 
 			{# back to top #}
-			<a href="#top" id="" title="{% trans %} Back to Top {% endtrans %}">
+			<a href="#top" title="{% trans %} Back to Top {% endtrans %}">
 				{{ icon('arrow-up', 'back-top') }}
 			</a>
 
