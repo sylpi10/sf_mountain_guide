@@ -1,7 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	{{ (app.request.locale == 'en' ? page.titleEn : null) ?: page.title }} - Directicimes
+	{% set seo_title = app.request.locale == 'en' ? page.seoTitleEn : page.seoTitle %}
+	{{ seo_title ?: ((app.request.locale == 'en' ? page.titleEn : null) ?: page.title) ~ ' - Directicimes' }}
 {% endblock %}
 {% block description %}
 	{{ (app.request.locale == 'en' ? page.metaDescriptionEn : null) ?: page.metaDescription ?: page.title }}

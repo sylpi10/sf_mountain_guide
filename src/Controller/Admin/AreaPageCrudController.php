@@ -46,8 +46,15 @@ class AreaPageCrudController extends AbstractCrudController
         return [
             TextField::new('name', 'Secteur')->setHelp('Nom court, utilisé dans le footer.'),
             BooleanField::new('isPublished', 'Publiée'),
-            TextField::new('title', 'Titre H1 (FR)')->setHelp('Ex. : Guide de ski à Serre Chevalier. Sert aussi de titre de l\'onglet et de lien dans Google.'),
+            TextField::new('title', 'Titre H1 (FR)')->setHelp('Ex. : Guide de ski à Serre Chevalier.'),
             TextField::new('titleEn', 'Titre H1 (EN)')->onlyOnForms(),
+            TextField::new('seoTitle', 'Titre Google (FR)')
+                ->setHelp('Titre de l\'onglet et du lien dans Google : 60 caractères max. Si vide : « Titre H1 - Directicimes ».')
+                ->setMaxLength(70)
+                ->onlyOnForms(),
+            TextField::new('seoTitleEn', 'Titre Google (EN)')
+                ->setHelp('Si vide : « Titre H1 (EN) - Directicimes ».')
+                ->onlyOnForms(),
             TextareaField::new('metaDescription', 'Description Google (FR)')->setHelp($metaHelp)->onlyOnForms(),
             TextareaField::new('metaDescriptionEn', 'Description Google (EN)')->onlyOnForms(),
             TextEditorField::new('content', 'Texte de la page (FR)')->onlyOnForms(),

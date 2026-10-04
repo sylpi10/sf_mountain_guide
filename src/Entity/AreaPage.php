@@ -33,6 +33,13 @@ class AreaPage
     #[ORM\Column(type: 'string', length: 150, nullable: true)]
     private $titleEn;
 
+    // titre de l'onglet / du lien Google, si le H1 est trop long (60 caractères max)
+    #[ORM\Column(type: 'string', length: 70, nullable: true)]
+    private $seoTitle;
+
+    #[ORM\Column(type: 'string', length: 70, nullable: true)]
+    private $seoTitleEn;
+
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $metaDescription;
 
@@ -96,6 +103,28 @@ class AreaPage
     public function setTitleEn(?string $titleEn): self
     {
         $this->titleEn = $titleEn;
+        return $this;
+    }
+
+    public function getSeoTitle(): ?string
+    {
+        return $this->seoTitle;
+    }
+
+    public function setSeoTitle(?string $seoTitle): self
+    {
+        $this->seoTitle = $seoTitle;
+        return $this;
+    }
+
+    public function getSeoTitleEn(): ?string
+    {
+        return $this->seoTitleEn;
+    }
+
+    public function setSeoTitleEn(?string $seoTitleEn): self
+    {
+        $this->seoTitleEn = $seoTitleEn;
         return $this;
     }
 

@@ -327,6 +327,10 @@
         <source>Areas:</source>
         <target>Secteurs :</target>
       </trans-unit>
+      <trans-unit id="about_description" resname="About Yoann Georges, IFMGA mountain guide based in Briançon: his background, his passion for the mountains and his approach to guiding in the Écrins and beyond.">
+        <source>About Yoann Georges, IFMGA mountain guide based in Briançon: his background, his passion for the mountains and his approach to guiding in the Écrins and beyond.</source>
+        <target>À propos de Yoann Georges, guide de haute montagne UIAGM basé à Briançon : son parcours, sa passion de la montagne et sa façon de guider dans les Écrins.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
