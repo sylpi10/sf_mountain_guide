@@ -339,6 +339,10 @@
         <source>Directicimes newsletter: news from your guide in Briançon</source>
         <target>Newsletter Directicimes : actus de votre guide à Briançon</target>
       </trans-unit>
+      <trans-unit id="other_activities" resname="Other activities">
+        <source>Other activities</source>
+        <target>Autres activités</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

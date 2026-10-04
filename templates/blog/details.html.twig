@@ -38,9 +38,9 @@
 							{{article.location}}
 						</span>
 						{% if locale == 'fr' %}
-							<p>{{article.content|replace({'<h1>': '<h3>', '</h1>': "</h3>"})|raw }}</p>
+							<p>{{article.content|replace({'<h1>': '<h2>', '</h1>': "</h2>"})|raw }}</p>
 						{% else %}
-							<p>{{article.englishContent|replace({'<h1>': '<h3>', '</h1>': "</h3>"})|raw }}</p>
+							<p>{{article.englishContent|replace({'<h1>': '<h2>', '</h1>': "</h2>"})|raw }}</p>
 						{% endif %}
 
 					{% endif %}
@@ -73,9 +73,9 @@
 
 				{% if app.user %}
 					<div class="add-comment">
-						<h4>
+						<h2>
 							{% trans %}Add a comment{% endtrans %}
-						</h4>
+						</h2>
 						{{form_start(form)}}
 
 						{{form_row(form.content, {'attr': {'placeholder': 'Your comment'|trans}}

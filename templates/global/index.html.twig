@@ -104,6 +104,8 @@
 			{% endfor %}
 		</div>
 
+		{# titre invisible : évite le saut h1 -> h3 des cartes #}
+		<h2 class="sr-only">{% trans %}Activities{% endtrans %}</h2>
 		{% for disci in disciplines %}
 			<a
 				href="{{ path('detail', {id: disci.id, slug: disci.slug}) }}" class="discipline" title="Détails {{disci}}">
