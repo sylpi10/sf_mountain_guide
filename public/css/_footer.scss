@@ -12,7 +12,7 @@
         padding: 50px;
     }
     @media screen and (max-width: 820px) {
-        padding: 20px;
+        padding: 14px;
     }
 
     .about-footer {
@@ -28,20 +28,20 @@
         @media screen and (max-width: 820px) {
             flex-direction: column;
             width: 100%;
-            box-shadow:
-                rgba(17, 17, 26, 0.05) 0px 4px 16px,
-                rgba(17, 17, 26, 0.05) 0px 8px 32px;
+            // box-shadow:
+            //     rgba(17, 17, 26, 0.05) 0px 4px 16px,
+            //     rgba(17, 17, 26, 0.05) 0px 8px 32px;
             border-radius: 20px;
             padding: 20px 0;
             .footer-infos {
                 width: 100%;
                 text-align: center;
             }
-            .img {
+            .images-wrapper {
                 width: 100% !important;
                 display: flex;
                 justify-content: center !important;
-                gap: 8px;
+                margin: 20px auto;
                 img {
                     width: 110px;
                     height: 110px;
@@ -64,11 +64,10 @@
             list-style-type: none;
             margin: 12px;
         }
-        .img {
+
+        .images-wrapper {
             display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            width: 40%;
+            gap: 20px;
         }
         // liens légaux + secteurs : on borne la colonne pour garder les 3 colonnes sur une ligne
         @media screen and (min-width: 821px) {
@@ -80,16 +79,23 @@
         .footer-legal {
             border-top: 1px solid rgba(255, 255, 255, 0.4);
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 12px;
+            width: 100%;
+            flex-wrap: wrap;
+            gap: 20px;
             padding: 0;
             margin-top: 12px;
             padding-top: 6px;
-            font-size: 0.9rem;
-            font-style: italic;
-            a:hover {
-                color: $accent-color;
+            @media screen and (max-width: 820px) {
+                width: 100%;
+            }
+            a {
+                width: 100%;
+                font-size: 0.9rem;
+                font-style: italic;
+                text-align: center;
+                &:hover {
+                    color: $accent-color;
+                }
             }
         }
 
@@ -125,10 +131,15 @@ footer a > .icon:hover {
 .footer-copyright {
     margin-top: 40px;
     padding-top: 10px;
-    margin-bottom: -20px;
+    margin-bottom: 0px;
     border-top: 1px solid rgba(255, 255, 255, 0.4);
     font-size: 0.9rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
     a {
+        text-align: center;
         font-style: italic;
         text-decoration: underline;
         &:hover {
