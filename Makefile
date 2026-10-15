@@ -1,41 +1,71 @@
-.PHONY: deploy
+.PHONY: deploy deploy-test build-front check-deploy
 
 ifneq (,$(wildcard .env.deploy))
 include .env.deploy
 export
 endif
 
-ifneq (,$(wildcard .env.deploy))
-include .env.deploy
-export
-endif
+REMOTE = $(SERVER_USER)@$(SERVER_HOST)
+# échoue en 10 s au lieu d'attendre indéfiniment si le serveur ne répond pas ; une seule
+# connexion partagée par toutes les commandes (un seul mot de passe par déploiement)
+SSH = ssh -o ConnectTimeout=10 -o ControlMaster=auto -o ControlPath=~/.ssh/cm-%C -o ControlPersist=120
+RSYNC = rsync -az --itemize-changes -e "$(SSH)"
 
+# Jamais envoyé : fichiers locaux, et dossiers propres au serveur (uploads de l'admin, vendor,
+# cache…). Un dossier exclu n'est ni écrasé ni supprimé sur le serveur, même avec --delete.
+# Le « / » initial ancre à la racine du projet : sans lui, « vendor/ » exclurait aussi public/vendor/.
 RSYNC_EXCLUDES = \
-	--exclude node_modules/ \
-	--exclude vendor/ \
-	--exclude .git/ \
-	--exclude .env \
-	--exclude .env.local \
-	--exclude var/ \
-	--exclude Makefile \
-	--exclude Dockerfile \
-	--exclude compose.yml \
-	--exclude tests/ \
-	--exclude public/bundles/
+	--exclude '/.git/' \
+	--exclude '/node_modules/' \
+	--exclude '/vendor/' \
+	--exclude '/var/' \
+	--exclude '/tests/' \
+	--exclude '/deploy/' \
+	--exclude '/.sass-cache/' \
+	--exclude '/public/bundles/' \
+	--exclude '/public/uploads/' \
+	--exclude '/public/css/style.css.map' \
+	--exclude '/.env' \
+	--exclude '/.env.local' \
+	--exclude '/.env.local.php' \
+	--exclude '/.env.*.local' \
+	--exclude '/.env.deploy' \
+	--exclude '/.ftpquota' \
+	--exclude '/.phpactor.json' \
+	--exclude '/info.md' \
+	--exclude '/Makefile' \
+	--exclude '/Dockerfile' \
+	--exclude '/compose.yaml' \
+	--exclude '/Procfile'
 
-deploy:
-	rsync -av --itemize-changes ./ $(SERVER_USER)@$(SERVER_HOST):~/$(SERVER_PATH) \
-		$(RSYNC_EXCLUDES)
+# Dossiers de code envoyés en miroir exact : un fichier supprimé en local (ex. config d'un
+# bundle retiré) l'est aussi sur le serveur, sinon cache:clear plante
+MIRROR_DIRS = config src templates translations migrations
 
-	ssh $(SERVER_USER)@$(SERVER_HOST) "\
-		cd $(SERVER_PATH) && \
-		composer install --no-dev --optimize-autoloader && \
-		php bin/console cache:clear --env=prod \
-	"
+deploy: check-deploy build-front
+	$(RSYNC) $(RSYNC_EXCLUDES) ./ $(REMOTE):~/$(SERVER_PATH)
+	$(RSYNC) --delete --relative $(RSYNC_EXCLUDES) $(MIRROR_DIRS) $(REMOTE):~/$(SERVER_PATH)/
+	$(SSH) $(REMOTE) "set -e; cd $(SERVER_PATH); \
+		composer install --no-dev --optimize-autoloader --no-interaction; \
+		php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration --env=prod; \
+		php bin/console cache:clear --env=prod"
+	@echo "✅ Déploiement terminé"
 
-deploy-test:
-	rsync -av --itemize-changes --dry-run ./ $(SERVER_USER)@$(SERVER_HOST):~/$(SERVER_PATH) \
-		$(RSYNC_EXCLUDES)
+# Simulation : liste ce qui serait envoyé (et supprimé, lignes « *deleting »), sans rien toucher
+deploy-test: check-deploy
+	$(RSYNC) --dry-run $(RSYNC_EXCLUDES) ./ $(REMOTE):~/$(SERVER_PATH)
+	$(RSYNC) --dry-run --delete --relative $(RSYNC_EXCLUDES) $(MIRROR_DIRS) $(REMOTE):~/$(SERVER_PATH)/
+
+check-deploy:
+	@test -n "$(SERVER_HOST)" -a -n "$(SERVER_USER)" -a -n "$(SERVER_PATH)" || \
+		(echo "❌ .env.deploy manquant ou incomplet (SERVER_USER, SERVER_HOST, SERVER_PATH)" && exit 1)
+	@git diff --quiet HEAD || echo "⚠️  Modifications non commitées : elles partent aussi en prod"
+	@$(SSH) $(REMOTE) true 2>/dev/null || (echo "❌ Connexion SSH impossible à $(SERVER_HOST). Chez o2switch : cPanel > Autorisation SSH, ajoute ton IP actuelle ($$(curl -s --max-time 5 https://api.ipify.org))" && exit 1)
+
+# CSS compilé + éditeur CKEditor 5 copié dans public/vendor (postinstall de npm)
+build-front:
+	npm install --no-audit --no-fund
+	npm run sass
 
 up:
 	docker compose up -d

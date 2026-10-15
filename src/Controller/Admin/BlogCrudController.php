@@ -9,15 +9,20 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class BlogCrudController extends AbstractCrudController
 {
+    public function __construct(private CsrfTokenManagerInterface $csrfTokenManager)
+    {
+    }
+
     public static function getEntityFqcn(): string
     {
         return Blog::class;
@@ -28,8 +33,8 @@ class BlogCrudController extends AbstractCrudController
         return [
             TextField::new('title', 'Titre'),
             TextField::new('englishTitle', 'Titre anglais'),
-            TextEditorField::new('content', 'Mon texte')->setFormType(CKEditorType::class),
-            TextEditorField::new('englishContent', 'Mon texte en anglais')->setFormType(CKEditorType::class),
+            $this->richTextField('content', 'Mon texte'),
+            $this->richTextField('englishContent', 'Mon texte en anglais'),
             TextField::new('location', 'Lieu'),
             ImageField::new('image', 'Image')
                 ->onlyOnIndex()
@@ -46,8 +51,35 @@ class BlogCrudController extends AbstractCrudController
         return $crud
             ->setPageTitle('index', 'Articles')
             ->setPageTitle('edit', 'Modifier Un Article')
-            ->setPageTitle('new', 'Créer Un Article')
-            ->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig');
+            ->setPageTitle('new', 'Créer Un Article');
+    }
+
+    // CKEditor 5 (public/vendor/ckeditor5, copié par `npm install`), initialisé par js/admin-editor.js
+    public function configureAssets(Assets $assets): Assets
+    {
+        return $assets
+            ->addCssFile('vendor/ckeditor5/ckeditor5.css')
+            ->addCssFile('css/admin-editor.css')
+            ->addJsFile('vendor/ckeditor5/ckeditor5.umd.js')
+            ->addJsFile('vendor/ckeditor5/translations/fr.umd.js')
+            ->addJsFile('js/admin-editor.js');
+    }
+
+    private function richTextField(string $property, string $label): TextareaField
+    {
+        return TextareaField::new($property, $label)
+            ->hideOnIndex()
+            ->renderAsHtml()
+            // le textarea est masqué par l'éditeur : pas de « required » navigateur, NotBlank côté serveur
+            ->setRequired(false)
+            ->setFormTypeOptions([
+                'empty_data' => '',
+                'attr' => [
+                    'class' => 'js-rich-editor',
+                    'data-upload-url' => $this->generateUrl('admin_editor_upload'),
+                    'data-upload-token' => $this->csrfTokenManager->getToken(EditorUploadController::CSRF_ID)->getValue(),
+                ],
+            ]);
     }
 
     public function configureActions(Actions $actions): Actions

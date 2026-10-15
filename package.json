@@ -4,6 +4,11 @@
     },
     "scripts": {
         "sass": "sass public/css/style.scss public/css/style.css --style=compressed",
-        "sass:watch": "sass --watch public/css/style.scss:public/css/style.css --style=compressed"
+        "sass:watch": "sass --watch public/css/style.scss:public/css/style.css --style=compressed",
+        "ckeditor": "mkdir -p public/vendor/ckeditor5/translations && cp node_modules/ckeditor5/dist/browser/ckeditor5.umd.js node_modules/ckeditor5/dist/browser/ckeditor5.css public/vendor/ckeditor5/ && cp node_modules/ckeditor5/dist/translations/fr.umd.js public/vendor/ckeditor5/translations/",
+        "postinstall": "npm run ckeditor"
+    },
+    "dependencies": {
+        "ckeditor5": "^49.0.0"
     }
 }

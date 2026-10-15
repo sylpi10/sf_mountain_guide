@@ -42,7 +42,7 @@
 .article-details {
     margin: 40px auto;
     width: 100%;
-
+    position: relative;
     h2,
     h3 {
         font-family: "Share Tech";
@@ -55,7 +55,8 @@
     }
     .date-loc {
         font-size: 1.2rem;
-        margin-top: 14px;
+        display: flex;
+        margin-top: 20px;
         color: $base-color;
     }
     img {
@@ -66,9 +67,7 @@
     }
     p {
         display: flex;
-        justify-content: space-around;
         flex-wrap: wrap;
-        padding: 20px 0;
     }
 }
 
@@ -76,6 +75,123 @@
 .article-details h2 {
     font-size: 1.6rem;
 }
+
+// texte de l'article écrit avec CKEditor 5 (admin) : paragraphes, intertitres, images, citations…
+.article-body {
+    margin-top: 30px;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    overflow-wrap: break-word;
+
+    p {
+        display: block;
+        padding: 0;
+        margin: 0 0 1rem;
+    }
+    h2 {
+        margin: 2.5rem 0 1rem;
+    }
+    h3 {
+        font-size: 1.3rem;
+        margin: 2rem 0 0.75rem;
+    }
+    a {
+        color: $base-color;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+    blockquote {
+        margin: 1.5rem 0;
+        padding: 0.5rem 1.25rem;
+        border-left: 4px solid $base-color;
+        background-color: $bg-soft;
+        font-style: italic;
+    }
+    table {
+        width: 100%;
+        margin: 1.5rem 0;
+        border-collapse: collapse;
+        td,
+        th {
+            padding: 0.5rem;
+            border: 1px solid #dee2e6;
+        }
+    }
+    hr {
+        width: 100%;
+        margin: 2rem 0;
+        background-color: #ccc;
+        opacity: 1;
+    }
+
+    // images CKEditor : <figure class="image"> (+ légende), alignements, redimensionnement en %
+    figure.image {
+        display: table;
+        clear: both;
+        margin: 1.5rem auto;
+        max-width: 100%;
+        img {
+            display: block;
+            margin: 0;
+            width: 100%;
+            border-radius: 8px;
+        }
+        &.image_resized {
+            display: block;
+            img {
+                width: 100%;
+            }
+        }
+    }
+    figcaption {
+        display: table-caption;
+        caption-side: bottom;
+        padding: 0.5rem;
+        font-size: 0.9rem;
+        color: #6c757d;
+        text-align: center;
+    }
+    img.image_resized {
+        height: auto;
+    }
+    .image-style-align-left {
+        float: left;
+        margin: 0.5rem 1.5rem 1rem 0;
+        max-width: 50%;
+    }
+    .image-style-align-right {
+        float: right;
+        margin: 0.5rem 0 1rem 1.5rem;
+        max-width: 50%;
+    }
+    .image-inline img {
+        margin: 0;
+    }
+    .text-tiny {
+        font-size: 0.7em;
+    }
+    .text-small {
+        font-size: 0.85em;
+    }
+    .text-big {
+        font-size: 1.4em;
+    }
+
+    // vidéos YouTube / Vimeo (mediaEmbed, aperçu enregistré dans le HTML)
+    figure.media {
+        margin: 1.5rem 0;
+    }
+
+    @media screen and (max-width: 600px) {
+        .image-style-align-left,
+        .image-style-align-right {
+            float: none;
+            margin: 1rem auto;
+            max-width: 100%;
+        }
+    }
+}
+
 .read-more {
     margin-top: 24px;
     a {
@@ -110,7 +226,6 @@
 }
 
 // blog details
-
 .comments {
     background-color: #eee;
     padding: 20px;

@@ -26,3 +26,4 @@ info.md
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
 /node_modules
+/public/vendor/ckeditor5/

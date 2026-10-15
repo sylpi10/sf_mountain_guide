@@ -1,0 +1,14 @@
+/* éditeur CKEditor 5 des articles (admin) */
+.ck-editor__editable_inline {
+    min-height: 400px;
+    max-height: 70vh;
+}
+.ck-content h2 {
+    font-size: 1.6rem;
+}
+.ck-content h3 {
+    font-size: 1.3rem;
+}
+.ck-content img {
+    max-width: 100%;
+}
