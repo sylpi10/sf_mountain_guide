@@ -9,7 +9,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Component\Routing\Attribute\Route;
 
 class DisciplinesController extends AbstractController
 {
@@ -30,7 +31,7 @@ class DisciplinesController extends AbstractController
     public function detail(
         $id,
         Request $request,
-        Discipline $discipline,
+        #[MapEntity(id: 'id')] Discipline $discipline,
         string $slug,
     ): Response {
         if ($discipline->getSlug() !== $slug) {

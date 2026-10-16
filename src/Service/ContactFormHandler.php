@@ -11,6 +11,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
@@ -58,13 +59,13 @@ class ContactFormHandler
             // robot : on redirige sans rien envoyer ni lui signaler
             if (!$this->isSpam($request)) {
                 $this->send($form, $request);
-                $request
-                    ->getSession()
-                    ->getFlashBag()
-                    ->add(
+                $session = $request->getSession();
+                if ($session instanceof FlashBagAwareSessionInterface) {
+                    $session->getFlashBag()->add(
                         "success",
                         $this->translator->trans("Your email has been send"),
                     );
+                }
             }
 
             return new RedirectResponse($redirectUrl);

@@ -30,6 +30,7 @@ class UserCrudController extends AbstractCrudController
      * @var Security
      */
     private $security;
+    private ?string $password = null;
 
     public function __construct(
         UserPasswordHasherInterface $passwordEncoder,

@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Repository\AlbumRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class PhotosController extends AbstractController
 {

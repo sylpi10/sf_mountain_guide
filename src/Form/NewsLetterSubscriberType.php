@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints\IsTrue;
 
 class NewsLetterSubscriberType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('fullname', TextType::class, [
@@ -24,13 +24,13 @@ class NewsLetterSubscriberType extends AbstractType
             ])
             ->add('isRgpd', CheckboxType::class, [
                 "label" => false,
-                "constraints" => new IsTrue([
-                    'message' => "Vous devez accepter la collecte de vos données personnelles"
-                ])
+                "constraints" => new IsTrue(
+                    message: "Vous devez accepter la collecte de vos données personnelles"
+                )
             ]);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => NewsLetterSubscriber::class,

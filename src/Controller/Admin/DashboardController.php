@@ -2,28 +2,16 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Blog;
-use App\Entity\User;
-use App\Entity\About;
-use App\Entity\Comment;
-use App\Entity\Contact;
-use App\Entity\ContactRecipient;
-use App\Entity\SiteImage;
-use App\Entity\SiteText;
-use App\Entity\Discipline;
-use App\Entity\NewsLetterSubscriber;
-use App\Entity\PricingPage;
-use App\Entity\LegalPage;
-use App\Entity\AreaPage;
 // use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 // use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlGenerator;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 
+#[AdminDashboard(routePath: "/admin", routeName: "admin")]
 class DashboardController extends AbstractDashboardController
 {
     private AdminUrlGenerator $adminUrlGenerator;
@@ -32,7 +20,6 @@ class DashboardController extends AbstractDashboardController
         $this->adminUrlGenerator = $adminUrlGenerator;
     }
 
-    #[Route(path: "/admin", name: "admin")]
     public function index(): Response
     {
         $url = $this->adminUrlGenerator
@@ -50,52 +37,20 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linktoDashboard("Mon Dashboard", "fa fa-home");
-        yield MenuItem::linkToCrud(
-            "Disciplines",
-            "fas fa-skiing",
-            Discipline::class,
-        );
-        yield MenuItem::linkToCrud("Utilisateurs", "fas fa-user", User::class);
-        yield MenuItem::linkToCrud(
-            "About",
-            "fas fa-address-card",
-            About::class,
-        );
-        yield MenuItem::linkToCrud("Tarifs", "fas fa-euro-sign", PricingPage::class);
-        yield MenuItem::linkToCrud("CGV / pages légales", "fas fa-file-contract", LegalPage::class);
-        yield MenuItem::linkToCrud("Pages secteurs (SEO)", "fas fa-map-marked-alt", AreaPage::class);
-        yield MenuItem::linkToCrud(
-            "Images du site",
-            "fas fa-image",
-            SiteImage::class,
-        );
-        yield MenuItem::linkToCrud(
-            "Textes de présentation des activités",
-            "fas fa-align-left",
-            SiteText::class,
-        );
-        yield MenuItem::linkToCrud(
-            "Abonnés à la Newsletter",
-            "far fa-paper-plane",
-            NewsLetterSubscriber::class,
-        );
-        yield MenuItem::linkToCrud(
-            "Mails reçus",
-            "fas fa-envelope-open-text",
-            Contact::class,
-        );
-        yield MenuItem::linkToCrud(
-            "Destinataires des mails",
-            "fas fa-at",
-            ContactRecipient::class,
-        );
-        yield MenuItem::linkToCrud("Blog", "fas fa-newspaper", Blog::class);
-        yield MenuItem::linkToCrud(
-            "Commentaires",
-            "fas fa-solid fa-comments",
-            Comment::class,
-        );
+        yield MenuItem::linkToDashboard("Mon Dashboard", "fa fa-home");
+        yield MenuItem::linkTo(DisciplineCrudController::class, "Disciplines", "fas fa-skiing");
+        yield MenuItem::linkTo(UserCrudController::class, "Utilisateurs", "fas fa-user");
+        yield MenuItem::linkTo(AboutCrudController::class, "About", "fas fa-address-card");
+        yield MenuItem::linkTo(PricingPageCrudController::class, "Tarifs", "fas fa-euro-sign");
+        yield MenuItem::linkTo(LegalPageCrudController::class, "CGV / pages légales", "fas fa-file-contract");
+        yield MenuItem::linkTo(AreaPageCrudController::class, "Pages secteurs (SEO)", "fas fa-map-marked-alt");
+        yield MenuItem::linkTo(SiteImageCrudController::class, "Images du site", "fas fa-image");
+        yield MenuItem::linkTo(SiteTextCrudController::class, "Textes de présentation des activités", "fas fa-align-left");
+        yield MenuItem::linkTo(NewsLetterSubscriberCrudController::class, "Abonnés à la Newsletter", "far fa-paper-plane");
+        yield MenuItem::linkTo(ContactCrudController::class, "Mails reçus", "fas fa-envelope-open-text");
+        yield MenuItem::linkTo(ContactRecipientCrudController::class, "Destinataires des mails", "fas fa-at");
+        yield MenuItem::linkTo(BlogCrudController::class, "Blog", "fas fa-newspaper");
+        yield MenuItem::linkTo(CommentCrudController::class, "Commentaires", "fas fa-solid fa-comments");
     }
     // public function configureCrud(): Crud
     // {

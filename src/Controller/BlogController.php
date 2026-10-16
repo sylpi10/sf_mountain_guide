@@ -15,7 +15,8 @@ use Symfony\Component\HttpFoundation\Response;
 // use Symfony\Component\Security\Core\Security;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Component\Routing\Attribute\Route;
 
 class BlogController extends AbstractController
 {
@@ -70,7 +71,7 @@ class BlogController extends AbstractController
      * @return Response
      */
     #[Route(path: '/blog/{slug}-{id}', name: 'blog_detail', requirements: ['slug' => '[a-z0-9\-]*'])]
-    public function detail(Blog $post, Request $request): Response
+    public function detail(#[MapEntity(id: 'id')] Blog $post, Request $request): Response
     {
         $comment = new Comment();
         $comment->setPost($post);

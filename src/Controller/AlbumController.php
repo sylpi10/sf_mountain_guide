@@ -10,7 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: "/admin")]
 class AlbumController extends AbstractController
@@ -61,16 +62,16 @@ class AlbumController extends AbstractController
         ]);
     }
 
-    #[Route(path: "/{id}", name: "album_show", methods: ["GET"])]
-    public function show(Album $album): Response
+    #[Route(path: "/{id}", name: "album_show", requirements: ["id" => "\d+"], methods: ["GET"])]
+    public function show(#[MapEntity(id: 'id')] Album $album): Response
     {
         return $this->render("album/show.html.twig", [
             "album" => $album,
         ]);
     }
 
-    #[Route(path: "/{id}/edit", name: "album_edit", methods: ["GET", "POST"])]
-    public function edit(Request $request, Album $album): Response
+    #[Route(path: "/{id}/edit", name: "album_edit", requirements: ["id" => "\d+"], methods: ["GET", "POST"])]
+    public function edit(Request $request, #[MapEntity(id: 'id')] Album $album): Response
     {
         $form = $this->createForm(AlbumType::class, $album);
         $form->handleRequest($request);
@@ -101,8 +102,8 @@ class AlbumController extends AbstractController
         ]);
     }
 
-    #[Route(path: "/{id}", name: "album_delete", methods: ["DELETE"])]
-    public function delete(Request $request, Album $album): Response
+    #[Route(path: "/{id}", name: "album_delete", requirements: ["id" => "\d+"], methods: ["DELETE"])]
+    public function delete(Request $request, #[MapEntity(id: 'id')] Album $album): Response
     {
         if (
             $this->isCsrfTokenValid(

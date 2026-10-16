@@ -14,7 +14,7 @@ class TypeCastingExtension extends AbstractExtension
     /**
      * @return array|\Twig_Filter[]
      */
-    public function getFilters()
+    public function getFilters(): array
     {
         return [
             new TwigFilter('int', function ($value) {
