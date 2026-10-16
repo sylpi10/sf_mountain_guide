@@ -2,43 +2,20 @@
 
 namespace App\Controller;
 
-use App\Entity\Contact;
-use App\Form\ContactType;
-use App\Repository\ContactRecipientRepository;
 use App\Repository\DisciplineRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use App\Service\ContactFormHandler;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class GlobalController extends AbstractController
 {
-    // si aucun destinataire actif en admin, pour ne jamais perdre un message
-    private const FALLBACK_RECIPIENT = "contact@directicimes.com";
-
-    private MailerInterface $mailer;
-    private TranslatorInterface $translator;
-    private DisciplineRepository $disciplineRepo;
-    private EntityManagerInterface $manager;
-    private ContactRecipientRepository $recipientRepo;
-
     public function __construct(
-        MailerInterface $mailer,
-        TranslatorInterface $translator,
-        DisciplineRepository $disciplineRepo,
-        EntityManagerInterface $manager,
-        ContactRecipientRepository $recipientRepo,
+        private DisciplineRepository $disciplineRepo,
+        private ContactFormHandler $contactForm,
     ) {
-        $this->mailer = $mailer;
-        $this->translator = $translator;
-        $this->disciplineRepo = $disciplineRepo;
-        $this->manager = $manager;
-        $this->recipientRepo = $recipientRepo;
     }
 
     /**
@@ -48,74 +25,20 @@ class GlobalController extends AbstractController
     #[Route(path: "/", name: "home")]
     public function index(Request $request): Response
     {
-        $sentEmail = new Contact();
-        $form = $this->createForm(ContactType::class);
-        $contact = $form->handleRequest($request);
-        $session = $request->getSession();
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            // honeypot for robots
-            $honeypot = trim((string) $request->request->get("website", ""));
-            $token = (string) $request->request->get("contact_token", "");
-            $formTime = (int) $request->request->get("contact_time", 0);
-            $sessionToken = (string) $session->get("contact_form_token", "");
-            $now = time();
-            $isTooFast = $formTime > 0 ? $now - $formTime < 4 : true;
-            $isTooOld = $formTime > 0 ? $now - $formTime > 86400 : true;
-            $tokenInvalid = $token === "" || $token !== $sessionToken;
-
-            if ($honeypot !== "" || $tokenInvalid || $isTooFast || $isTooOld) {
-                return $this->redirectToRoute("home");
-                // if not filled, handle request
-            } else {
-                $email = new TemplatedEmail()
-                    // expéditeur = notre domaine (SPF/DMARC), le visiteur en reply-to
-                    ->from(
-                        new Address("contact@directicimes.com", "DirectiCimes"),
-                    )
-                    ->replyTo($contact->get("email")->getData())
-                    ->to(
-                        ...($this->recipientRepo->findActiveEmails() ?: [
-                            self::FALLBACK_RECIPIENT,
-                        ]),
-                    )
-                    ->subject("Nouveau Message depuis DirectiCimes")
-                    // ->htmlTemplate("global/index.html.twig")
-                    ->text($contact->get("message")->getData())
-                    ->context([
-                        "form" => $form->createView(),
-                    ]);
-
-                $sentEmail->setName($form->get("name")->getData());
-                $sentEmail->setEmail($form->get("email")->getData());
-                $sentEmail->setMessage($form->get("message")->getData());
-
-                // persist contact infos
-                $this->manager->persist($sentEmail);
-                $this->manager->flush();
-
-                $this->mailer->send($email);
-
-                // $notification->notify($contact);
-                $message = $this->translator->trans("Your email has been send");
-
-                $this->addFlash("success", $message);
-                // return $this->redirect($this->generateUrl("home") . "#top");
-                return $this->redirectToRoute("home");
-            }
+        $contact = $this->contactForm->handle(
+            $request,
+            $this->generateUrl("home", ["_fragment" => "contact-form"]),
+        );
+        if ($contact instanceof RedirectResponse) {
+            return $contact;
         }
-
-        [$contactToken, $contactTime] = $this->refreshContactGuards($request);
 
         // return every disciplines on home page
         $disciplines = $this->disciplineRepo->findAll();
         return $this->render("global/index.html.twig", [
-            "form" => $form->createView(),
             "disciplines" => $disciplines,
             "displayBtn" => true,
-            "contact_token" => $contactToken,
-            "contact_time" => $contactTime,
-        ]);
+        ] + $contact);
     }
 
     /**
@@ -138,17 +61,5 @@ class GlobalController extends AbstractController
         return $this->redirect(
             $request->headers->get("referer") ?: $this->generateUrl("home"),
         );
-    }
-
-    private function refreshContactGuards(Request $request): array
-    {
-        $token = bin2hex(random_bytes(16));
-        $time = time();
-
-        $session = $request->getSession();
-        $session->set("contact_form_token", $token);
-        $session->set("contact_form_time", $time);
-
-        return [$token, $time];
     }
 }

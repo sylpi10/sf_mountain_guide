@@ -10,7 +10,7 @@
 {% block body_class %}base-page
 {% endblock %}
 {# vignette Google / réseaux sociaux : portrait du guide plutôt que le paysage par défaut #}
-{% block og_image %}{{ site_url ~ asset('images/profile.jpg') }}{% endblock %}
+{% block og_image %}{{ site_url ~ asset('images/profil-contact.webp') }}{% endblock %}
 {% block head_extra %}
 	<script type="application/ld+json">
 	{{ {
@@ -76,13 +76,14 @@
 
 			<div class="pricing-cta">
 				<p>{% trans %}A project in mind? I will send you a personalised quote.{% endtrans %}</p>
-				<a class="btn more-link" href="{{ path('home', {'_fragment': 'contact-form'}) }}">{% trans %}Contact me{% endtrans %}</a>
+				<a class="btn more-link" href="#contact-form">{% trans %}Contact me{% endtrans %}</a>
 				<p class="area-prices"><a href="{{ path('pricing') }}">{% trans %}See all prices{% endtrans %}</a></p>
 			</div>
 		</div>
 	</main>
 
-	<div>
+	<div class="contact" id="contact-form">
+		{% include "contact.html.twig" %}
 		{% include "footer.html.twig" %}
 	</div>
 {% endblock %}

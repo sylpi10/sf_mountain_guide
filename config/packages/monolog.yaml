@@ -1,0 +1,18 @@
+when@dev:
+    monolog:
+        handlers:
+            main:
+                type: stream
+                path: "%kernel.logs_dir%/%kernel.environment%.log"
+                level: debug
+                channels: ["!event"]
+
+when@prod:
+    monolog:
+        handlers:
+            # erreurs (dont les échecs d'envoi du formulaire de contact) dans var/log/prod.log
+            main:
+                type: rotating_file
+                path: "%kernel.logs_dir%/%kernel.environment%.log"
+                level: error
+                max_files: 30

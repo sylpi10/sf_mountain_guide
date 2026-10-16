@@ -9,6 +9,10 @@ parameters:
   app.path.blog_images: /uploads
   app.path.discipline_images: /uploads
   app.path.discipline_images_detail: /uploads
+  # expéditeur des mails du formulaire : doit être le compte du MAILER_DSN (SPF/DMARC)
+  env(MAILER_FROM): contact@directicimes.com
+  # sujet ntfy.sh qui reçoit une alerte si un mail de contact ne part pas (vide = pas d'alerte)
+  env(NTFY_TOPIC): ""
 services:
   # default configuration for services in *this* file
   _defaults:
@@ -31,6 +35,11 @@ services:
     resource: "../src/Controller/"
     tags: ["controller.service_arguments"]
     public: true
+
+  App\Service\ContactFormHandler:
+    arguments:
+      $mailerFrom: "%env(MAILER_FROM)%"
+      $ntfyTopic: "%env(NTFY_TOPIC)%"
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones# config/packages/vich_uploader.yaml
