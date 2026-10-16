@@ -10,7 +10,7 @@
 {% block body_class %}base-page
 {% endblock %}
 {# vignette Google / réseaux sociaux : portrait du guide plutôt que le paysage par défaut #}
-{% block og_image %}{{ site_url ~ asset('images/profil-contact.webp') }}{% endblock %}
+{% block og_image %}{{ site_url ~ asset('images/profile-share.jpg') }}{% endblock %}
 {% block head_extra %}
 	<script type="application/ld+json">
 	{{ {
@@ -18,14 +18,14 @@
 		'@type': 'WebPage',
 		'url': site_url ~ app.request.pathInfo,
 		'name': block('title')|striptags|trim,
-		'primaryImageOfPage': site_url ~ asset('images/profile.jpg'),
-		'image': site_url ~ asset('images/profile.jpg'),
+		'primaryImageOfPage': site_url ~ asset('images/profile-share.jpg'),
+		'image': site_url ~ asset('images/profile-share.jpg'),
 		'author': {
 			'@type': 'Person',
 			'@id': site_url ~ '/#yoann-georges',
 			'name': 'Yoann Georges',
 			'jobTitle': 'Guide de haute montagne UIAGM',
-			'image': site_url ~ asset('images/profile.jpg'),
+			'image': site_url ~ asset('images/profile-share.jpg'),
 			'url': site_url ~ path('about'),
 		},
 		'provider': {'@id': site_url ~ '/#guide'},
@@ -40,7 +40,7 @@
 			<h1>{{ (is_en ? page.titleEn : null) ?: page.title }}</h1>
 
 			<a class="area-guide" href="{{ path('about') }}">
-				<img src="{{ asset('images/profile.jpg') }}" alt="Yoann Georges, {% trans %}IFMGA mountain guide{% endtrans %}" width="96" height="90">
+				<img src="{{ asset('images/profile-contact.webp') }}" alt="Yoann Georges, {% trans %}IFMGA mountain guide{% endtrans %}" width="96" height="90">
 				<span>
 					<strong>Yoann Georges</strong>
 					{% trans %}IFMGA mountain guide{% endtrans %}
