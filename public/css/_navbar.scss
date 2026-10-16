@@ -40,6 +40,7 @@
     display: none;
     &.show {
         display: block;
+        width: 90%;
     }
 }
 .navbar-dark {
@@ -49,6 +50,7 @@
     }
     .navbar-nav .nav-link {
         color: rgba(255, 255, 255, 0.5);
+
         &:hover {
             color: rgba(255, 255, 255, 0.75);
         }

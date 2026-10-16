@@ -29,18 +29,20 @@
 }
 ul.right-nav {
     background-color: $second-color;
-    width: 20%;
-    min-width: 300px;
+    width: fit-content;
     align-self: center;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     font-size: 0.9rem;
+
     li {
         list-style-type: none;
+
         a {
             color: #fff;
             transition: color $transition-fast;
             font-size: 0.8rem;
+            text-align: center;
             &:hover {
                 color: $accent-color;
                 text-decoration: none;
@@ -59,6 +61,10 @@ ul.right-nav {
 @media screen and (max-width: 1200px) {
     .nav-primary {
         margin-left: -200px;
+    }
+    ul.right-nav {
+        flex-wrap: wrap;
+        gap: 4px;
     }
 }
 @media screen and (max-width: 991px) {
@@ -96,6 +102,9 @@ ul.right-nav {
                 font-weight: bold !important;
             }
         }
+    }
+    ul.right-nav li a {
+        border: solid 1px #fff;
     }
 }
 
