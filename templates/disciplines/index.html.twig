@@ -28,7 +28,10 @@
 					{% set url = path('detail', {id: disci.id, slug: disci.slug}) %}
 					<article class="activity">
 						<a class="activity-image" href="{{ url }}" tabindex="-1" aria-hidden="true">
-							<img src="{{ asset('uploads/' ~ disci.image) }}" alt="" loading="{{ loop.first ? 'eager' : 'lazy' }}">
+							{% set img = upload_image(disci.image, constant('App\\Entity\\Discipline::IMAGE_WIDTHS')['discipline_images']) %}
+							{% if img %}
+								<img src="{{ img.src }}" {% if img.srcset %}srcset="{{ img.srcset }}" sizes="(max-width: 768px) 100vw, 490px"{% endif %} {% if img.width %}width="{{ img.width }}" height="{{ img.height }}"{% endif %} alt="" loading="{{ loop.first ? 'eager' : 'lazy' }}" decoding="async">
+							{% endif %}
 						</a>
 						<div class="activity-body">
 							<h2><a href="{{ url }}">{{ title }}</a></h2>

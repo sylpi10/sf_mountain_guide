@@ -44,12 +44,20 @@ class ImageOptimizer
      */
     public function delete(string $path): void
     {
-        foreach (glob($this->basePath($path) . '-[0-9]*.webp') ?: [] as $variant) {
-            @unlink($variant);
-        }
+        $this->deleteVariants($path);
 
         if (is_file($path)) {
             @unlink($path);
+        }
+    }
+
+    /**
+     * Supprime seulement les déclinaisons (photo-123-500.webp…), pas l'image principale.
+     */
+    public function deleteVariants(string $path): void
+    {
+        foreach (glob($this->basePath($path) . '-[0-9]*.webp') ?: [] as $variant) {
+            @unlink($variant);
         }
     }
 

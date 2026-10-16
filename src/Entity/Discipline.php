@@ -14,6 +14,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: DisciplineRepository::class)]
 class Discipline
 {
+    // largeurs WebP générées à l'upload, par mapping Vich (la plus grande = image principale)
+    public const IMAGE_WIDTHS = [
+        'discipline_images' => [480, 960],
+        'discipline_images_detail' => [1280, 1920, 2560],
+    ];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]

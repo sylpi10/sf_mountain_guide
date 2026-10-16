@@ -77,6 +77,14 @@
     color: #fff;
     transition: transform 0.6s ease;
 }
+// photo en <img> (srcset WebP) sous le dégradé et le titre
+.discipline-title > img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 .discipline-title > h3 {
     position: relative;
     z-index: 2;

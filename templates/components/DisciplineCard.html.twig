@@ -4,7 +4,11 @@
 {% set title = fr ? discipline.title : discipline.englishTitle %}
 <a href="{{ path('detail', {id: discipline.id, slug: discipline.slug}) }}" class="discipline" title="Détails {{ title }}">
 	<div class="discipline-image">
-		<div class="discipline-title" style="background:url('{{ asset('uploads/' ~ discipline.image) }}') center no-repeat;background-size:cover;">
+		<div class="discipline-title">
+			{% set img = upload_image(discipline.image, constant('App\\Entity\\Discipline::IMAGE_WIDTHS')['discipline_images']) %}
+			{% if img %}
+				<img src="{{ img.src }}" {% if img.srcset %}srcset="{{ img.srcset }}" sizes="(max-width: 500px) 100vw, 500px"{% endif %} {% if img.width %}width="{{ img.width }}" height="{{ img.height }}"{% endif %} alt="" loading="lazy" decoding="async">
+			{% endif %}
 			<h3>{{ title }}</h3>
 		</div>
 	</div>

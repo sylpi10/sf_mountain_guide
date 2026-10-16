@@ -7,12 +7,27 @@
 	{% if app.request.locale == 'fr' %}{{ discipline.content|plain_text }}{% else %}{{ discipline.englishContent|plain_text }}{% endif %}
 {% endblock %}
 
+{% block head_extra %}
+	{# image de fond : la plus petite déclinaison par défaut, une plus grande dès que l'écran la dépasse #}
+	{% set bg = upload_image(discipline.imageDetail, constant('App\\Entity\\Discipline::IMAGE_WIDTHS')['discipline_images_detail']) %}
+	{% if bg %}
+		<style>
+			{% set previous = null %}
+			{% for width, url in bg.variants|default({0: bg.src}) %}
+				{% if previous %}@media (min-width: {{ previous + 1 }}px) { {% endif %}
+				.discipline-bg { background-image: url('{{ url }}'); }
+				{% if previous %}}{% endif %}
+				{% set previous = width %}
+			{% endfor %}
+		</style>
+	{% endif %}
+{% endblock %}
 {% block body %}
 	<main class="details">
 		{% for locale in locales %}
 			{% if locale == app.request.locale %}
 				{# <div class="disciplines {{discipline|replace({" ":" -"})|lower|trim}}" id=""> #}
-				<div data-jarallax data-speed="0.4" class="disciplines jarallax {{discipline.slug|lower}}" id="" style="background-image:url('../uploads/{{discipline.imageDetail}}')">
+				<div data-jarallax data-speed="0.4" class="disciplines discipline-bg jarallax {{discipline.slug|lower}}" id="">
 					<div class=" container-fluid">
 						<div class="text-wrapper">
 							<div class="text">
