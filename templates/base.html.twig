@@ -65,7 +65,9 @@
 			'sameAs': ['https://facebook.com/directicimes/', 'https://instagram.com/directicimes'],
 			'founder': {
 				'@type': 'Person',
+				'@id': site_url ~ '/#yoann-georges',
 				'name': 'Yoann Georges',
+				'image': site_url ~ asset('images/profile.jpg'),
 				'jobTitle': 'Guide de haute montagne',
 				'hasCredential': {
 					'@type': 'EducationalOccupationalCredential',
@@ -75,6 +77,18 @@
 			},
 		}|json_encode(constant('JSON_UNESCAPED_UNICODE') b-or constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_HEX_TAG'))|raw }}
 		</script>
+		{# nom de site affiché par Google au-dessus de l'URL (lu sur la page d'accueil) #}
+		{% if app.request.attributes.get('_route') == 'home' %}
+		<script type="application/ld+json">
+		{{ {
+			'@context': 'https://schema.org',
+			'@type': 'WebSite',
+			'name': 'Yoann Georges - Directicimes',
+			'alternateName': ['Directicimes', 'Yoann Georges guide de haute montagne'],
+			'url': site_url ~ '/',
+		}|json_encode(constant('JSON_UNESCAPED_UNICODE') b-or constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_HEX_TAG'))|raw }}
+		</script>
+		{% endif %}
 		{# favicon : SVG net à toutes les tailles, ICO 16/32/48 en repli (Google exige un multiple de 48 px) #}
 		<link rel="icon" href="{{ asset('favicon.ico') }}" sizes="48x48">
 		<link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">

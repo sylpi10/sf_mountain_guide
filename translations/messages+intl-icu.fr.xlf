@@ -323,6 +323,10 @@
         <source>Other areas:</source>
         <target>Autres secteurs :</target>
       </trans-unit>
+      <trans-unit id="area_guide" resname="IFMGA mountain guide">
+        <source>IFMGA mountain guide</source>
+        <target>Guide de haute montagne UIAGM</target>
+      </trans-unit>
       <trans-unit id="area_4" resname="Areas:">
         <source>Areas:</source>
         <target>Secteurs :</target>

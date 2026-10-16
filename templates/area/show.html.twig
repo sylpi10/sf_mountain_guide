@@ -9,12 +9,43 @@
 {% endblock %}
 {% block body_class %}base-page
 {% endblock %}
+{# vignette Google / réseaux sociaux : portrait du guide plutôt que le paysage par défaut #}
+{% block og_image %}{{ site_url ~ asset('images/profile.jpg') }}{% endblock %}
+{% block head_extra %}
+	<script type="application/ld+json">
+	{{ {
+		'@context': 'https://schema.org',
+		'@type': 'WebPage',
+		'url': site_url ~ app.request.pathInfo,
+		'name': block('title')|striptags|trim,
+		'primaryImageOfPage': site_url ~ asset('images/profile.jpg'),
+		'image': site_url ~ asset('images/profile.jpg'),
+		'author': {
+			'@type': 'Person',
+			'@id': site_url ~ '/#yoann-georges',
+			'name': 'Yoann Georges',
+			'jobTitle': 'Guide de haute montagne UIAGM',
+			'image': site_url ~ asset('images/profile.jpg'),
+			'url': site_url ~ path('about'),
+		},
+		'provider': {'@id': site_url ~ '/#guide'},
+	}|json_encode(constant('JSON_UNESCAPED_UNICODE') b-or constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_HEX_TAG'))|raw }}
+	</script>
+{% endblock %}
 {% block body %}
 	{% set is_en = app.request.locale == 'en' %}
 
 	<main class="legal-page area-page">
 		<div class="container legal-container">
 			<h1>{{ (is_en ? page.titleEn : null) ?: page.title }}</h1>
+
+			<a class="area-guide" href="{{ path('about') }}">
+				<img src="{{ asset('images/profile.jpg') }}" alt="Yoann Georges, {% trans %}IFMGA mountain guide{% endtrans %}" width="96" height="90">
+				<span>
+					<strong>Yoann Georges</strong>
+					{% trans %}IFMGA mountain guide{% endtrans %}
+				</span>
+			</a>
 
 			{# l'éditeur de l'admin ne produit que des <h1> : on les passe en <h2> sous le titre de page #}
 			<div class="legal-content">

@@ -51,6 +51,29 @@
         text-transform: uppercase;
         letter-spacing: 1px;
     }
+    .area-guide {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        margin: 1.5rem auto 0;
+        color: inherit;
+        img {
+            width: 96px;
+            height: 96px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: solid 1px navy;
+        }
+        span {
+            display: flex;
+            flex-direction: column;
+        }
+        strong {
+            color: $second-color;
+            font-size: 1.15rem;
+        }
+    }
     .pricing-item {
         justify-content: space-between;
     }
