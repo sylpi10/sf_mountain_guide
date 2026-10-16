@@ -1,9 +1,12 @@
 @use "variables" as *;
 
 /* NAV BAR*/
-.home-page .menu:not(.scrolled-nav) .logo img#logo {
-    width: 110px;
-    height: 110px;
+
+@media screen and (min-width: 991px) {
+    .home-page .menu:not(.scrolled-nav) .logo img#logo {
+        width: 110px;
+        height: 110px;
+    }
 }
 
 .menu {
@@ -18,16 +21,12 @@
         }
     }
 
-    .nav-primary {
+    .navbar-nav {
         margin: auto;
         justify-self: center;
         text-align: center;
         display: flex;
         justify-content: center;
-    }
-
-    ul {
-        padding: 6px;
     }
 }
 ul.right-nav {
@@ -37,10 +36,10 @@ ul.right-nav {
     display: flex;
     justify-content: center;
     font-size: 0.9rem;
-
+    padding-left: 0;
+    margin-bottom: 0;
     li {
         list-style-type: none;
-
         a {
             color: #fff;
             transition: color $transition-fast;
@@ -127,22 +126,7 @@ ul.right-nav {
         }
     }
     ul li a {
-        color: #fff !important;
-    }
-}
-
-// nav menu
-nav ul.navbar-nav li a {
-    text-transform: uppercase;
-    color: #fff;
-    border-bottom: solid 1px transparent;
-    font-weight: 400 !important;
-    min-width: 100px;
-    text-align: center;
-    transition: border-color $transition-fast;
-    &:hover,
-    &:active {
-        border-bottom: solid 1px $text-color;
-        font-weight: bold;
+        color: #fff;
+        font-weight: normal;
     }
 }
