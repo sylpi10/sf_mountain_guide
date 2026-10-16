@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route(path: "/admin")]
+#[Route(path: "/admin/album")]
 class AlbumController extends AbstractController
 {
     #[Route(path: "/", name: "album_index", methods: ["GET"])]

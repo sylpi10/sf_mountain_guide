@@ -3,10 +3,14 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Discipline;
+use App\Enum\PriceUnit;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
@@ -72,8 +76,24 @@ class DisciplineCrudController extends AbstractCrudController
                 ->setBasePath('/uploads'),
             TextField::new('imageDetailFile', 'image de fond de la page de détails')
                 ->onlyOnForms()
-                ->setFormType(VichImageType::class)
+                ->setFormType(VichImageType::class),
 
+            FormField::addFieldset('Carte produit (accueil et « autres activités »)')
+                ->setHelp('Chiffres seuls, le texte et la traduction anglaise sont ajoutés automatiquement. Laisser vide pour ne pas afficher la ligne.'),
+            IntegerField::new('maxPeopleBeginner', 'Pers. max en initiation')
+                ->setHelp('Si aucun itinéraire technique n\'est renseigné, affiché simplement « X pers. max ».')
+                ->onlyOnForms(),
+            IntegerField::new('maxPeopleTechnicalMin', 'Pers. min sur itinéraire technique')
+                ->setHelp('Optionnel : permet d\'afficher « 1 à 2 pers. ».')
+                ->onlyOnForms(),
+            IntegerField::new('maxPeopleTechnicalMax', 'Pers. max sur itinéraire technique')
+                ->setHelp('Sommet difficile, grandes voies, cascade en plusieurs longueurs…')
+                ->onlyOnForms(),
+            IntegerField::new('priceFrom', 'Prix à partir de (€)')
+                ->onlyOnForms(),
+            ChoiceField::new('priceUnit', 'Prix par')
+                ->setFormTypeOption('choice_label', fn (PriceUnit $unit) => $unit->label())
+                ->onlyOnForms(),
         ];
     }
 
