@@ -7,6 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Attribute as Vich;
 use App\Repository\DisciplineRepository;
+use App\Enum\PriceUnit;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: DisciplineRepository::class)]
@@ -59,6 +61,28 @@ class Discipline
 
     #[ORM\Column(type: 'string', length: 255)]
     private $englishPrice;
+
+    // infos courtes de la carte produit (accueil, autres activités) : chiffres seuls,
+    // le texte autour est traduit dans le composant DisciplineCard
+    #[ORM\Column(nullable: true)]
+    #[Assert\Positive]
+    private ?int $maxPeopleBeginner = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Assert\Positive]
+    private ?int $maxPeopleTechnicalMin = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Assert\Positive]
+    #[Assert\GreaterThanOrEqual(propertyPath: 'maxPeopleTechnicalMin')]
+    private ?int $maxPeopleTechnicalMax = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Assert\Positive]
+    private ?int $priceFrom = null;
+
+    #[ORM\Column(length: 20, nullable: true, enumType: PriceUnit::class)]
+    private ?PriceUnit $priceUnit = null;
 
     /**
      * @var \DateTime
@@ -363,6 +387,66 @@ class Discipline
     public function setUpdatedAt(\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getMaxPeopleBeginner(): ?int
+    {
+        return $this->maxPeopleBeginner;
+    }
+
+    public function setMaxPeopleBeginner(?int $maxPeopleBeginner): self
+    {
+        $this->maxPeopleBeginner = $maxPeopleBeginner;
+
+        return $this;
+    }
+
+    public function getMaxPeopleTechnicalMin(): ?int
+    {
+        return $this->maxPeopleTechnicalMin;
+    }
+
+    public function setMaxPeopleTechnicalMin(?int $maxPeopleTechnicalMin): self
+    {
+        $this->maxPeopleTechnicalMin = $maxPeopleTechnicalMin;
+
+        return $this;
+    }
+
+    public function getMaxPeopleTechnicalMax(): ?int
+    {
+        return $this->maxPeopleTechnicalMax;
+    }
+
+    public function setMaxPeopleTechnicalMax(?int $maxPeopleTechnicalMax): self
+    {
+        $this->maxPeopleTechnicalMax = $maxPeopleTechnicalMax;
+
+        return $this;
+    }
+
+    public function getPriceFrom(): ?int
+    {
+        return $this->priceFrom;
+    }
+
+    public function setPriceFrom(?int $priceFrom): self
+    {
+        $this->priceFrom = $priceFrom;
+
+        return $this;
+    }
+
+    public function getPriceUnit(): ?PriceUnit
+    {
+        return $this->priceUnit;
+    }
+
+    public function setPriceUnit(?PriceUnit $priceUnit): self
+    {
+        $this->priceUnit = $priceUnit;
 
         return $this;
     }

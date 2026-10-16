@@ -107,21 +107,7 @@
 		{# titre invisible : évite le saut h1 -> h3 des cartes #}
 		<h2 class="sr-only">{% trans %}Activities{% endtrans %}</h2>
 		{% for disci in disciplines %}
-			<a
-				href="{{ path('detail', {id: disci.id, slug: disci.slug}) }}" class="discipline" title="Détails {{disci}}">
-				{# <div class="text" style="background:url('/images/{{disci.slug}}.jpg') center no-repeat;background-size:cover;"> #}
-				<div class="discipline-title" style="background:url('uploads/{{disci.image}}') center no-repeat;background-size:cover;">
-					{% for locale in locales %}
-						{% if locale == app.request.locale %}
-							{% if locale =='fr' %}
-								<h3>{{disci.title}}</h3>
-							{% else %}
-								<h3>{{disci.englishTitle}}</h3>
-							{% endif %}
-						{% endif %}
-					{% endfor %}
-				</div>
-			</a>
+			<twig:DisciplineCard :discipline="disci" />
 		{% endfor %}
 	</main>
 

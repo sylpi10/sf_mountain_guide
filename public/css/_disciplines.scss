@@ -34,14 +34,18 @@
     }
 }
 
+// carte produit : image + titre en haut, infos pratiques dessous
 .discipline {
     width: 45%;
-    height: 250px;
     margin: 20px auto;
     overflow: hidden;
-    color: #fff;
+    display: flex;
+    flex-direction: column;
     min-width: 360px;
     border-radius: 14px;
+    background-color: #fff;
+    color: $text-color;
+    text-align: left;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
     transition:
         transform $transition-base,
@@ -54,6 +58,13 @@
     box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
 }
 
+// cadre fixe : l'image zoome au survol sans déborder sur les infos
+.discipline-image {
+    height: 220px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
 .discipline-title {
     position: relative;
     justify-content: center;
@@ -61,6 +72,7 @@
     height: 100%;
     display: flex;
     align-items: center;
+    color: #fff;
     transition: transform 0.6s ease;
 }
 .discipline-title > h3 {
@@ -77,9 +89,6 @@
 .discipline:hover .discipline-title > h3,
 .discipline:focus .discipline-title > h3 {
     color: $accent-color;
-}
-.discipline .discipline-title {
-    background-size: contain;
 }
 
 .discipline-title:before {
@@ -102,6 +111,44 @@
 .discipline:focus .discipline-title:before {
     background-color: rgba(14, 11, 44, 0.75);
 }
+
+.discipline-infos {
+    list-style: none;
+    margin: 0;
+    padding: 18px 22px 8px;
+    flex-grow: 1; // aligne les liens « Voir le détail » des cartes d'une même ligne
+    font-size: 0.95rem;
+    line-height: 1.4;
+
+    li {
+        display: flex;
+        gap: 10px;
+        align-items: baseline;
+        padding: 5px 0;
+    }
+    li + li {
+        border-top: 1px solid $border-soft;
+    }
+    .icon {
+        flex-shrink: 0;
+        color: $base-color;
+    }
+}
+
+.discipline-price {
+    font-weight: 600;
+}
+
+.discipline-more {
+    padding: 8px 22px 18px;
+    font-weight: 600;
+    color: $base-color;
+    transition: color $transition-fast;
+}
+.discipline:hover .discipline-more,
+.discipline:focus .discipline-more {
+    color: $accent-color-dark;
+}
 @media screen and (max-width: 768px) {
     .disciplines-list {
         width: 80%;
@@ -123,6 +170,8 @@
     .discipline {
         width: 100%;
         min-width: 200px;
+    }
+    .discipline-image {
         height: 180px;
     }
 }

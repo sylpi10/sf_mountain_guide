@@ -347,6 +347,34 @@
         <source>Other activities</source>
         <target>Autres activités</target>
       </trans-unit>
+      <trans-unit id="card_people_beginner" resname="Up to {max} people for beginners">
+        <source>Up to {max} people for beginners</source>
+        <target>{max} pers. max en initiation</target>
+      </trans-unit>
+      <trans-unit id="card_people" resname="Up to {max} people">
+        <source>Up to {max} people</source>
+        <target>{max} pers. max</target>
+      </trans-unit>
+      <trans-unit id="card_people_technical_range" resname="{min} to {max} people on technical routes">
+        <source>{min} to {max} people on technical routes</source>
+        <target>{min} à {max} pers. sur itinéraire technique</target>
+      </trans-unit>
+      <trans-unit id="card_people_technical" resname="Up to {max} people on technical routes">
+        <source>Up to {max} people on technical routes</source>
+        <target>{max} pers. max sur itinéraire technique</target>
+      </trans-unit>
+      <trans-unit id="card_price_day" resname="From {price} € per day">
+        <source>From {price} € per day</source>
+        <target>Dès {price} € / jour</target>
+      </trans-unit>
+      <trans-unit id="card_price_half_day" resname="From {price} € per half day">
+        <source>From {price} € per half day</source>
+        <target>Dès {price} € / demi-journée</target>
+      </trans-unit>
+      <trans-unit id="card_see_details" resname="See details">
+        <source>See details</source>
+        <target>Voir le détail</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
