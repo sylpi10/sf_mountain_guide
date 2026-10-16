@@ -2,50 +2,12 @@
 {% props discipline %}
 {% set fr = app.request.locale == 'fr' %}
 {% set title = fr ? discipline.title : discipline.englishTitle %}
-{% set duration = fr ? discipline.duration : discipline.englishDuration %}
-{% set beginner = discipline.maxPeopleBeginner %}
-{% set technicalMin = discipline.maxPeopleTechnicalMin %}
-{% set technicalMax = discipline.maxPeopleTechnicalMax %}
 <a href="{{ path('detail', {id: discipline.id, slug: discipline.slug}) }}" class="discipline" title="Détails {{ title }}">
 	<div class="discipline-image">
 		<div class="discipline-title" style="background:url('{{ asset('uploads/' ~ discipline.image) }}') center no-repeat;background-size:cover;">
 			<h3>{{ title }}</h3>
 		</div>
 	</div>
-	<ul class="discipline-infos">
-		{% if beginner %}
-			<li>
-				{{ icon('users') }}
-				{% if technicalMax %}
-					{{ 'Up to {max} people for beginners'|trans({'{max}': beginner}) }}
-				{% else %}
-					{{ 'Up to {max} people'|trans({'{max}': beginner}) }}
-				{% endif %}
-			</li>
-		{% endif %}
-		{% if technicalMax %}
-			<li>
-				{{ icon('user') }}
-				{% if technicalMin and technicalMin < technicalMax %}
-					{{ '{min} to {max} people on technical routes'|trans({'{min}': technicalMin, '{max}': technicalMax}) }}
-				{% else %}
-					{{ 'Up to {max} people on technical routes'|trans({'{max}': technicalMax}) }}
-				{% endif %}
-			</li>
-		{% endif %}
-		{% if duration %}
-			<li>{{ icon('clock') }} {{ duration|striptags }}</li>
-		{% endif %}
-		{% if discipline.priceFrom %}
-			<li class="discipline-price">
-				{{ icon('tag') }}
-				{% if discipline.priceUnit and discipline.priceUnit.value == 'half_day' %}
-					{{ 'From {price} € per half day'|trans({'{price}': discipline.priceFrom}) }}
-				{% else %}
-					{{ 'From {price} € per day'|trans({'{price}': discipline.priceFrom}) }}
-				{% endif %}
-			</li>
-		{% endif %}
-	</ul>
+	<twig:DisciplineInfos :discipline="discipline" />
 	<span class="discipline-more">{% trans %}See details{% endtrans %} &rarr;</span>
 </a>

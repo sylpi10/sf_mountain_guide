@@ -31,6 +31,7 @@ class SitemapController extends AbstractController
         // add statics urls
         // $urls[] = $urls->push()
         $urls[] = ["loc" => $this->generateUrl("home")];
+        $urls[] = ["loc" => $this->generateUrl("activities")];
         $urls[] = ["loc" => $this->generateUrl("about")];
         $urls[] = ["loc" => $this->generateUrl("pricing")];
         $urls[] = ["loc" => $this->generateUrl("blog")];

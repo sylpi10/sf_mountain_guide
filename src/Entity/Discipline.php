@@ -84,6 +84,13 @@ class Discipline
     #[ORM\Column(length: 20, nullable: true, enumType: PriceUnit::class)]
     private ?PriceUnit $priceUnit = null;
 
+    // accroche courte de la page Activités (texte simple)
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $teaser = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $teaserEn = null;
+
     /**
      * @var \DateTime
      */
@@ -447,6 +454,30 @@ class Discipline
     public function setPriceUnit(?PriceUnit $priceUnit): self
     {
         $this->priceUnit = $priceUnit;
+
+        return $this;
+    }
+
+    public function getTeaser(): ?string
+    {
+        return $this->teaser;
+    }
+
+    public function setTeaser(?string $teaser): self
+    {
+        $this->teaser = $teaser;
+
+        return $this;
+    }
+
+    public function getTeaserEn(): ?string
+    {
+        return $this->teaserEn;
+    }
+
+    public function setTeaserEn(?string $teaserEn): self
+    {
+        $this->teaserEn = $teaserEn;
 
         return $this;
     }

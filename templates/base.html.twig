@@ -117,28 +117,31 @@
 							</div>
 
 							<ul class="navbar-nav nav-primary">
-								<li class="nav-item active">
-									<a class="nav-link" href="{{path('home')}}" title="{% trans %} Home {% endtrans %}">
+								{% set current_route = app.request.attributes.get('_route') %}
+								<li class="nav-item{{ current_route == 'home' ? ' active' }}">
+									<a class="nav-link" href="{{path('home')}}" title="{% trans %} Home {% endtrans %}"{{ current_route == 'home' ? ' aria-current="page"' }}>
 										{% trans %}
 										Home
 										{% endtrans %}
-										<span class="sr-only">(current)</span>
 									</a>
+								</li>
+								<li class="nav-item{{ current_route in ['activities', 'detail'] ? ' active' }}">
+									<a class="nav-link" href="{{path('activities')}}"{{ current_route in ['activities', 'detail'] ? ' aria-current="page"' }} title="{% trans %}See all my activities{% endtrans %}">{% trans %}Activities{% endtrans %}</a>
 								</li>
 								<li class="nav-item">
 									<a class="nav-link" href="{{path('home', {'_fragment':'contact-form'})}}" title="{% trans %}To get in touch with me{% endtrans %}">Contact
 									</a>
 								</li>
-								<li class="nav-item">
-									<a class="nav-link" href="{{path('about')}}" title="{% trans %} Get to know me {% endtrans %}">{% trans %}
+								<li class="nav-item{{ current_route == 'about' ? ' active' }}">
+									<a class="nav-link" href="{{path('about')}}"{{ current_route == 'about' ? ' aria-current="page"' }} title="{% trans %} Get to know me {% endtrans %}">{% trans %}
 										About
 										{% endtrans %}</a>
 								</li>
-								<li class="nav-item">
-									<a class="nav-link" href="{{path('pricing')}}" title="{% trans %}See my prices{% endtrans %}">{% trans %}Prices{% endtrans %}</a>
+								<li class="nav-item{{ current_route == 'pricing' ? ' active' }}">
+									<a class="nav-link" href="{{path('pricing')}}"{{ current_route == 'pricing' ? ' aria-current="page"' }} title="{% trans %}See my prices{% endtrans %}">{% trans %}Prices{% endtrans %}</a>
 								</li>
-								<li class="nav-item">
-									<a class="nav-link" href="{{path('blog')}}" title="{% trans %}See our last adventures{% endtrans %}">Blog</a>
+								<li class="nav-item{{ current_route in ['blog', 'blog_detail'] ? ' active' }}">
+									<a class="nav-link" href="{{path('blog')}}"{{ current_route in ['blog', 'blog_detail'] ? ' aria-current="page"' }} title="{% trans %}See our last adventures{% endtrans %}">Blog</a>
 								</li>
 
 

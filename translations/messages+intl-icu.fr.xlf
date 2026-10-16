@@ -375,6 +375,22 @@
         <source>See details</source>
         <target>Voir le détail</target>
       </trans-unit>
+      <trans-unit id="activities_1" resname="Mountain activities in Briançon">
+        <source>Mountain activities in Briançon</source>
+        <target>Activités de montagne à Briançon</target>
+      </trans-unit>
+      <trans-unit id="activities_2" resname="Mountaineering, rock climbing, off-piste skiing and ice climbing with a mountain guide in Briançon: beginner or experienced, tailor-made trips in small groups or private.">
+        <source>Mountaineering, rock climbing, off-piste skiing and ice climbing with a mountain guide in Briançon: beginner or experienced, tailor-made trips in small groups or private.</source>
+        <target>Alpinisme, escalade, ski hors-piste et cascade de glace avec un guide de haute montagne à Briançon : débutant ou confirmé, sorties sur mesure en petit groupe ou en privé.</target>
+      </trans-unit>
+      <trans-unit id="activities_3" resname="Discover the activity">
+        <source>Discover the activity</source>
+        <target>Découvrir l'activité</target>
+      </trans-unit>
+      <trans-unit id="activities_4" resname="See all my activities">
+        <source>See all my activities</source>
+        <target>Voir toutes mes activités</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

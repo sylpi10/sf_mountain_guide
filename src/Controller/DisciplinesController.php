@@ -19,6 +19,15 @@ class DisciplinesController extends AbstractController
         private ContactFormHandler $contactForm,
     ) {
     }
+
+    #[Route(path: '/activites', name: 'activities')]
+    public function index(): Response
+    {
+        return $this->render('disciplines/index.html.twig', [
+            'disciplines' => $this->disciplineRepo->findAll(),
+        ]);
+    }
+
     /**
      *
      * @param [type] $id

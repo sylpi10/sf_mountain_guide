@@ -12,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlGenerator;
@@ -93,6 +94,16 @@ class DisciplineCrudController extends AbstractCrudController
                 ->onlyOnForms(),
             ChoiceField::new('priceUnit', 'Prix par')
                 ->setFormTypeOption('choice_label', fn (PriceUnit $unit) => $unit->label())
+                ->onlyOnForms(),
+
+            FormField::addFieldset('Page Activités'),
+            TextareaField::new('teaser', 'Accroche')
+                ->setNumOfRows(3)
+                ->setHelp('1 ou 2 phrases, texte simple : donne envie de cliquer sur l\'activité.')
+                ->onlyOnForms(),
+            TextareaField::new('teaserEn', 'Accroche en anglais')
+                ->setNumOfRows(3)
+                ->setHelp('Si vide, l\'accroche FR est affichée.')
                 ->onlyOnForms(),
         ];
     }

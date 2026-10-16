@@ -14,6 +14,7 @@ class SiteText
 {
     public const SLOTS = [
         'home_intro' => 'Accueil - texte de présentation des activités',
+        'activities_intro' => 'Page Activités - texte d\'introduction',
     ];
 
     #[ORM\Id]
