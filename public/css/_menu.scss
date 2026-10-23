@@ -84,6 +84,7 @@ ul.right-nav {
         }
         ul.navbar-nav {
             width: 100%;
+            margin-top: 14px;
             li a.nav-link {
                 width: 100%;
                 text-align: center;
@@ -96,6 +97,7 @@ ul.right-nav {
             }
         }
         .right-nav {
+            padding-top: 8px;
             width: 100%;
             border-top: solid 1px #fcfcfc;
             li a:hover,
