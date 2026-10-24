@@ -14,7 +14,9 @@ class CommentType extends AbstractType
     {
         $builder
             ->add('content', TextareaType::class, [
-                'label' => false
+                'label' => false,
+                // chaîne vide plutôt que null : setContent() n'accepte qu'une string, NotBlank affiche l'erreur
+                'empty_data' => '',
 
             ]);
     }

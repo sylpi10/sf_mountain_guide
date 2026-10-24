@@ -103,7 +103,7 @@ class BlogController extends AbstractController
         );
         return $this->render("blog/details.html.twig", [
             "article" => $post,
-            "form" => $form->createView(),
+            "form" => $form,
             "displayBtn" => true,
             "acceptedComments" => $acceptedComments,
         ]);

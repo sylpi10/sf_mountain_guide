@@ -10,7 +10,7 @@
 	<div class="login-container container">
 		<div class="bg-light form-login-wrapper">
 			<h1>{% trans %}Register{% endtrans %}</h1>
-			{{form_start(form)}}
+			{{form_start(form, {'attr': {'data-turbo': 'true'}})}}
 			<label class="control-label" for="">{% trans %}
 				User Name
 				{% endtrans %}</label>

@@ -16,7 +16,6 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -36,8 +35,7 @@ class ContactFormHandler
         private ContactRecipientRepository $recipientRepo,
         private LoggerInterface $logger,
         private string $mailerFrom,
-        private HttpClientInterface $httpClient,
-        private string $ntfyTopic,
+        private FailureAlerter $alerter,
     ) {}
 
     /**
@@ -142,36 +140,11 @@ class ContactFormHandler
                 "contact_id" => $contact->getId(),
                 "exception" => $e,
             ]);
-            $this->alertFailure($contact, $e);
-        }
-    }
-
-    /**
-     * Alerte push (ntfy) quand le mail ne part pas : une alerte par mail serait perdue avec lui.
-     * Pas de données du visiteur dans l'alerte, elle transite par un service tiers.
-     */
-    private function alertFailure(Contact $contact, \Throwable $e): void
-    {
-        if ($this->ntfyTopic === "") {
-            return;
-        }
-
-        try {
-            $this->httpClient->request("POST", "https://ntfy.sh/" . $this->ntfyTopic, [
-                "headers" => [
-                    "Title" => "Directicimes : mail de contact non envoye",
-                    "Priority" => "high",
-                    "Tags" => "warning",
-                ],
-                "body" => sprintf(
-                    "Message n°%d enregistré mais pas envoyé (consultable dans l'admin).\n%s",
-                    $contact->getId(),
-                    mb_substr($e->getMessage(), 0, 300),
-                ),
-                "timeout" => 5,
-            ])->getStatusCode();
-        } catch (\Throwable $alertError) {
-            $this->logger->error("Alerte ntfy impossible", ["exception" => $alertError]);
+            $this->alerter->alert(
+                "Directicimes : mail de contact non envoye",
+                sprintf("Message n°%d enregistré mais pas envoyé (consultable dans l'admin).", $contact->getId()),
+                $e,
+            );
         }
     }
 

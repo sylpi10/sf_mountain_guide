@@ -5,10 +5,14 @@ namespace App\Controller;
 use App\Entity\NewsLetterSubscriber;
 use App\Form\NewsLetterSubscriberType;
 use App\Repository\NewsLetterSubscriberRepository;
+use App\Service\FailureAlerter;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Attribute\Route;
@@ -24,6 +28,10 @@ class NewsLetterSubscriberController extends AbstractController
         NewsLetterSubscriberRepository $newsLetterRepository,
         EntityManagerInterface $manager,
         TranslatorInterface $translator,
+        private LoggerInterface $logger,
+        private FailureAlerter $alerter,
+        // expéditeur = le compte du MAILER_DSN (SPF/DMARC)
+        private string $mailerFrom,
     ) {
         $this->mailer = $mailer;
         $this->newsLetterRepository = $newsLetterRepository;
@@ -59,42 +67,29 @@ class NewsLetterSubscriberController extends AbstractController
             $this->manager->persist($subscriber);
             $this->manager->flush();
 
-            // send email to client who registered
-            $emailToClient = (new TemplatedEmail())->from("contact@directicimes.com")
-                // ->from("syl.pillet@hotmail.fr")
-                ->to($newsletter->get("email")->getData())
-                ->subject("Votre abonnement à la newsletter")
-                ->text(
-                    " Bonjour " .
-                        $newsletter->get("fullname")->getData() .
-                        ".\n Nous avons bien pris en compte votre abonnement à notre newsletter !",
-                )
-                ->context([
-                    "formNews" => $formNews->createView(),
-                ]);
+            $fullname = $newsletter->get("fullname")->getData();
+            $email = $newsletter->get("email")->getData();
+            $from = new Address($this->mailerFrom, "DirectiCimes");
 
-            $this->mailer->send($emailToClient);
+            // confirmation à l'abonné
+            $this->sendMail(
+                new Email()
+                    ->from($from)
+                    ->to($email)
+                    ->subject("Votre abonnement à la newsletter")
+                    ->text(" Bonjour " . $fullname . ".\n Nous avons bien pris en compte votre abonnement à notre newsletter !"),
+                $subscriber,
+            );
 
-            $email = (new TemplatedEmail())
-                // ->from($newsletter->get('email')->getData())
-                ->from("contact@directicimes.com")
-                // ->to("syl.pillet@hotmail.fr")
-                ->to("contact@directicimes.com", "georgesyn@gmail.com")
-                ->subject("Nouvel abonné à la newsletter")
-                // ->htmlTemplate("global/index.html.twig")
-
-                ->text(
-                    $newsletter->get("fullname")->getData() .
-                        " s'est abonné à la newsletter. \nSon email est : " .
-                        $newsletter->get("email")->getData() .
-                        " !",
-                )
-                ->context([
-                    "formNews" => $formNews->createView(),
-                ]);
-
-            //send mail to admin
-            $this->mailer->send($email);
+            // notification à l'admin
+            $this->sendMail(
+                new Email()
+                    ->from($from)
+                    ->to("contact@directicimes.com", "georgesyn@gmail.com")
+                    ->subject("Nouvel abonné à la newsletter")
+                    ->text($fullname . " s'est abonné à la newsletter. \nSon email est : " . $email . " !"),
+                $subscriber,
+            );
 
             // confirmation msg
             $message = $this->translator->trans(
@@ -103,18 +98,40 @@ class NewsLetterSubscriberController extends AbstractController
             $this->addFlash("success", $message);
 
             // redirection
-            return $this->redirectToRoute("new");
+            return $this->redirectToRoute("newsletter");
         }
 
         [$newsletterToken, $newsletterTime] = $this->refreshNewsletterGuards($request);
 
         return $this->render("news_letter/newsLetter.html.twig", [
-            "form" => $formNews->createView(),
+            "form" => $formNews,
             "newsletterEntity" => $newsletterEntity,
             "displayBtn" => $displayBtn,
             "newsletter_token" => $newsletterToken,
             "newsletter_time" => $newsletterTime,
         ]);
+    }
+
+    /**
+     * L'abonné est déjà en base (consultable en admin) : un SMTP en panne ne doit pas faire une erreur 500 au visiteur.
+     * Chaque mail est tenté séparément : l'échec de la confirmation n'empêche pas la notification à l'admin.
+     */
+    private function sendMail(Email $mail, NewsLetterSubscriber $subscriber): void
+    {
+        try {
+            $this->mailer->send($mail);
+        } catch (TransportExceptionInterface $e) {
+            $this->logger->error("Envoi d'un mail de newsletter impossible", [
+                "subscriber_id" => $subscriber->getId(),
+                "subject" => $mail->getSubject(),
+                "exception" => $e,
+            ]);
+            $this->alerter->alert(
+                "Directicimes : mail de newsletter non envoye",
+                sprintf("Abonné n°%d enregistré, mail « %s » pas envoyé.", $subscriber->getId(), $mail->getSubject()),
+                $e,
+            );
+        }
     }
 
     private function refreshNewsletterGuards(Request $request): array

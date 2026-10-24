@@ -22,9 +22,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank]
     private $username;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank]
     private $password;
 
     #[Assert\EqualTo(propertyPath: 'password', message: 'Les mots de passe ne correspondent pas')]

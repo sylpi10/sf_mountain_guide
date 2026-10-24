@@ -15,12 +15,6 @@
 	<div class="container blog-container">
 		<div class="mt-5 article-wrapper">
 
-			<div class="blog-notif">
-				{% for msg in app.flashes('success') %}
-					<p class="alert alert-success" data-controller="alert">{{msg}}</p>
-				{% endfor %}
-			</div>
-
 			<article class="article-details">
 				{% for locale in locales %}
 					{% if locale == app.request.locale %}
@@ -72,11 +66,18 @@
 				{% endif %}
 
 				{% if app.user %}
+					{# Turbo Frame : à l'envoi, seul ce bloc est remplacé, on reste au niveau des commentaires #}
+					<turbo-frame id="comment-frame">
+					<div class="comment-notif">
+						{% for msg in app.flashes('success') %}
+							<p class="alert alert-success" data-controller="alert">{{msg}}</p>
+						{% endfor %}
+					</div>
 					<div class="add-comment">
 						<h2>
 							{% trans %}Add a comment{% endtrans %}
 						</h2>
-						{{form_start(form)}}
+						{{form_start(form, {'attr': {'data-turbo': 'true'}})}}
 
 						{{form_row(form.content, {'attr': {'placeholder': 'Your comment'|trans}}
 						)}}
@@ -84,6 +85,7 @@
 						<input type="submit" value="{% trans %} Send {% endtrans %}" class="btn button-link">
 						{{form_end(form)}}
 					</div>
+					</turbo-frame>
 				{% else %}
 					<p>{% trans %}You must be logged to post a comment{% endtrans %}</p>
 				{% endif %}
