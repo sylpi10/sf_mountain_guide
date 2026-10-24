@@ -11,15 +11,15 @@
 		<div class="bg-light form-login-wrapper">
 			<h1>{% trans %}Register{% endtrans %}</h1>
 			{{form_start(form, {'attr': {'data-turbo': 'true'}})}}
-			<label class="control-label" for="">{% trans %}
+			<label class="control-label" for="{{ field_id(form.username) }}">{% trans %}
 				User Name
 				{% endtrans %}</label>
 			{{form_row(form.username)}}
-			<label class="control-label" for="">{% trans %}
+			<label class="control-label" for="{{ field_id(form.password) }}">{% trans %}
 				Password
 				{% endtrans %}</label>
 			{{form_row(form.password)}}
-			<label class="control-label" for="">{% trans %}
+			<label class="control-label" for="{{ field_id(form.confirmPassword) }}">{% trans %}
 				Confirm Password
 				{% endtrans %}</label>
 			{{form_row(form.confirmPassword)}}

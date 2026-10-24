@@ -391,6 +391,54 @@
         <source>See all my activities</source>
         <target>Voir toutes mes activités</target>
       </trans-unit>
+      <trans-unit id="newsletter_mail_1" resname="Welcome to the Directicimes newsletter">
+        <source>Welcome to the Directicimes newsletter</source>
+        <target>Bienvenue dans la newsletter Directicimes</target>
+      </trans-unit>
+      <trans-unit id="newsletter_mail_2" resname="Hello {name},">
+        <source>Hello {name},</source>
+        <target>Bonjour {name},</target>
+      </trans-unit>
+      <trans-unit id="newsletter_mail_3" resname="Thank you for subscribing to the Directicimes newsletter!">
+        <source>Thank you for subscribing to the Directicimes newsletter!</source>
+        <target>Merci pour votre inscription à la newsletter Directicimes !</target>
+      </trans-unit>
+      <trans-unit id="newsletter_mail_4" resname="From time to time, you will receive news from the mountains: trip reports, current conditions and outing ideas around Briançon.">
+        <source>From time to time, you will receive news from the mountains: trip reports, current conditions and outing ideas around Briançon.</source>
+        <target>De temps en temps, vous recevrez des nouvelles de la montagne : récits de sorties, conditions du moment et idées de courses autour de Briançon.</target>
+      </trans-unit>
+      <trans-unit id="newsletter_mail_5" resname="Discover my activities">
+        <source>Discover my activities</source>
+        <target>Découvrir mes activités</target>
+      </trans-unit>
+      <trans-unit id="newsletter_mail_6" resname="See you soon in the mountains,">
+        <source>See you soon in the mountains,</source>
+        <target>À bientôt en montagne,</target>
+      </trans-unit>
+      <trans-unit id="newsletter_mail_7" resname="You are receiving this email because you subscribed on directicimes.com.">
+        <source>You are receiving this email because you subscribed on directicimes.com.</source>
+        <target>Vous recevez ce mail car vous vous êtes inscrit sur directicimes.com.</target>
+      </trans-unit>
+      <trans-unit id="newsletter_mail_8" resname="Unsubscribe">
+        <source>Unsubscribe</source>
+        <target>Se désabonner</target>
+      </trans-unit>
+      <trans-unit id="newsletter_mail_9" resname="Unsubscribe from the newsletter">
+        <source>Unsubscribe from the newsletter</source>
+        <target>Désabonnement de la newsletter</target>
+      </trans-unit>
+      <trans-unit id="newsletter_mail_10" resname="Do you want to unsubscribe {email} from the Directicimes newsletter?">
+        <source>Do you want to unsubscribe {email} from the Directicimes newsletter?</source>
+        <target>Voulez-vous désabonner {email} de la newsletter Directicimes ?</target>
+      </trans-unit>
+      <trans-unit id="newsletter_mail_11" resname="You have been unsubscribed from the newsletter. You will no longer receive our emails.">
+        <source>You have been unsubscribed from the newsletter. You will no longer receive our emails.</source>
+        <target>Vous êtes désabonné de la newsletter. Vous ne recevrez plus nos mails.</target>
+      </trans-unit>
+      <trans-unit id="newsletter_mail_12" resname="Back to the website">
+        <source>Back to the website</source>
+        <target>Retour au site</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

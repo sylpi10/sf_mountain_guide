@@ -21,8 +21,8 @@
 				{% trans %}
 				Subscribe to our Newsletter to be aware of our latest news !
 				{% endtrans %}
-				<hr>
 			</p>
+			<hr>
 
 			<div class="contact-notif">
 				{% for msg in app.flashes('success') %}
@@ -30,7 +30,7 @@
 				{% endfor %}
 			</div>
 
-			<label class="control-label" for="">{% trans %}
+			<label class="control-label" for="{{ field_id(form.fullname) }}">{% trans %}
 				Your Name
 				{% endtrans %}</label>
 			{{form_row(form.fullname, {'attr':{'placeholder': 'ex:Mike Horn'}})}}
@@ -39,17 +39,13 @@
 			<input type="hidden" name="newsletter_token" value="{{ newsletter_token }}">
 			<input type="hidden" name="newsletter_time" value="{{ newsletter_time }}">
 
-			<label class="control-label" for="">{% trans %}
+			<label class="control-label" for="{{ field_id(form.email) }}">{% trans %}
 				Your Email
 				{% endtrans %}</label>
 			{{form_row(form.email, {'attr':{'placeholder': 'mail@gmail.com'}})}}
 
-			<label class="control-label" for="">
-				{% trans %}
-				I accept data collect (name and email)
-				{% endtrans %}
-				{{form_row(form.isRgpd)}}
-			</label>
+			{# case puis texte cliquable, reliés par le label que génère Symfony #}
+			{{ form_row(form.isRgpd, {'label': 'I accept data collect (name and email)'|trans}) }}
 
 			<button type="submit" class="btn button-link">
 				{{ icon('paper-plane') }}

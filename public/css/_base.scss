@@ -238,7 +238,9 @@ textarea {
         margin-bottom: 3rem !important;
     }
 }
-.sr-only {
+// .form-error-icon : badge « Erreur » du thème de formulaire Bootstrap 4, gardé pour les lecteurs d'écran seulement
+.sr-only,
+.form-error-icon {
     position: absolute;
     width: 1px;
     height: 1px;

@@ -33,7 +33,11 @@ class NewsLetterSubscriberCrudController extends AbstractCrudController
             IdField::new('id'),
             TextField::new('fullname', "Nom Prénom"),
             TextField::new('email'),
-            BooleanField::new('isRgpd'),
+            // preuve du consentement donné à l'inscription : affiché en Oui/Non, pas modifiable depuis l'admin
+            BooleanField::new('isRgpd', 'Consentement RGPD')
+                ->renderAsSwitch(false)
+                ->hideOnForm()
+                ->setHelp("Case « J'accepte la collecte de mes données » cochée lors de l'inscription"),
         ];
     }
     public function configureActions(Actions $actions): Actions

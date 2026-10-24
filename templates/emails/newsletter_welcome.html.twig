@@ -1,0 +1,73 @@
+{# Mail de bienvenue à un nouvel abonné. Mise en page en tableaux et styles en ligne : les messageries ignorent la plupart du CSS #}
+{% set activities_url = site_url ~ path('activities') %}
+<!DOCTYPE html>
+<html lang="{{ app.locale }}">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{{ email.subject }}</title>
+</head>
+<body style="margin:0; padding:0; background-color:#eef0f7;">
+	<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#eef0f7;">
+		<tr>
+			<td align="center" style="padding:32px 12px;">
+				<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px; background-color:#ffffff; border-radius:12px; overflow:hidden; font-family:-apple-system, 'Segoe UI', Roboto, Arial, sans-serif; color:#1f2433;">
+
+					{# en-tête : logo sur la couleur du menu du site #}
+					<tr>
+						<td align="center" style="background-color:#0b0b25; padding:28px 24px;">
+							<img src="{{ email.image('@images/logo.png') }}" width="96" height="95" alt="Directicimes" style="display:block; border:0;">
+						</td>
+					</tr>
+
+					<tr>
+						<td style="padding:36px 40px 8px; font-size:16px; line-height:1.6;">
+							<h1 style="margin:0 0 20px; font-size:22px; color:#0b0b25;">
+								{{ 'Hello {name},'|trans({'{name}': fullname}) }}
+							</h1>
+							<p style="margin:0 0 16px;">
+								{% trans %}Thank you for subscribing to the Directicimes newsletter!{% endtrans %}
+							</p>
+							<p style="margin:0 0 28px;">
+								{% trans %}From time to time, you will receive news from the mountains: trip reports, current conditions and outing ideas around Briançon.{% endtrans %}
+							</p>
+						</td>
+					</tr>
+
+					{# bouton : couleur d'accent du site, texte foncé pour le contraste #}
+					<tr>
+						<td align="center" style="padding:0 40px 32px;">
+							<a href="{{ activities_url }}" style="display:inline-block; padding:14px 28px; background-color:#ff9f1c; color:#0b0b25; font-weight:bold; font-size:16px; text-decoration:none; border-radius:50px;">
+								{% trans %}Discover my activities{% endtrans %}
+							</a>
+						</td>
+					</tr>
+
+					<tr>
+						<td style="padding:0 40px 36px; font-size:16px; line-height:1.6;">
+							<p style="margin:0;">
+								{% trans %}See you soon in the mountains,{% endtrans %}<br>
+								<strong>Yoann Georges</strong><br>
+								<span style="color:#5b6075;">{% trans %}IFMGA mountain guide{% endtrans %}</span>
+							</p>
+						</td>
+					</tr>
+
+					<tr>
+						<td align="center" style="background-color:#f5f6fb; padding:20px 32px; font-size:13px; line-height:1.5; color:#5b6075;">
+							<a href="{{ site_url }}" style="color:#2733a0; text-decoration:none;">directicimes.com</a>
+							&nbsp;·&nbsp;
+							<a href="tel:{{ contact_phone|replace({' ': ''}) }}" style="color:#2733a0; text-decoration:none;">{{ contact_phone }}</a>
+							<br><br>
+							{% trans %}You are receiving this email because you subscribed on directicimes.com.{% endtrans %}
+							<br>
+							<a href="{{ unsubscribe_url }}" style="color:#5b6075; text-decoration:underline;">{% trans %}Unsubscribe{% endtrans %}</a>
+						</td>
+					</tr>
+
+				</table>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

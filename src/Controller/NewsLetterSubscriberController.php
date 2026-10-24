@@ -8,7 +8,10 @@ use App\Repository\NewsLetterSubscriberRepository;
 use App\Service\FailureAlerter;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\UriSigner;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
@@ -16,6 +19,7 @@ use Symfony\Component\Mime\Email;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class NewsLetterSubscriberController extends AbstractController
 {
@@ -30,6 +34,7 @@ class NewsLetterSubscriberController extends AbstractController
         TranslatorInterface $translator,
         private LoggerInterface $logger,
         private FailureAlerter $alerter,
+        private UriSigner $uriSigner,
         // expéditeur = le compte du MAILER_DSN (SPF/DMARC)
         private string $mailerFrom,
     ) {
@@ -42,7 +47,7 @@ class NewsLetterSubscriberController extends AbstractController
     public function index(Request $request)
     {
         $formNews = $this->createForm(NewsLetterSubscriberType::class);
-        $newsletter = $formNews->handleRequest($request);
+        $formNews->handleRequest($request);
         $newsletterEntity = $this->newsLetterRepository->findAll();
         $displayBtn = false;
         if ($formNews->isSubmitted() && $formNews->isValid()) {
@@ -59,27 +64,32 @@ class NewsLetterSubscriberController extends AbstractController
             if ($honeypot !== "" || $tokenInvalid || $isTooFast || $isTooOld) {
                 return $this->redirectToRoute("home");
             }
-            // push subscriber to db
-            $subscriber = new NewsLetterSubscriber();
-            $subscriber->setEmail($newsletter->get("email")->getData());
-            $subscriber->setFullname($newsletter->get("fullname")->getData());
+            // l'abonné rempli par le formulaire (nom, email et case de consentement RGPD)
+            /** @var NewsLetterSubscriber $subscriber */
+            $subscriber = $formNews->getData();
 
             $this->manager->persist($subscriber);
             $this->manager->flush();
 
-            $fullname = $newsletter->get("fullname")->getData();
-            $email = $newsletter->get("email")->getData();
+            $fullname = $subscriber->getFullname();
+            $email = $subscriber->getEmail();
             $from = new Address($this->mailerFrom, "DirectiCimes");
 
-            // confirmation à l'abonné
-            $this->sendMail(
-                new Email()
-                    ->from($from)
-                    ->to($email)
-                    ->subject("Votre abonnement à la newsletter")
-                    ->text(" Bonjour " . $fullname . ".\n Nous avons bien pris en compte votre abonnement à notre newsletter !"),
-                $subscriber,
-            );
+            // mail de bienvenue à l'abonné, dans la langue du site, avec son lien de désabonnement
+            $unsubscribeUrl = $this->unsubscribeUrl($subscriber);
+            $welcome = new TemplatedEmail()
+                ->from($from)
+                ->to($email)
+                ->replyTo("contact@directicimes.com")
+                ->subject($this->translator->trans("Welcome to the Directicimes newsletter"))
+                ->htmlTemplate("emails/newsletter_welcome.html.twig")
+                ->textTemplate("emails/newsletter_welcome.txt.twig")
+                ->context(["fullname" => $fullname, "unsubscribe_url" => $unsubscribeUrl]);
+            // bouton « Se désabonner » affiché par Gmail, Outlook… (désabonnement en un clic, RFC 8058)
+            $welcome->getHeaders()
+                ->addTextHeader("List-Unsubscribe", "<" . $unsubscribeUrl . ">")
+                ->addTextHeader("List-Unsubscribe-Post", "List-Unsubscribe=One-Click");
+            $this->sendMail($welcome, $subscriber);
 
             // notification à l'admin
             $this->sendMail(
@@ -110,6 +120,49 @@ class NewsLetterSubscriberController extends AbstractController
             "newsletter_token" => $newsletterToken,
             "newsletter_time" => $newsletterTime,
         ]);
+    }
+
+    /**
+     * Lien de désabonnement envoyé par mail. Signé avec APP_SECRET : impossible de fabriquer
+     * le lien d'un autre abonné en changeant l'id.
+     *
+     * GET  : page de confirmation (les antivirus de messagerie ouvrent les liens, ils ne doivent pas désabonner)
+     * POST : désabonnement, depuis le bouton de la page ou le bouton « Se désabonner » de la messagerie
+     */
+    #[Route(path: '/newsletter/desabonnement/{id}', name: 'newsletter_unsubscribe', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    public function unsubscribe(int $id, Request $request): Response
+    {
+        if (!$this->uriSigner->checkRequest($request)) {
+            throw $this->createNotFoundException();
+        }
+
+        $subscriber = $this->newsLetterRepository->find($id);
+
+        if ($subscriber && $request->isMethod('POST')) {
+            // la même adresse a pu s'inscrire plusieurs fois : on retire toutes ses inscriptions
+            foreach ($this->newsLetterRepository->findBy(["email" => $subscriber->getEmail()]) as $registration) {
+                $this->manager->remove($registration);
+            }
+            $this->manager->flush();
+            $this->logger->info("Désabonnement de la newsletter", ["subscriber_id" => $id]);
+
+            // retour sur le même lien signé, qui affiche alors « vous êtes désabonné »
+            return $this->redirect($request->getUri(), Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render("news_letter/unsubscribe.html.twig", [
+            "subscriber" => $subscriber,
+            "displayBtn" => false,
+        ]);
+    }
+
+    private function unsubscribeUrl(NewsLetterSubscriber $subscriber): string
+    {
+        return $this->uriSigner->sign($this->generateUrl(
+            "newsletter_unsubscribe",
+            ["id" => $subscriber->getId()],
+            UrlGeneratorInterface::ABSOLUTE_URL,
+        ));
     }
 
     /**

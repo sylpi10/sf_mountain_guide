@@ -1,0 +1,22 @@
+{# version texte du mail de bienvenue, pour les messageries qui n'affichent pas le HTML (Twig mange le saut de ligne qui suit une balise : d'où les lignes vides doublées) #}
+{{ 'Hello {name},'|trans({'{name}': fullname}) }}
+
+{% trans %}Thank you for subscribing to the Directicimes newsletter!{% endtrans %}
+
+
+{% trans %}From time to time, you will receive news from the mountains: trip reports, current conditions and outing ideas around Briançon.{% endtrans %}
+
+
+{% trans %}Discover my activities{% endtrans %} : {{ site_url ~ path('activities') }}
+
+{% trans %}See you soon in the mountains,{% endtrans %}
+
+Yoann Georges
+{% trans %}IFMGA mountain guide{% endtrans %}
+
+
+--
+directicimes.com · {{ contact_phone }}
+{% trans %}You are receiving this email because you subscribed on directicimes.com.{% endtrans %}
+
+{% trans %}Unsubscribe{% endtrans %} : {{ unsubscribe_url }}

@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{% trans %}Unsubscribe from the newsletter{% endtrans %} - Directicimes
+{% endblock %}
+
+{% block robots %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+
+{% block body_class %}base-page
+{% endblock %}
+{% block body %}
+
+	<div class="container newsletter-container">
+
+		<div class="subscribe-form contact-form text-center">
+			<h1>Newsletter</h1>
+
+			{% if subscriber %}
+				<p>
+					{{ 'Do you want to unsubscribe {email} from the Directicimes newsletter?'|trans({'{email}': subscriber.email}) }}
+				</p>
+				{# envoi classique (pas de Turbo) vers le même lien signé #}
+				<form method="post" action="{{ app.request.uri }}">
+					<button type="submit" class="btn button-link">
+						{% trans %}Unsubscribe{% endtrans %}
+					</button>
+				</form>
+			{% else %}
+				<p>
+					{% trans %}You have been unsubscribed from the newsletter. You will no longer receive our emails.{% endtrans %}
+				</p>
+				<p>
+					<a href="{{ path('home') }}" class="btn button-link">{% trans %}Back to the website{% endtrans %}</a>
+				</p>
+			{% endif %}
+		</div>
+
+	</div>
+
+	<div>
+		{% include "footer.html.twig" %}
+	</div>
+{% endblock %}
