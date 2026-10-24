@@ -51,7 +51,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkTo(ContactRecipientCrudController::class, "Destinataires des mails", "fas fa-at");
         yield MenuItem::linkTo(BlogCrudController::class, "Blog", "fas fa-newspaper");
         yield MenuItem::linkTo(CommentCrudController::class, "Commentaires", "fas fa-solid fa-comments");
-        yield MenuItem::linkToRoute("Albums photos", "fas fa-images", "album_index");
     }
     // public function configureCrud(): Crud
     // {
