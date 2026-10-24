@@ -28,13 +28,15 @@
 		<p class="contact-whatsapp-or">{% trans %}or use the form below{% endtrans %}</p>
 	</div>
 
+	{# Turbo Frame : à l'envoi, seul ce bloc est remplacé par celui de la réponse, sans recharger la page #}
+	<turbo-frame id="contact-frame">
 	<div class="contact-notif">
 		{% for msg in app.flashes('success') %}
-			<p class="alert alert-success">{{msg}}</p>
+			<p class="alert alert-success" data-controller="alert">{{msg}}</p>
 		{% endfor %}
 	</div>
 
-	{{form_start(form)}}
+	{{form_start(form, {'attr': {'data-turbo': 'true'}})}}
 	<label class="control-label" for="contact_name">{% trans %}
 		Your Name
 		{% endtrans %}</label>
@@ -54,5 +56,6 @@
 	{{form_row(form.message)}}
 	<input type="submit" value="{% trans %} Send {% endtrans %}" class="btn button-link">
 	{{form_end(form)}}
+	</turbo-frame>
 
 </div>

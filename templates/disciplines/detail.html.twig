@@ -7,8 +7,8 @@
 	{% if app.request.locale == 'fr' %}{{ discipline.content|plain_text }}{% else %}{{ discipline.englishContent|plain_text }}{% endif %}
 {% endblock %}
 
-{% block head_extra %}
-	{# image de fond : la plus petite déclinaison par défaut, une plus grande dès que l'écran la dépasse #}
+{% block body %}
+	{# image de fond (dans le body et non le head : Turbo fusionne les <head>, les styles des pages précédentes resteraient) : la plus petite déclinaison par défaut, une plus grande dès que l'écran la dépasse #}
 	{% set bg = upload_image(discipline.imageDetail, constant('App\\Entity\\Discipline::IMAGE_WIDTHS')['discipline_images_detail']) %}
 	{% if bg %}
 		<style>
@@ -21,8 +21,6 @@
 			{% endfor %}
 		</style>
 	{% endif %}
-{% endblock %}
-{% block body %}
 	<main class="details">
 		{% for locale in locales %}
 			{% if locale == app.request.locale %}

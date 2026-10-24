@@ -45,8 +45,9 @@ class ContactFormHandler
      *
      * @param string $redirectUrl page sur laquelle revenir après envoi (avec l'ancre du formulaire)
      *
-     * @return RedirectResponse|array{form: \Symfony\Component\Form\FormView, contact_token: string, contact_time: int}
+     * @return RedirectResponse|array{form: FormInterface, contact_token: string, contact_time: int}
      *         redirection si le formulaire a été soumis et valide, sinon les variables à passer au template
+     *         (le formulaire lui-même et non sa vue : render() répond alors en 422 s'il est invalide, ce qu'attend Turbo)
      */
     public function handle(
         Request $request,
@@ -74,7 +75,7 @@ class ContactFormHandler
         [$token, $time] = $this->refreshGuards($request);
 
         return [
-            "form" => $form->createView(),
+            "form" => $form,
             "contact_token" => $token,
             "contact_time" => $time,
         ];

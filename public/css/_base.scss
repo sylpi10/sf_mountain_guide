@@ -23,6 +23,11 @@ body {
     background-color: #fff;
 }
 
+// Turbo Frame : élément inline par défaut, les largeurs en % de son contenu deviendraient fausses
+turbo-frame {
+    display: block;
+}
+
 h1,
 h2,
 h3,

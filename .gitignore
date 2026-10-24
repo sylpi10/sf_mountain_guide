@@ -27,3 +27,8 @@ info.md
 ###< symfony/phpunit-bridge ###
 /node_modules
 /public/vendor/ckeditor5/
+
+###> symfony/asset-mapper ###
+/public/assets/
+/assets/vendor/
+###< symfony/asset-mapper ###

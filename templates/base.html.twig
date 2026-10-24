@@ -96,19 +96,22 @@
 		<link rel="manifest" href="{{ asset('site.webmanifest') }}">
 		<meta name="theme-color" content="#0b0b25">
 		<link rel="stylesheet" href="{{asset('css/style.css')}}"> {% block stylesheets %}{% endblock %}
+		{# Turbo : fondu entre les pages (navigateurs compatibles View Transitions) #}
+		<meta name="view-transition" content="same-origin">
+		{% block importmap %}{{ importmap('app') }}{% endblock %}
 
 		{% block head_extra %}{% endblock %}
 		</head>
 		<body class="{% block body_class %}detail-page{% endblock %}">
 			<header id="top">
-				<nav class="navbar navbar-expand-lg navbar-dark menu">
+				<nav class="navbar navbar-expand-lg navbar-dark menu" data-controller="menu">
 					<div class="container-fluid">
 
-						<button class="navbar-toggler ml-auto" type="button" aria-controls="navbarCollapse" aria-expanded="false" aria-label="{% trans %}Toggle navigation{% endtrans %}">
+						<button class="navbar-toggler ml-auto" type="button" data-menu-target="toggler" data-action="menu#toggle" aria-controls="navbarCollapse" aria-expanded="false" aria-label="{% trans %}Toggle navigation{% endtrans %}">
 							<span class="navbar-toggler-icon"></span>
 						</button>
 
-						<div class="collapse navbar-collapse navs-wrapper" id="navbarCollapse">
+						<div class="collapse navbar-collapse navs-wrapper" id="navbarCollapse" data-menu-target="collapse" data-action="click->menu#close">
 
 							<div class="logo">
 								<a class="navbar-brand" href="{{path('home')}}">
@@ -147,7 +150,7 @@
 
 								{% if is_granted('ROLE_ADMIN') %}
 									<li class="nav-item">
-										<a class="nav-link text-warning" href="{{path('admin')}}" title="admin">Admin</a>
+										<a class="nav-link text-warning" href="{{path('admin')}}" title="admin" data-turbo="false">Admin</a>
 									</li>
 								{% endif %}
 
@@ -155,7 +158,7 @@
 								{% for locale in locales %}
 									{% if locale != app.request.locale %}
 										<li class="nav-item">
-											<a href="{{path('change-locale', {'locale': locale})}}" class="nav-link" title="{% trans %} Passer en Français {% endtrans %}">
+											<a href="{{path('change-locale', {'locale': locale})}}" data-turbo-prefetch="false" class="nav-link" title="{% trans %} Passer en Français {% endtrans %}">
 												<img src="{{asset('images/' ~locale~ '.webp')}}" alt="{{locale}}" width="24" height="24">
 											</a>
 										</li>
@@ -184,7 +187,7 @@
 								{% endif %}
 								{% if app.user %}
 									<li class="nav-item">
-										<a class="nav-link text-danger" title="logout" href=" {{path('logout')}} ">{% trans %}
+										<a class="nav-link text-danger" title="logout" href="{{path('logout')}}" data-turbo="false">{% trans %}
 											Logout
 											{% endtrans %}</a>
 									</li>
@@ -202,12 +205,11 @@
 			</header>
 
 			{# back to top #}
-			<a href="#top" title="{% trans %} Back to Top {% endtrans %}">
+			<a href="#top" data-controller="back-top" title="{% trans %} Back to Top {% endtrans %}">
 				{{ icon('arrow-up', 'back-top') }}
 			</a>
 
 			{% block body %}{% endblock %}
 			{% block javascripts %}{% endblock %}
-			<script src="{{asset('js/script.js')}}" defer></script>
 		</body>
 	</html>

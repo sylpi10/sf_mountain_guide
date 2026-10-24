@@ -24,6 +24,7 @@ RSYNC_EXCLUDES = \
 	--exclude '/.sass-cache/' \
 	--exclude '/public/bundles/' \
 	--exclude '/public/uploads/' \
+	--exclude '/public/assets/' \
 	--exclude '/public/css/style.css.map' \
 	--exclude '/.env' \
 	--exclude '/.env.local' \
@@ -48,7 +49,8 @@ deploy: check-deploy build-front
 	$(SSH) $(REMOTE) "set -e; cd $(SERVER_PATH); \
 		composer install --no-dev --optimize-autoloader --no-interaction; \
 		php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration --env=prod; \
-		php bin/console cache:clear --env=prod"
+		php bin/console cache:clear --env=prod; \
+		php bin/console asset-map:compile --env=prod"
 	@echo "✅ Déploiement terminé"
 
 # Simulation : liste ce qui serait envoyé (et supprimé, lignes « *deleting »), sans rien toucher
@@ -63,7 +65,9 @@ check-deploy:
 	@$(SSH) $(REMOTE) true 2>/dev/null || (echo "❌ Connexion SSH impossible à $(SERVER_HOST). Chez o2switch : cPanel > Autorisation SSH, ajoute ton IP actuelle ($$(curl -s --max-time 5 https://api.ipify.org))" && exit 1)
 
 # CSS compilé + éditeur CKEditor 5 copié dans public/vendor (postinstall de npm)
+# + paquets JS de l'importmap (Turbo, Stimulus) téléchargés dans assets/vendor, envoyés par rsync
 build-front:
+	php bin/console importmap:install
 	npm install --no-audit --no-fund
 	npm run sass
 

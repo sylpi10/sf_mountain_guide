@@ -17,7 +17,7 @@
 
 			<div class="blog-notif">
 				{% for msg in app.flashes('success') %}
-					<p class="alert alert-success">{{msg}}</p>
+					<p class="alert alert-success" data-controller="alert">{{msg}}</p>
 				{% endfor %}
 			</div>
 
