@@ -87,6 +87,10 @@
     .navbar-nav .nav-link.active {
         color: #fff;
         font-weight: bold;
+        &::after {
+            border-width: 1px;
+            transform: scaleY(1);
+        }
     }
 }
 .navbar-toggler {
@@ -110,10 +114,6 @@
 @media (max-width: 991.98px) {
     .navbar-dark .navbar-nav .nav-link {
         margin: 0;
-        &::before,
-        &::after {
-            display: none;
-        }
     }
     .navbar > .container-fluid {
         padding-right: 0;
