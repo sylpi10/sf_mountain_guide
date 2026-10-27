@@ -28,12 +28,16 @@ enum PricingSeason: string
     }
 
     /**
-     * Onglet ouvert par défaut : hiver de décembre à avril, été le reste de l'année.
+     * Onglet ouvert par défaut selon le mois : hiver à partir de $winterFrom, été à partir de $summerFrom
+     * (ex. 10 et 5 : hiver d'octobre à avril, été de mai à septembre).
      */
-    public static function current(?\DateTimeInterface $date = null): self
+    public static function current(int $winterFrom = 10, int $summerFrom = 5, ?\DateTimeInterface $date = null): self
     {
         $month = (int) ($date ?? new \DateTimeImmutable())->format('n');
+        $winter = $winterFrom > $summerFrom
+            ? $month >= $winterFrom || $month < $summerFrom
+            : $month >= $winterFrom && $month < $summerFrom;
 
-        return $month >= 12 || $month <= 4 ? self::Winter : self::Summer;
+        return $winter ? self::Winter : self::Summer;
     }
 }

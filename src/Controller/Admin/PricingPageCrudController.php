@@ -8,12 +8,18 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class PricingPageCrudController extends AbstractCrudController
 {
+    private const MONTHS = [
+        'janvier' => 1, 'février' => 2, 'mars' => 3, 'avril' => 4, 'mai' => 5, 'juin' => 6,
+        'juillet' => 7, 'août' => 8, 'septembre' => 9, 'octobre' => 10, 'novembre' => 11, 'décembre' => 12,
+    ];
+
     public static function getEntityFqcn(): string
     {
         return PricingPage::class;
@@ -45,6 +51,13 @@ class PricingPageCrudController extends AbstractCrudController
                 ->onlyOnForms(),
             TextEditorField::new('contentEn', 'Introduction (EN)')
                 ->setHelp('Si vide, le texte FR est affiché.')
+                ->onlyOnForms(),
+            ChoiceField::new('winterFromMonth', 'Onglet hiver ouvert à partir de')
+                ->setChoices(self::MONTHS)
+                ->setHelp('Onglet affiché par défaut en arrivant sur la page.')
+                ->onlyOnForms(),
+            ChoiceField::new('summerFromMonth', 'Onglet été ouvert à partir de')
+                ->setChoices(self::MONTHS)
                 ->onlyOnForms(),
             DateTimeField::new('updatedAt', 'Modifiée le')->hideOnForm(),
         ];

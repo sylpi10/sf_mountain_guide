@@ -24,10 +24,11 @@ class PricingController extends AbstractController
                 $tabs[$season->value] = ['season' => $season, 'sections' => $sections];
             }
         }
-        $active = PricingSeason::current()->value;
+        $pricing = $pricingRepo->findPage();
+        $active = ($pricing ? PricingSeason::current($pricing->getWinterFromMonth(), $pricing->getSummerFromMonth()) : PricingSeason::current())->value;
 
         return $this->render('pricing/index.html.twig', [
-            'pricing' => $pricingRepo->findPage(),
+            'pricing' => $pricing,
             'tabs' => $tabs,
             'activeTab' => isset($tabs[$active]) ? $active : array_key_first($tabs),
             'disciplines' => $disciplineRepo->findAll(),

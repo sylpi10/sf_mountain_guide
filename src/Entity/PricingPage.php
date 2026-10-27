@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PricingPageRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Page « Tarifs » (une seule ligne, créée par migration) : saison + texte d'introduction.
@@ -31,6 +32,15 @@ class PricingPage
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private $updatedAt;
+
+    // mois (1-12) à partir desquels l'onglet hiver / été est ouvert par défaut
+    #[ORM\Column(type: 'smallint', options: ['default' => 10])]
+    #[Assert\Range(min: 1, max: 12)]
+    private int $winterFromMonth = 10;
+
+    #[ORM\Column(type: 'smallint', options: ['default' => 5])]
+    #[Assert\Range(min: 1, max: 12)]
+    private int $summerFromMonth = 5;
 
     public function __toString(): string
     {
@@ -94,6 +104,28 @@ class PricingPage
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+    public function getWinterFromMonth(): int
+    {
+        return $this->winterFromMonth;
+    }
+
+    public function setWinterFromMonth(int $winterFromMonth): self
+    {
+        $this->winterFromMonth = $winterFromMonth;
+        return $this;
+    }
+
+    public function getSummerFromMonth(): int
+    {
+        return $this->summerFromMonth;
+    }
+
+    public function setSummerFromMonth(int $summerFromMonth): self
+    {
+        $this->summerFromMonth = $summerFromMonth;
         return $this;
     }
 }
