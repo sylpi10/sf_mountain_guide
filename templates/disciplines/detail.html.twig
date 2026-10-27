@@ -79,14 +79,9 @@
 									</div>
 								{% endif %}
 								<hr>
-								<a class="price" href="{{ path('pricing') }}" title="{% trans %}See all prices{% endtrans %}">
+								<a class="price" href="{{ path('pricing') }}">
 									{{ icon('tag') }}
-									{% if locale == 'fr' %}
-										<span>{{discipline.price|raw}}</span>
-									{% else %}
-										<span>{{discipline.englishPrice|raw}}</span>
-									{% endif %}
-									<span class="price-more">{% trans %}See all prices{% endtrans %}</span>
+									<span class="price-more">{% trans %}See prices{% endtrans %}</span>
 								</a>
 							</div>
 						</div>

@@ -42,6 +42,7 @@
     display: flex;
     flex-direction: column;
     min-width: 360px;
+    position: relative;
     border-radius: 14px;
     background-color: #fff;
     color: $text-color;
@@ -55,7 +56,7 @@
 }
 
 .discipline:hover,
-.discipline:focus {
+.discipline:focus-within {
     transform: translateY(-4px);
     box-shadow: 0 16px 36px rgba(0, 0, 0, 0.15);
 }
@@ -93,11 +94,11 @@
         color $transition-fast;
 }
 .discipline:hover .discipline-title,
-.discipline:focus .discipline-title {
+.discipline:focus-within .discipline-title {
     transform: scale(1.06);
 }
 .discipline:hover .discipline-title > h3,
-.discipline:focus .discipline-title > h3 {
+.discipline:focus-within .discipline-title > h3 {
     color: $accent-color;
 }
 
@@ -118,7 +119,7 @@
 }
 
 .discipline:hover .discipline-title:before,
-.discipline:focus .discipline-title:before {
+.discipline:focus-within .discipline-title:before {
     background-color: rgba(14, 11, 44, 0.75);
 }
 
@@ -147,6 +148,17 @@
 
 .discipline-price {
     font-weight: 600;
+    a {
+        position: relative;
+        z-index: 4; // au-dessus du lien étiré de la carte
+        color: $base-color;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        &:hover,
+        &:focus-visible {
+            color: $accent-color-dark;
+        }
+    }
 }
 
 .discipline-more {
@@ -154,9 +166,16 @@
     font-weight: 600;
     color: $base-color;
     transition: color $transition-fast;
+    // lien étiré : toute la carte mène au détail
+    &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+    }
 }
 .discipline:hover .discipline-more,
-.discipline:focus .discipline-more {
+.discipline:focus-within .discipline-more {
     color: $accent-color-dark;
 }
 @media screen and (max-width: 768px) {

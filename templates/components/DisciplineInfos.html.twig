@@ -1,4 +1,4 @@
-{# Infos pratiques d'une discipline : pers. max, durée, prix « à partir de » #}
+{# Infos pratiques d'une discipline : pers. max, durée, lien vers la page tarifs #}
 {% props discipline %}
 {% set fr = app.request.locale == 'fr' %}
 {% set duration = fr ? discipline.duration : discipline.englishDuration %}
@@ -29,14 +29,8 @@
 	{% if duration %}
 		<li>{{ icon('clock') }} {{ duration|striptags }}</li>
 	{% endif %}
-	{% if discipline.priceFrom %}
-		<li class="discipline-price">
-			{{ icon('tag') }}
-			{% if discipline.priceUnit and discipline.priceUnit.value == 'half_day' %}
-				{{ 'From {price} € per half day'|trans({'{price}': discipline.priceFrom}) }}
-			{% else %}
-				{{ 'From {price} € per day'|trans({'{price}': discipline.priceFrom}) }}
-			{% endif %}
-		</li>
-	{% endif %}
+	<li class="discipline-price">
+		{{ icon('tag') }}
+		<a href="{{ path('pricing') }}">{% trans %}See prices{% endtrans %}</a>
+	</li>
 </ul>

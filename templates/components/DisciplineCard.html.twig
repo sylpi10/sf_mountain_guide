@@ -2,7 +2,8 @@
 {% props discipline %}
 {% set fr = app.request.locale == 'fr' %}
 {% set title = fr ? discipline.title : discipline.englishTitle %}
-<a href="{{ path('detail', {id: discipline.id, slug: discipline.slug(app.request.locale)}) }}" class="discipline" title="Détails {{ title }}">
+{# carte entièrement cliquable via le ::after de .discipline-more (pas de <a> englobant : la carte contient le lien tarifs) #}
+<article class="discipline">
 	<div class="discipline-image">
 		<div class="discipline-title">
 			{% set img = upload_image(discipline.image, constant('App\\Entity\\Discipline::IMAGE_WIDTHS')['discipline_images']) %}
@@ -13,5 +14,5 @@
 		</div>
 	</div>
 	<twig:DisciplineInfos :discipline="discipline" />
-	<span class="discipline-more">{% trans %}See details{% endtrans %} &rarr;</span>
-</a>
+	<a href="{{ path('detail', {id: discipline.id, slug: discipline.slug(app.request.locale)}) }}" class="discipline-more" title="Détails {{ title }}">{% trans %}See details{% endtrans %} &rarr;</a>
+</article>
