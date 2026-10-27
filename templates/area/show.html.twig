@@ -28,7 +28,7 @@
 			'image': site_url ~ asset('images/profile-share.jpg'),
 			'url': site_url ~ path('about'),
 		},
-		'provider': {'@id': site_url ~ '/#guide'},
+		'about': {'@id': site_url ~ '/#guide'},
 	}|json_encode(constant('JSON_UNESCAPED_UNICODE') b-or constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_HEX_TAG'))|raw }}
 	</script>
 {% endblock %}

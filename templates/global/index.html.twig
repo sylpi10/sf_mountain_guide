@@ -81,7 +81,11 @@
 
 
   <div class="hero-content hero-overlay">
-    <h1 class="main-title">{% trans %}Mountaineering, Ski, Rock Climbing{% endtrans %}</h1>
+    {# un seul bloc dans la grille du hero : le sous-titre reste collé au H1 #}
+    <div class="hero-heading">
+      <h1 class="main-title">{% trans %}Mountain guide in Briançon, French Alps{% endtrans %}</h1>
+      <p class="hero-subtitle">{% trans %}Ski touring, mountaineering, rock climbing{% endtrans %}</p>
+    </div>
     <a href="{{ path('home', {'_fragment':'disciplines'}) }}" class="btn more-link">
       {% trans %}Discover the activities{% endtrans %}
     </a>

@@ -6,9 +6,10 @@
     font-display: swap;
 }
 
+// titres : slab en petites capitales, avec tous les accents (onderneming n'en avait aucun)
 @font-face {
-    font-family: "onderneming";
-    src: url("../fonts/onderneming/Onderneming.ttf");
+    font-family: "Graduate";
+    src: url("../fonts/graduate/Graduate-Regular.ttf");
     font-display: swap;
 }
 
@@ -29,7 +30,7 @@ body {
 h1,
 h2 {
     // font-family: "Share Tech", sans-serif;
-    font-family: "onderneming", sans-serif;
+    font-family: "Graduate", sans-serif;
     /* color: rgb(108, 108, 233); */
 }
 

@@ -37,17 +37,47 @@
     padding: 2rem;
     @media (max-width: 768px) {
         place-items: unset;
-        h1.main-title {
+    }
+    .hero-heading {
+        height: fit-content;
+        padding: 1rem 1.6rem;
+        border-radius: 12px;
+        @media (max-width: 768px) {
+            width: fit-content;
+            max-width: 100%;
             margin: 60px auto 0 auto;
+            padding: 0.8rem 1rem;
+            background-color: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(4px);
         }
     }
     h1.main-title {
         color: #0b0b25;
         letter-spacing: 3.3px;
-        max-width: 520px;
+        margin-inline: auto;
+        max-width: 620px;
         height: fit-content;
         @media screen and (min-width: 768px) {
             font-size: 2.6rem;
+        }
+    }
+    // activités sous le H1
+    .hero-subtitle {
+        border-top: double 3px rgba(0, 0, 0, 0.2);
+
+        margin: 0.8rem auto 0;
+        color: #0b0b25;
+        font-size: 1.2rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        @media screen and (max-width: 768px) {
+            width: 320px;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+        }
+        @media screen and (min-width: 768px) {
+            font-size: 1.5rem;
         }
     }
 }
@@ -91,7 +121,6 @@
         width: 320px;
         /* color: #fff; */
         /* text-shadow: 4px 2px black; */
-        backdrop-filter: blur(3px);
     }
     .more-link {
         align-self: start;

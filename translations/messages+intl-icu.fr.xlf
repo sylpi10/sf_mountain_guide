@@ -107,9 +107,13 @@
         <source>home</source>
         <target>accueil</target>
       </trans-unit>
-      <trans-unit id="j6mFlf4" resname="Mountaineering, Ski, Rock Climbing">
-        <source>Mountaineering, Ski, Rock Climbing</source>
-        <target>Alpinisme, ski, escalade</target>
+      <trans-unit id="home_h1" resname="Mountain guide in Briançon, French Alps">
+        <source>Mountain guide in Briançon, French Alps</source>
+        <target>Guide de haute montagne à Briançon</target>
+      </trans-unit>
+      <trans-unit id="home_subtitle" resname="Ski touring, mountaineering, rock climbing">
+        <source>Ski touring, mountaineering, rock climbing</source>
+        <target>Ski, alpinisme, escalade</target>
       </trans-unit>
       <trans-unit id="rezL_Hs" resname="Montain Guide in Briançon, I have many mountain activities to show you:">
         <source>Montain Guide in Briançon, I have many mountain activities to show you:</source>

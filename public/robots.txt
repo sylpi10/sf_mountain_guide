@@ -1,6 +1,6 @@
 User-agent: *
-Disallow: /admin/
-Disallow: /login/
+Disallow: /admin
+Disallow: /login
 Disallow: /change-locale/
 
 Sitemap: https://directicimes.com/sitemap.xml

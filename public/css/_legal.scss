@@ -8,8 +8,6 @@
         text-transform: uppercase;
         text-align: center;
         margin-bottom: 0.5rem;
-        // titres libres saisis en admin : onderneming n'a pas les capitales accentuées
-        font-family: "Share Tech", sans-serif;
         letter-spacing: 1px;
     }
 }
@@ -26,8 +24,6 @@
     line-height: 1.7;
     h2 {
         margin: 2rem 0 0.75rem;
-        // onderneming n'a pas les capitales accentuées
-        font-family: "Share Tech", sans-serif;
         font-size: 1.5rem;
     }
     a {
