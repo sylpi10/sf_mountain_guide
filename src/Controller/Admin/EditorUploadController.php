@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
- * Upload des images insérées dans le texte des articles (CKEditor 5, SimpleUploadAdapter).
+ * Upload des images insérées dans le texte des articles et des pages secteurs (CKEditor 5, SimpleUploadAdapter).
  * Les images sont réduites à 1600 px de large et converties en webp pour rester légères.
  */
 #[IsGranted('ROLE_ADMIN')]

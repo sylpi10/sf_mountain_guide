@@ -127,49 +127,8 @@
         opacity: 1;
     }
 
-    // images CKEditor : <figure class="image"> (+ légende), alignements, redimensionnement en %
-    figure.image {
-        display: table;
-        clear: both;
-        margin: 1.5rem auto;
-        max-width: 100%;
-        img {
-            display: block;
-            margin: 0;
-            width: 100%;
-            border-radius: 8px;
-        }
-        &.image_resized {
-            display: block;
-            img {
-                width: 100%;
-            }
-        }
-    }
-    figcaption {
-        display: table-caption;
-        caption-side: bottom;
-        padding: 0.5rem;
-        font-size: 0.9rem;
-        color: #6c757d;
-        text-align: center;
-    }
-    img.image_resized {
-        height: auto;
-    }
-    .image-style-align-left {
-        float: left;
-        margin: 0.5rem 1.5rem 1rem 0;
-        max-width: 50%;
-    }
-    .image-style-align-right {
-        float: right;
-        margin: 0.5rem 0 1rem 1.5rem;
-        max-width: 50%;
-    }
-    .image-inline img {
-        margin: 0;
-    }
+    @include ck-images;
+
     .text-tiny {
         font-size: 0.7em;
     }
@@ -183,15 +142,6 @@
     // vidéos YouTube / Vimeo (mediaEmbed, aperçu enregistré dans le HTML)
     figure.media {
         margin: 1.5rem 0;
-    }
-
-    @media screen and (max-width: 600px) {
-        .image-style-align-left,
-        .image-style-align-right {
-            float: none;
-            margin: 1rem auto;
-            max-width: 100%;
-        }
     }
 }
 

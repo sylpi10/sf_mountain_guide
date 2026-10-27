@@ -9,11 +9,17 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class AreaPageCrudController extends AbstractCrudController
 {
+    use RichTextEditorTrait;
+
+    public function __construct(private CsrfTokenManagerInterface $csrfTokenManager)
+    {
+    }
+
     public static function getEntityFqcn(): string
     {
         return AreaPage::class;
@@ -55,8 +61,10 @@ class AreaPageCrudController extends AbstractCrudController
                 ->onlyOnForms(),
             TextareaField::new('metaDescription', 'Description Google (FR)')->setHelp($metaHelp)->onlyOnForms(),
             TextareaField::new('metaDescriptionEn', 'Description Google (EN)')->onlyOnForms(),
-            TextEditorField::new('content', 'Texte de la page (FR)')->onlyOnForms(),
-            TextEditorField::new('contentEn', 'Texte de la page (EN)')
+            $this->richTextField('content', 'Texte de la page (FR)')
+                ->setHelp('Bouton « Insérer une image » pour ajouter des photos du secteur (réduites et converties automatiquement). Pensez au texte alternatif : décrire le lieu (ex. « Ski de randonnée au col de l\'Échelle »).')
+                ->onlyOnForms(),
+            $this->richTextField('contentEn', 'Texte de la page (EN)')
                 ->setHelp('Si vide, le texte FR est affiché.')
                 ->onlyOnForms(),
             DateTimeField::new('updatedAt', 'Modifiée le')->hideOnForm(),
