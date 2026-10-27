@@ -14,10 +14,11 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class AreaPageController extends AbstractController
 {
-    #[Route(path: ['fr' => '/{slug}', 'en' => '/en/{slug}'], name: 'area_page', requirements: ['slug' => AreaPage::SLUG_REQUIREMENT])]
+    // slugs gérés en admin : priorité basse pour que les pages fixes (/tarifs, /blog, /cgv…) passent avant
+    #[Route(path: ['fr' => '/{slug}', 'en' => '/en/{slug}'], name: 'area_page', requirements: ['slug' => AreaPage::SLUG_REQUIREMENT], priority: -10)]
     public function show(string $slug, Request $request, AreaPageRepository $areaPageRepo, DisciplineRepository $disciplineRepo, ContactFormHandler $contactForm): Response
     {
-        $page = $areaPageRepo->findPublishedBySlug(AreaPage::frenchSlug($slug));
+        $page = $areaPageRepo->findOneByAnySlug($slug);
 
         if (!$page) {
             throw $this->createNotFoundException();

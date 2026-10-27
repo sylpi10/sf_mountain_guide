@@ -3,25 +3,20 @@
 namespace App\Entity;
 
 use App\Repository\AreaPageRepository;
+use App\Validator\AreaPageSlugs;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Pages « secteur » pour le référencement local (guide à Serre Chevalier, Montgenèvre…),
- * une ligne par page créée par migration. Invisibles tant qu'elles ne sont pas publiées.
+ * créées en admin. Invisibles tant qu'elles ne sont pas publiées.
  */
 #[ORM\Entity(repositoryClass: AreaPageRepository::class)]
+#[AreaPageSlugs]
 class AreaPage
 {
-    // slugs servis par la route /{slug} (et /en/{slug}) : ajouter ici, dans SLUGS_EN + une ligne en migration pour un nouveau secteur
-    public const SLUG_REQUIREMENT = 'guide-serre-chevalier|guide-montgenevre|guide-vallee-de-la-claree'
-        .'|mountain-guide-serre-chevalier|mountain-guide-montgenevre|mountain-guide-claree-valley';
-
-    // slug FR => slug de la version anglaise
-    public const SLUGS_EN = [
-        'guide-serre-chevalier' => 'mountain-guide-serre-chevalier',
-        'guide-montgenevre' => 'mountain-guide-montgenevre',
-        'guide-vallee-de-la-claree' => 'mountain-guide-claree-valley',
-    ];
+    // format des slugs servis par la route /{slug} (et /en/{slug}) : minuscules, chiffres, tirets
+    public const SLUG_REQUIREMENT = '[a-z0-9]+(?:-[a-z0-9]+)*';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -29,13 +24,25 @@ class AreaPage
     private $id;
 
     #[ORM\Column(type: 'string', length: 80, unique: true)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 80)]
+    #[Assert\Regex('/^'.self::SLUG_REQUIREMENT.'$/', message: 'Minuscules, chiffres et tirets uniquement (ex. : guide-vallouise).')]
     private $slug;
+
+    // slug de la version anglaise (/en/{slugEn})
+    #[ORM\Column(type: 'string', length: 80, unique: true)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 80)]
+    #[Assert\Regex('/^'.self::SLUG_REQUIREMENT.'$/', message: 'Minuscules, chiffres et tirets uniquement (ex. : mountain-guide-vallouise).')]
+    private $slugEn;
 
     // nom court du secteur (liens du footer)
     #[ORM\Column(type: 'string', length: 80)]
+    #[Assert\NotBlank]
     private $name;
 
     #[ORM\Column(type: 'string', length: 150)]
+    #[Assert\NotBlank]
     private $title;
 
     #[ORM\Column(type: 'string', length: 150, nullable: true)]
@@ -76,16 +83,27 @@ class AreaPage
         return $this->id;
     }
 
-    // slug de l'URL dans la langue demandée (slug FR stocké en base, slug EN tiré de SLUGS_EN)
+    // slug de l'URL dans la langue demandée
     public function getSlug(?string $locale = null): ?string
     {
-        return 'en' === $locale ? (self::SLUGS_EN[$this->slug] ?? $this->slug) : $this->slug;
+        return 'en' === $locale ? ($this->slugEn ?: $this->slug) : $this->slug;
     }
 
-    // slug FR (clé en base) correspondant à un slug d'URL, quelle que soit sa langue
-    public static function frenchSlug(string $slug): string
+    public function setSlug(?string $slug): self
     {
-        return array_search($slug, self::SLUGS_EN, true) ?: $slug;
+        $this->slug = (string) $slug;
+        return $this;
+    }
+
+    public function getSlugEn(): ?string
+    {
+        return $this->slugEn;
+    }
+
+    public function setSlugEn(?string $slugEn): self
+    {
+        $this->slugEn = (string) $slugEn;
+        return $this;
     }
 
     public function getName(): ?string

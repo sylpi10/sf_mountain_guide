@@ -4,8 +4,6 @@ namespace App\Controller\Admin;
 
 use App\Entity\AreaPage;
 use Doctrine\ORM\EntityManagerInterface;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
@@ -29,14 +27,9 @@ class AreaPageCrudController extends AbstractCrudController
             ->setPageTitle('index', 'Pages secteurs (référencement local)')
             ->setPageTitle('edit', fn (AreaPage $page) => 'Modifier : ' . $page->getName())
             ->setHelp('index', 'Une page par secteur, pour apparaître sur les recherches du type « guide Serre Chevalier ». Chaque texte doit rester unique (pas de copier-coller entre secteurs).')
+            ->setHelp('new', 'La page n\'est visible sur le site (et dans le footer) qu\'une fois « Publiée » cochée.')
             ->setHelp('edit', 'La page n\'est visible sur le site (et dans le footer) qu\'une fois « Publiée » cochée.')
             ->setDefaultSort(['id' => 'ASC']);
-    }
-
-    // secteurs fixes, créés par migration
-    public function configureActions(Actions $actions): Actions
-    {
-        return $actions->disable(Action::NEW, Action::DELETE);
     }
 
     public function configureFields(string $pageName): iterable
@@ -46,6 +39,11 @@ class AreaPageCrudController extends AbstractCrudController
         return [
             TextField::new('name', 'Secteur')->setHelp('Nom court, utilisé dans le footer.'),
             BooleanField::new('isPublished', 'Publiée'),
+            TextField::new('slug', 'Adresse (FR)')
+                ->setHelp('Ex. : guide-vallouise → directicimes.com/guide-vallouise. Minuscules, chiffres et tirets, avec le mot-clé recherché. À ne plus changer une fois la page publiée : l\'ancienne adresse indexée par Google serait perdue.'),
+            TextField::new('slugEn', 'Adresse (EN)')
+                ->setHelp('Ex. : mountain-guide-vallouise → directicimes.com/en/mountain-guide-vallouise. Mêmes règles, en anglais.')
+                ->onlyOnForms(),
             TextField::new('title', 'Titre H1 (FR)')->setHelp('Ex. : Guide de ski à Serre Chevalier.'),
             TextField::new('titleEn', 'Titre H1 (EN)')->onlyOnForms(),
             TextField::new('seoTitle', 'Titre Google (FR)')
@@ -63,6 +61,12 @@ class AreaPageCrudController extends AbstractCrudController
                 ->onlyOnForms(),
             DateTimeField::new('updatedAt', 'Modifiée le')->hideOnForm(),
         ];
+    }
+
+    public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        $entityInstance->setUpdatedAt(new \DateTimeImmutable());
+        parent::persistEntity($entityManager, $entityInstance);
     }
 
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void

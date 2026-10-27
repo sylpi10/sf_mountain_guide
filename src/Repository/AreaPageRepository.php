@@ -16,9 +16,18 @@ class AreaPageRepository extends ServiceEntityRepository
         parent::__construct($registry, AreaPage::class);
     }
 
-    public function findPublishedBySlug(string $slug): ?AreaPage
+    // page dont le slug FR ou EN vaut $slug
+    public function findOneByAnySlug(string $slug, bool $publishedOnly = true): ?AreaPage
     {
-        return $this->findOneBy(['slug' => $slug, 'isPublished' => true]);
+        $qb = $this->createQueryBuilder('p')
+            ->where('p.slug = :slug OR p.slugEn = :slug')
+            ->setParameter('slug', $slug)
+            ->setMaxResults(1);
+        if ($publishedOnly) {
+            $qb->andWhere('p.isPublished = true');
+        }
+
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     /**
