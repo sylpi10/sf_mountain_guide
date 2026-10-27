@@ -41,7 +41,11 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkTo(DisciplineCrudController::class, "Disciplines", "fas fa-skiing");
         yield MenuItem::linkTo(UserCrudController::class, "Utilisateurs", "fas fa-user");
         yield MenuItem::linkTo(AboutCrudController::class, "About", "fas fa-address-card");
-        yield MenuItem::linkTo(PricingPageCrudController::class, "Tarifs", "fas fa-euro-sign");
+        yield MenuItem::subMenu("Tarifs", "fas fa-euro-sign")->setSubItems([
+            MenuItem::linkTo(PricingGroupCrudController::class, "Blocs de tarifs"),
+            MenuItem::linkTo(PricingSectionCrudController::class, "Sections"),
+            MenuItem::linkTo(PricingPageCrudController::class, "Saison et introduction"),
+        ]);
         yield MenuItem::linkTo(LegalPageCrudController::class, "CGV / pages légales", "fas fa-file-contract");
         yield MenuItem::linkTo(AreaPageCrudController::class, "Pages secteurs (SEO)", "fas fa-map-marked-alt");
         yield MenuItem::linkTo(SiteImageCrudController::class, "Images du site", "fas fa-image");

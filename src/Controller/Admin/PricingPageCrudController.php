@@ -26,7 +26,7 @@ class PricingPageCrudController extends AbstractCrudController
             ->setEntityLabelInPlural('Page tarifs')
             ->setPageTitle('index', 'Page tarifs')
             ->setPageTitle('edit', 'Modifier la page tarifs')
-            ->setHelp('edit', 'Les prix « à partir de » affichés sous ce texte viennent de chaque activité (menu Disciplines, champ Prix).');
+            ->setHelp('edit', 'Les tarifs eux-mêmes se saisissent dans Tarifs > Blocs de tarifs.');
     }
 
     // page unique, créée par migration
@@ -40,10 +40,10 @@ class PricingPageCrudController extends AbstractCrudController
         return [
             TextField::new('season', 'Saison (FR)')->setHelp('Ex. : Saison hiver 2026 - 2027'),
             TextField::new('seasonEn', 'Saison (EN)')->onlyOnForms(),
-            TextEditorField::new('content', 'Texte de la page (FR)')
-                ->setHelp('Conditions, ce qui est compris, tarifs de groupe, acompte…')
+            TextEditorField::new('content', 'Introduction (FR)')
+                ->setHelp('Affichée en haut de la page, avant les tarifs : conditions générales, devis…')
                 ->onlyOnForms(),
-            TextEditorField::new('contentEn', 'Texte de la page (EN)')
+            TextEditorField::new('contentEn', 'Introduction (EN)')
                 ->setHelp('Si vide, le texte FR est affiché.')
                 ->onlyOnForms(),
             DateTimeField::new('updatedAt', 'Modifiée le')->hideOnForm(),

@@ -1,0 +1,7 @@
+/* admin des blocs de tarifs : les 4 champs d'une ligne (libellé / prix, FR puis EN) sur une grille */
+.pricing-line-form > .form-widget > div,
+.pricing-line-form .form-widget-compound > div {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 0 1rem;
+}

@@ -6,8 +6,8 @@ use App\Repository\PricingPageRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Page « Tarifs » (une seule ligne, créée par migration), mise à jour à chaque saison.
- * Les prix « à partir de » de chaque activité restent dans Discipline::price.
+ * Page « Tarifs » (une seule ligne, créée par migration) : saison + texte d'introduction.
+ * Les tarifs sont dans PricingSection > PricingGroup > PricingLine.
  */
 #[ORM\Entity(repositoryClass: PricingPageRepository::class)]
 class PricingPage

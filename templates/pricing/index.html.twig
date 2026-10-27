@@ -22,8 +22,73 @@
 
 			{% set content = pricing ? ((is_en ? pricing.contentEn : null) ?: pricing.content) : null %}
 			{% if content %}
-				<div class="pricing-content">{{ content|replace({'<h1>': '<h2>', '</h1>': '</h2>'})|raw }}</div>
+				<div class="pricing-intro">{{ content|raw }}</div>
 			{% endif %}
+
+			{# onglets hiver / été ; sans JS, seul l'onglet de la saison en cours est visible #}
+			<div class="pricing-tabs" data-controller="tabs">
+				{% if tabs|length > 1 %}
+					<div class="pricing-tablist" role="tablist" aria-label="{% trans %}Prices{% endtrans %}">
+						{% for key, tab in tabs %}
+							{% set anchor = tab.season.anchor %}
+							<a href="#{{ anchor }}" id="tab-{{ anchor }}" role="tab" aria-controls="{{ anchor }}" aria-selected="{{ key == activeTab ? 'true' : 'false' }}"{% if key != activeTab %} tabindex="-1"{% endif %} data-tabs-target="tab" data-action="tabs#select keydown->tabs#keydown">
+								{{ key == 'winter' ? 'Winter prices'|trans : 'Summer prices'|trans }}
+							</a>
+						{% endfor %}
+					</div>
+				{% endif %}
+
+				{% for key, tab in tabs %}
+					{% set anchor = tab.season.anchor %}
+					{% set titled = tab.sections|filter(s => (is_en ? s.titleEn : null) ?: s.title) %}
+					<div class="pricing-panel" id="{{ anchor }}"{% if tabs|length > 1 %} role="tabpanel" aria-labelledby="tab-{{ anchor }}"{% endif %} data-tabs-target="panel"{% if key != activeTab %} hidden{% endif %}>
+						{% if titled|length > 1 %}
+							<nav class="pricing-nav" aria-label="{{ key == 'winter' ? 'Winter prices'|trans : 'Summer prices'|trans }}">
+								{% for section in titled %}
+									<a href="#tarifs-{{ section.id }}">{{ (is_en ? section.titleEn : null) ?: section.title }}</a>
+								{% endfor %}
+							</nav>
+						{% endif %}
+
+						{% for section in tab.sections %}
+							<section class="pricing-section" id="tarifs-{{ section.id }}">
+								{% set section_title = (is_en ? section.titleEn : null) ?: section.title %}
+								{% if section_title %}
+									<h2>{{ section_title }}</h2>
+								{% endif %}
+								<div class="pricing-groups">
+									{% for group in section.groups %}
+										{% set note = (is_en ? group.noteEn : null) ?: group.note %}
+										<div class="pricing-group">
+											{% set group_title = (is_en ? group.titleEn : null) ?: group.title %}
+											{% if group_title %}
+												<h3>{{ group_title }}</h3>
+											{% endif %}
+											<ul>
+												{% for line in group.lines %}
+													{% set label = (is_en ? line.labelEn : null) ?: line.label %}
+													{% set price = (is_en ? line.priceEn : null) ?: line.price %}
+													{% if price %}
+														<li class="pricing-row{{ label ? '' : ' pricing-row-alone' }}">
+															{% if label %}<span class="pricing-row-label">{{ label }}</span>{% endif %}
+															<span class="pricing-row-price">{{ price }}</span>
+														</li>
+													{% elseif label %}
+														<li class="pricing-text">{{ label }}</li>
+													{% endif %}
+												{% endfor %}
+											</ul>
+											{% if note %}
+												<p class="pricing-note">{{ note|nl2br }}</p>
+											{% endif %}
+										</div>
+									{% endfor %}
+								</div>
+							</section>
+						{% endfor %}
+					</div>
+				{% endfor %}
+			</div>
 
 			<h2>{% trans %}Prices by activity{% endtrans %}</h2>
 			<ul class="pricing-list">
