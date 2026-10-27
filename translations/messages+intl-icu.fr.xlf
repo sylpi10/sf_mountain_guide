@@ -311,9 +311,9 @@
         <source>Last updated:</source>
         <target>Dernière mise à jour :</target>
       </trans-unit>
-      <trans-unit id="area_0" resname="Ski &amp; mountain guide in Serre Chevalier and Montgenèvre">
-        <source>Ski &amp; mountain guide in Serre Chevalier and Montgenèvre</source>
-        <target>Guide ski &amp; haute montagne à Serre Chevalier, Montgenèvre</target>
+      <trans-unit id="home_title" resname="Mountain guide in Briançon, French Alps – Ski touring, mountaineering">
+        <source>Mountain guide in Briançon, French Alps – Ski touring, mountaineering</source>
+        <target>Guide de haute montagne à Briançon – Ski, alpinisme, escalade</target>
       </trans-unit>
       <trans-unit id="area_1" resname="IFMGA mountain guide in Briançon: off-piste skiing and ski touring in Serre Chevalier, Montgenèvre and the Clarée valley. Tailor-made days for all levels.">
         <source>IFMGA mountain guide in Briançon: off-piste skiing and ski touring in Serre Chevalier, Montgenèvre and the Clarée valley. Tailor-made days for all levels.</source>
