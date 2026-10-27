@@ -60,6 +60,14 @@
         @media screen and (min-width: 768px) {
             font-size: 2.6rem;
         }
+        @media screen and (max-width: 768px) {
+            font-size: 1.9rem;
+            text-align: center;
+            width: 320px;
+        }
+        @media screen and (max-width: 500px) {
+            width: fit-content;
+        }
     }
     // activités sous le H1
     .hero-subtitle {
@@ -71,13 +79,16 @@
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 2px;
+        @media screen and (min-width: 768px) {
+            font-size: 1.5rem;
+        }
         @media screen and (max-width: 768px) {
             width: 320px;
             font-size: 0.95rem;
             letter-spacing: 1px;
         }
-        @media screen and (min-width: 768px) {
-            font-size: 1.5rem;
+        @media screen and (max-width: 500px) {
+            width: fit-content;
         }
     }
 }
@@ -112,17 +123,7 @@
         color: $accent-color;
         padding: 0.85rem 2.9rem;
     }
-}
-
-@media screen and (max-width: 768px) {
-    h1.main-title {
-        font-size: 1.9rem;
-        text-align: center;
-        width: 320px;
-        /* color: #fff; */
-        /* text-shadow: 4px 2px black; */
-    }
-    .more-link {
+    @media screen and (max-width: 768px) {
         align-self: start;
         margin-top: 1rem;
         padding: 0.7rem 1.4rem;
