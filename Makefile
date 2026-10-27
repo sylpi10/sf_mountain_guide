@@ -1,4 +1,4 @@
-.PHONY: deploy deploy-test build-front check-deploy
+.PHONY: deploy deploy-test build-front check-deploy backup
 
 ifneq (,$(wildcard .env.deploy))
 include .env.deploy
@@ -43,7 +43,8 @@ RSYNC_EXCLUDES = \
 # bundle retiré) l'est aussi sur le serveur, sinon cache:clear plante
 MIRROR_DIRS = config src templates translations migrations
 
-deploy: check-deploy build-front
+# Le backup passe avant tout : s'il échoue, le déploiement s'arrête.
+deploy: check-deploy backup build-front
 	$(RSYNC) $(RSYNC_EXCLUDES) ./ $(REMOTE):~/$(SERVER_PATH)
 	$(RSYNC) --delete --relative $(RSYNC_EXCLUDES) $(MIRROR_DIRS) $(REMOTE):~/$(SERVER_PATH)/
 	$(SSH) $(REMOTE) "set -e; cd $(SERVER_PATH); \
@@ -52,6 +53,14 @@ deploy: check-deploy build-front
 		php bin/console cache:clear --env=prod; \
 		php bin/console asset-map:compile --env=prod"
 	@echo "✅ Déploiement terminé"
+
+# Dump de la base de prod sur le serveur (~/backups/directicimes, 10 derniers gardés),
+# puis copie locale dans var/backups/ (au cas où le serveur lui-même serait perdu)
+backup: check-deploy
+	$(SSH) $(REMOTE) 'bash -s' -- $(SERVER_PATH) < bin/backup-db.sh
+	@mkdir -p var/backups
+	$(RSYNC) $(REMOTE):~/backups/directicimes/ var/backups/
+	@echo "✅ Base sauvegardée"
 
 # Simulation : liste ce qui serait envoyé (et supprimé, lignes « *deleting »), sans rien toucher
 deploy-test: check-deploy
