@@ -8,6 +8,13 @@
 			{# check if hostname in url #}
 			{# add it if not #}
 				<loc>{{ site_url ~ url.loc }}</loc>
+			{# versions de la page dans chaque langue ; x-default = version FR #}
+			{% for hreflang, href in url.alternates|default([]) %}
+				<xhtml:link rel="alternate" hreflang="{{ hreflang }}" href="{{ site_url ~ href }}"/>
+			{% endfor %}
+			{% if url.alternates.fr is defined %}
+				<xhtml:link rel="alternate" hreflang="x-default" href="{{ site_url ~ url.alternates.fr }}"/>
+			{% endif %}
 			{# if update date #}
 			{% if url.lastmod is defined %}
 				<lastmod>{{ url.lastmod }}</lastmod>

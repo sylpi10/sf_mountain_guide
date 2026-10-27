@@ -18,20 +18,27 @@ class LocaleSubscriber implements EventSubscriberInterface{
     public function onKernelRequest(RequestEvent $event)
     {
         $request = $event->getRequest();
+
+        // page traduite (/en/...) : la langue vient de l'URL, on la retient pour les pages
+        // sans version par URL (login, newsletter…)
+        if ($locale = $request->attributes->get('_locale')) {
+            if ($request->hasPreviousSession()) {
+                $request->getSession()->set('_locale', $locale);
+            }
+            return;
+        }
+
         if (!$request->hasPreviousSession()) {
             return;
         }
-        if ($locale = $request->query->get('_locale')) {
-            $request->setLocale($locale);
-        }else{
-            $request->setLocale($request->getSession()->get('_locale', 
-            $this->defaultLocale));
-        }
+        $request->setLocale($request->getSession()->get('_locale',
+        $this->defaultLocale));
     }
 
     public static function getSubscribedEvents(): array
     {
         return [
+            // après le routeur (32) pour lire le _locale de la route
             KernelEvents :: REQUEST => [['onKernelRequest', 20]],
         ];
     }

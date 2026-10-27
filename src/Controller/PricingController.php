@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class PricingController extends AbstractController
 {
-    #[Route(path: '/tarifs', name: 'pricing')]
+    #[Route(path: ['fr' => '/tarifs', 'en' => '/en/prices'], name: 'pricing')]
     public function index(PricingPageRepository $pricingRepo, DisciplineRepository $disciplineRepo): Response
     {
         return $this->render('pricing/index.html.twig', [

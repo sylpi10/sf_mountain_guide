@@ -56,7 +56,7 @@
 			<ul class="pricing-list">
 				{% for disci in disciplines %}
 					<li>
-						<a class="pricing-item" href="{{ path('detail', {id: disci.id, slug: disci.slug}) }}">
+						<a class="pricing-item" href="{{ path('detail', {id: disci.id, slug: disci.slug(app.request.locale)}) }}">
 							<h3>{{ is_en ? disci.englishTitle : disci.title }}</h3>
 							<span class="pricing-item-more">{% trans %}See the activity{% endtrans %}</span>
 						</a>
@@ -69,7 +69,7 @@
 				<p class="area-others">
 					{% trans %}Other areas:{% endtrans %}
 					{% for area in other_areas %}
-						<a href="{{ path('area_page', {slug: area.slug}) }}">{{ area.name }}</a>{{ not loop.last ? ', ' }}
+						<a href="{{ path('area_page', {slug: area.slug(app.request.locale)}) }}">{{ area.name }}</a>{{ not loop.last ? ', ' }}
 					{% endfor %}
 				</p>
 			{% endif %}

@@ -14,7 +14,7 @@ class AboutController extends AbstractController
      * @param AboutRepository $aboutRepo
      * @return Response
      */
-    #[Route(path: '/about', name: 'about')]
+    #[Route(path: ['fr' => '/about', 'en' => '/en/about'], name: 'about')]
     public function about(AboutRepository $aboutRepo): Response
     {
         // $about = $aboutRepo->findOneById(1);

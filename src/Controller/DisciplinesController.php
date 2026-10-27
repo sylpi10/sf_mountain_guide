@@ -20,7 +20,7 @@ class DisciplinesController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/activites', name: 'activities')]
+    #[Route(path: ['fr' => '/activites', 'en' => '/en/activities'], name: 'activities')]
     public function index(): Response
     {
         return $this->render('disciplines/index.html.twig', [
@@ -36,23 +36,29 @@ class DisciplinesController extends AbstractController
      * @param string $slug
      * @return Response
      */
-    #[Route(path: 'discipline/{slug}-{id}', name: 'detail', requirements: ['slug' => '[a-z0-9\-]*'])]
+    #[Route(path: ['fr' => '/discipline/{slug}-{id}', 'en' => '/en/activity/{slug}-{id}'], name: 'detail', requirements: ['slug' => '[a-z0-9\-]*'])]
     public function detail(
         $id,
         Request $request,
         #[MapEntity(id: 'id')] Discipline $discipline,
         string $slug,
     ): Response {
-        if ($discipline->getSlug() !== $slug) {
+        $locale = $request->getLocale();
+        if ($discipline->getSlug($locale) !== $slug) {
             return $this->redirectToRoute(
                 "detail",
                 [
                     "id" => $discipline->getId(),
-                    "slug" => $discipline->getSlug(),
+                    "slug" => $discipline->getSlug($locale),
                 ],
                 301,
             );
         }
+        // slugs des autres langues, pour le sélecteur de langue et les hreflang
+        $request->attributes->set("_locale_slugs", [
+            "fr" => $discipline->getSlug("fr"),
+            "en" => $discipline->getSlug("en"),
+        ]);
         $contact = $this->contactForm->handle(
             $request,
             $this->generateUrl("detail", [

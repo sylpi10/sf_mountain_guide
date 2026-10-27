@@ -29,7 +29,7 @@
 			<ul class="pricing-list">
 				{% for disci in disciplines %}
 					<li>
-						<a class="pricing-item" href="{{ path('detail', {id: disci.id, slug: disci.slug}) }}">
+						<a class="pricing-item" href="{{ path('detail', {id: disci.id, slug: disci.slug(app.request.locale)}) }}">
 							<h3>{{ is_en ? disci.englishTitle : disci.title }}</h3>
 							<div class="pricing-item-price">
 								{{ icon('tag') }}

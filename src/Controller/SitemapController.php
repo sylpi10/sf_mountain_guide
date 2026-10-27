@@ -29,23 +29,20 @@ class SitemapController extends AbstractController
         $urls = [];
 
         // add statics urls
-        // $urls[] = $urls->push()
-        $urls[] = ["loc" => $this->generateUrl("home")];
-        $urls[] = ["loc" => $this->generateUrl("activities")];
-        $urls[] = ["loc" => $this->generateUrl("about")];
-        $urls[] = ["loc" => $this->generateUrl("pricing")];
-        $urls[] = ["loc" => $this->generateUrl("blog")];
+        foreach (["home", "activities", "about", "pricing", "blog"] as $route) {
+            $this->addLocalized($urls, $route);
+        }
         foreach (
             $this->managerRegistry->getRepository(LegalPage::class)->findBy(["isPublished" => true])
             as $legalPage
         ) {
-            $urls[] = ["loc" => $this->generateUrl("legal_page", ["slug" => $legalPage->getSlug()])];
+            $this->addLocalized($urls, "legal_page", fn ($locale) => ["slug" => $legalPage->getSlug($locale)]);
         }
         foreach (
             $this->managerRegistry->getRepository(AreaPage::class)->findBy(["isPublished" => true])
             as $areaPage
         ) {
-            $urls[] = ["loc" => $this->generateUrl("area_page", ["slug" => $areaPage->getSlug()])];
+            $this->addLocalized($urls, "area_page", fn ($locale) => ["slug" => $areaPage->getSlug($locale)]);
         }
 
         // add dynamic urls
@@ -53,32 +50,21 @@ class SitemapController extends AbstractController
             $this->managerRegistry->getRepository(Discipline::class)->findAll()
             as $discipline
         ) {
-            $title = [
-                "loc" => $discipline->getTitle(),
-            ];
-            $urls[] = [
-                "loc" => $this->generateUrl("detail", [
-                    "slug" => $discipline->getSlug(),
-                    "id" => $discipline->getId(),
-                ]),
-                "title" => $title,
-            ];
+            $this->addLocalized($urls, "detail", fn ($locale) => [
+                "slug" => $discipline->getSlug($locale),
+                "id" => $discipline->getId(),
+            ]);
         }
 
         foreach (
             $this->managerRegistry->getRepository(Blog::class)->findAll()
             as $post
         ) {
-            $url = [
-                "loc" => $this->generateUrl("blog_detail", [
-                    "slug" => $post->getSlug(),
-                    "id" => $post->getId(),
-                ]),
-            ];
-            if ($post->getUpdatedAt()) {
-                $url["lastmod"] = $post->getUpdatedAt()->format("Y-m-d");
-            }
-            $urls[] = $url;
+            $extra = $post->getUpdatedAt() ? ["lastmod" => $post->getUpdatedAt()->format("Y-m-d")] : [];
+            $this->addLocalized($urls, "blog_detail", fn ($locale) => [
+                "slug" => $post->getSlug($locale),
+                "id" => $post->getId(),
+            ], $extra);
         }
 
         // create response
@@ -95,5 +81,19 @@ class SitemapController extends AbstractController
 
         //send response
         return $response;
+    }
+
+    /**
+     * Une entrée par langue, chacune listant toutes les versions (balises hreflang du sitemap).
+     */
+    private function addLocalized(array &$urls, string $route, ?callable $params = null, array $extra = []): void
+    {
+        $alternates = [];
+        foreach ($this->getParameter("app.locales") as $locale) {
+            $alternates[$locale] = $this->generateUrl($route, ["_locale" => $locale] + ($params ? $params($locale) : []));
+        }
+        foreach ($alternates as $loc) {
+            $urls[] = ["loc" => $loc, "alternates" => $alternates] + $extra;
+        }
     }
 }

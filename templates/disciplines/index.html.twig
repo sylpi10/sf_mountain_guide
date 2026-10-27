@@ -25,7 +25,7 @@
 				{% for disci in disciplines %}
 					{% set title = is_en ? disci.englishTitle : disci.title %}
 					{% set teaser = (is_en ? disci.teaserEn : null) ?: disci.teaser %}
-					{% set url = path('detail', {id: disci.id, slug: disci.slug}) %}
+					{% set url = path('detail', {id: disci.id, slug: disci.slug(app.request.locale)}) %}
 					<article class="activity">
 						<a class="activity-image" href="{{ url }}" tabindex="-1" aria-hidden="true">
 							{% set img = upload_image(disci.image, constant('App\\Entity\\Discipline::IMAGE_WIDTHS')['discipline_images']) %}

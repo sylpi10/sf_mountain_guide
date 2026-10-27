@@ -20,7 +20,16 @@
 			{% endblock %}
 		</title>
 		{% set canonical_page = app.request.query.get('page') %}
-		<link rel="canonical" href="{{ site_url ~ app.request.pathInfo ~ (canonical_page and canonical_page > 1 ? '?page=' ~ canonical_page : '') }}">
+		{% set page_suffix = canonical_page and canonical_page > 1 ? '?page=' ~ canonical_page : '' %}
+		<link rel="canonical" href="{{ site_url ~ app.request.pathInfo ~ page_suffix }}">
+		{# versions de la page dans chaque langue ; x-default = version FR #}
+		{% set locale_urls = locale_urls() %}
+		{% for locale, locale_url in locale_urls %}
+			<link rel="alternate" hreflang="{{ locale }}" href="{{ site_url ~ locale_url ~ page_suffix }}">
+		{% endfor %}
+		{% if locale_urls.fr is defined %}
+			<link rel="alternate" hreflang="x-default" href="{{ site_url ~ locale_urls.fr ~ page_suffix }}">
+		{% endif %}
 		<meta property="og:type" content="{% block og_type %}website{% endblock %}">
 		<meta property="og:site_name" content="Directicimes">
 		<meta property="og:locale" content="{{ app.request.locale == 'en' ? 'en_GB' : 'fr_FR' }}">
@@ -158,7 +167,8 @@
 								{% for locale in locales %}
 									{% if locale != app.request.locale %}
 										<li class="nav-item">
-											<a href="{{path('change-locale', {'locale': locale})}}" data-turbo-prefetch="false" class="nav-link" title="{% trans %} Passer en Français {% endtrans %}">
+											{# même page dans l'autre langue ; sinon (login, newsletter…) changement de langue en session #}
+											<a href="{{ locale_urls[locale] ?? path('change-locale', {'locale': locale}) }}" hreflang="{{ locale }}" data-turbo-prefetch="false" class="nav-link" title="{{ locale == 'fr' ? 'Passer en français' : 'Switch to English' }}">
 												<img src="{{asset('images/' ~locale~ '.webp')}}" alt="{{locale}}" width="24" height="24">
 											</a>
 										</li>

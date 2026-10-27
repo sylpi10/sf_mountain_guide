@@ -12,8 +12,16 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: AreaPageRepository::class)]
 class AreaPage
 {
-    // slugs servis par la route /{slug} : ajouter ici + une ligne en migration pour un nouveau secteur
-    public const SLUG_REQUIREMENT = 'guide-serre-chevalier|guide-montgenevre|guide-vallee-de-la-claree';
+    // slugs servis par la route /{slug} (et /en/{slug}) : ajouter ici, dans SLUGS_EN + une ligne en migration pour un nouveau secteur
+    public const SLUG_REQUIREMENT = 'guide-serre-chevalier|guide-montgenevre|guide-vallee-de-la-claree'
+        .'|mountain-guide-serre-chevalier|mountain-guide-montgenevre|mountain-guide-claree-valley';
+
+    // slug FR => slug de la version anglaise
+    public const SLUGS_EN = [
+        'guide-serre-chevalier' => 'mountain-guide-serre-chevalier',
+        'guide-montgenevre' => 'mountain-guide-montgenevre',
+        'guide-vallee-de-la-claree' => 'mountain-guide-claree-valley',
+    ];
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -68,9 +76,16 @@ class AreaPage
         return $this->id;
     }
 
-    public function getSlug(): ?string
+    // slug de l'URL dans la langue demandée (slug FR stocké en base, slug EN tiré de SLUGS_EN)
+    public function getSlug(?string $locale = null): ?string
     {
-        return $this->slug;
+        return 'en' === $locale ? (self::SLUGS_EN[$this->slug] ?? $this->slug) : $this->slug;
+    }
+
+    // slug FR (clé en base) correspondant à un slug d'URL, quelle que soit sa langue
+    public static function frenchSlug(string $slug): string
+    {
+        return array_search($slug, self::SLUGS_EN, true) ?: $slug;
     }
 
     public function getName(): ?string

@@ -12,8 +12,14 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: LegalPageRepository::class)]
 class LegalPage
 {
-    // slugs servis par la route /{slug} : ajouter ici + une ligne en migration pour une nouvelle page
-    public const SLUG_REQUIREMENT = 'cgv|mentions-legales';
+    // slugs servis par la route /{slug} (et /en/{slug}) : ajouter ici, dans SLUGS_EN + une ligne en migration pour une nouvelle page
+    public const SLUG_REQUIREMENT = 'cgv|mentions-legales|terms-and-conditions|legal-notice';
+
+    // slug FR => slug de la version anglaise
+    public const SLUGS_EN = [
+        'cgv' => 'terms-and-conditions',
+        'mentions-legales' => 'legal-notice',
+    ];
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -51,9 +57,16 @@ class LegalPage
         return $this->id;
     }
 
-    public function getSlug(): ?string
+    // slug de l'URL dans la langue demandée (slug FR stocké en base, slug EN tiré de SLUGS_EN)
+    public function getSlug(?string $locale = null): ?string
     {
-        return $this->slug;
+        return 'en' === $locale ? (self::SLUGS_EN[$this->slug] ?? $this->slug) : $this->slug;
+    }
+
+    // slug FR (clé en base) correspondant à un slug d'URL, quelle que soit sa langue
+    public static function frenchSlug(string $slug): string
+    {
+        return array_search($slug, self::SLUGS_EN, true) ?: $slug;
     }
 
     public function getTitle(): ?string

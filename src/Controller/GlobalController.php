@@ -22,7 +22,7 @@ class GlobalController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    #[Route(path: "/", name: "home")]
+    #[Route(path: ["fr" => "/", "en" => "/en"], name: "home")]
     public function index(Request $request): Response
     {
         $contact = $this->contactForm->handle(
@@ -42,6 +42,8 @@ class GlobalController extends AbstractController
     }
 
     /**
+     * Changement de langue pour les pages sans version par URL (login, newsletter…) ;
+     * les pages traduites passent directement par leur URL /en.
      * @param [type] $locale
      * @param Request $request
      */

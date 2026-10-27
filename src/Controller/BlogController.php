@@ -48,7 +48,7 @@ class BlogController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    #[Route(path: '/blog', name: 'blog')]
+    #[Route(path: ['fr' => '/blog', 'en' => '/en/blog'], name: 'blog')]
     public function index(Request $request): Response
     {
         $displayBtn = true;
@@ -70,9 +70,22 @@ class BlogController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    #[Route(path: '/blog/{slug}-{id}', name: 'blog_detail', requirements: ['slug' => '[a-z0-9\-]*'])]
-    public function detail(#[MapEntity(id: 'id')] Blog $post, Request $request): Response
+    #[Route(path: ['fr' => '/blog/{slug}-{id}', 'en' => '/en/blog/{slug}-{id}'], name: 'blog_detail', requirements: ['slug' => '[a-z0-9\-]*'])]
+    public function detail(#[MapEntity(id: 'id')] Blog $post, Request $request, string $slug): Response
     {
+        $locale = $request->getLocale();
+        if ($post->getSlug($locale) !== $slug) {
+            return $this->redirectToRoute("blog_detail", [
+                "id" => $post->getId(),
+                "slug" => $post->getSlug($locale),
+            ], 301);
+        }
+        // slugs des autres langues, pour le sélecteur de langue et les hreflang
+        $request->attributes->set("_locale_slugs", [
+            "fr" => $post->getSlug("fr"),
+            "en" => $post->getSlug("en"),
+        ]);
+
         $comment = new Comment();
         $comment->setPost($post);
         // if ($this->isGranted('ROLE_USER')) {
@@ -94,7 +107,7 @@ class BlogController extends AbstractController
             //without redirection, com will be re-posted on each reload (f5)
             return $this->redirectToRoute("blog_detail", [
                 "id" => $post->getId(),
-                "slug" => $post->getSlug(),
+                "slug" => $slug,
             ]);
         }
 

@@ -33,14 +33,14 @@
 							<div class="article-content">
 								{% if locale == 'fr' %}
 									<p>{{ article.content|plain_text(300) }}
-										<a href="{{ path('blog_detail', {id: article.id, slug: article.slug}) }}" title="details">
+										<a href="{{ path('blog_detail', {id: article.id, slug: article.slug(app.request.locale)}) }}" title="details">
 											[...]
 											{% trans %}Read the post{% endtrans %}
 										</a>
 									</p>
 								{% else %}
 									<p>{{ article.englishContent|plain_text(300) }}
-										<a href="{{ path('blog_detail', {id: article.id, slug: article.slug}) }}" title="details">
+										<a href="{{ path('blog_detail', {id: article.id, slug: article.slug(app.request.locale)}) }}" title="details">
 											[...]
 											{% trans %}Read the post{% endtrans %}
 										</a>
@@ -56,7 +56,7 @@
 
 
 					{# <div class="read-more">
-																																																																																																					<a href="{{ path('blog_detail', {id: article.id, slug: article.slug}) }}" title="details">
+																																																																																																					<a href="{{ path('blog_detail', {id: article.id, slug: article.slug(app.request.locale)}) }}" title="details">
 																																																																																																						{% trans %}Read the post{% endtrans %}
 																																																																																																					</a>
 																																																																																																				</div> #}

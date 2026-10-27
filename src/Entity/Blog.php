@@ -233,8 +233,10 @@ class Blog
 
         return $this;
     }
-    public function getSlug(): string
+
+    // slug de l'URL dans la langue demandée (titre anglais sous /en, repli sur le titre FR)
+    public function getSlug(?string $locale = null): string
     {
-        return (new Slugify())->slugify($this->title);
+        return (new Slugify())->slugify('en' === $locale && $this->englishTitle ? $this->englishTitle : $this->title);
     }
 }
