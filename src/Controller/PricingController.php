@@ -6,6 +6,9 @@ use App\Enum\PricingSeason;
 use App\Repository\DisciplineRepository;
 use App\Repository\PricingPageRepository;
 use App\Repository\PricingSectionRepository;
+use App\Service\ContactFormHandler;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -13,8 +16,13 @@ use Symfony\Component\Routing\Attribute\Route;
 class PricingController extends AbstractController
 {
     #[Route(path: ['fr' => '/tarifs', 'en' => '/en/prices'], name: 'pricing')]
-    public function index(PricingPageRepository $pricingRepo, PricingSectionRepository $sectionRepo, DisciplineRepository $disciplineRepo): Response
+    public function index(Request $request, PricingPageRepository $pricingRepo, PricingSectionRepository $sectionRepo, DisciplineRepository $disciplineRepo, ContactFormHandler $contactForm): Response
     {
+        $contact = $contactForm->handle($request, $this->generateUrl('pricing', ['_fragment' => 'contact-form']));
+        if ($contact instanceof RedirectResponse) {
+            return $contact;
+        }
+
         // un onglet par saison ayant des sections, dans l'ordre de l'enum (hiver, été)
         $allSections = $sectionRepo->findForPage();
         $tabs = [];
@@ -33,6 +41,6 @@ class PricingController extends AbstractController
             'activeTab' => isset($tabs[$active]) ? $active : array_key_first($tabs),
             'disciplines' => $disciplineRepo->findAll(),
             'displayBtn' => true,
-        ]);
+        ] + $contact);
     }
 }

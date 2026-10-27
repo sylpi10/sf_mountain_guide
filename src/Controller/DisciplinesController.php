@@ -21,11 +21,19 @@ class DisciplinesController extends AbstractController
     }
 
     #[Route(path: ['fr' => '/activites', 'en' => '/en/activities'], name: 'activities')]
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $contact = $this->contactForm->handle(
+            $request,
+            $this->generateUrl('activities', ['_fragment' => 'contact-form']),
+        );
+        if ($contact instanceof RedirectResponse) {
+            return $contact;
+        }
+
         return $this->render('disciplines/index.html.twig', [
             'disciplines' => $this->disciplineRepo->findAll(),
-        ]);
+        ] + $contact);
     }
 
     /**

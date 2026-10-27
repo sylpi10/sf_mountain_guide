@@ -47,12 +47,15 @@
 
 			<div class="activities-cta">
 				<p>{% trans %}A project in mind? I will send you a personalised quote.{% endtrans %}</p>
-				<a class="btn more-link" href="{{ path('home', {'_fragment': 'contact-form'}) }}">{% trans %}Contact me{% endtrans %}</a>
+				<a class="btn more-link" href="#contact-form">{% trans %}Contact me{% endtrans %}</a>
 			</div>
 		</div>
 	</main>
 
-	<div>
+	<twig:Reviews />
+
+	<div class="contact" id="contact-form">
+		{% include "contact.html.twig" %}
 		{% include "footer.html.twig" %}
 	</div>
 {% endblock %}
