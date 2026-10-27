@@ -18,7 +18,7 @@
     }
 }
 .pricing-container {
-    max-width: 960px;
+    max-width: 1200px;
 }
 .pricing-season {
     text-align: center;
@@ -100,12 +100,21 @@
 
 .pricing-section {
     scroll-margin-top: 100px;
+    h2::after {
+        content: "";
+        display: block;
+        width: 60px;
+        height: 3px;
+        margin: 0.75rem auto 0;
+        border-radius: 3px;
+        background-color: $accent-color;
+    }
 }
 
-// blocs en colonnes façon « masonry » : les cartes de hauteurs différentes s'emboîtent
+// blocs en colonnes, les cartes de hauteurs différentes s'emboîtent
 .pricing-groups {
     columns: 2 340px;
-    column-gap: 20px;
+    column-gap: 40px;
 }
 // forme du panneau .info-details des pages activité (coins arrondis en bas), fond clair, titre en bandeau
 .pricing-group {
@@ -115,21 +124,37 @@
     font-family: "montserrat";
     color: $text-color;
     background-color: $bg-soft;
+    border: solid 1px $second-color;
     border-radius: 12px;
     box-shadow:
         rgba(0, 0, 0, 0.04) 0px 20px 25px -5px,
         rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
     h3 {
-        margin: 0 0 0.5rem;
-        padding: 16px 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 14px;
+        // margin: 0 0 0.5rem;
+        margin: 14px -14px 20px -14px;
+        padding: 12px 24px;
         background-color: $second-color;
         font-family: "Share Tech", sans-serif;
         font-size: 1.4rem;
         letter-spacing: 1px;
         text-align: center;
         color: #fff;
-        border-top-left-radius: 12px;
-        border-top-right-radius: 12px;
+        border-radius: 20px;
+        position: relative;
+        &::before,
+        &::after {
+            content: " ";
+            position: relative;
+            display: flex;
+            width: 30px;
+            // border-top: solid 1px $accent-color;
+            border-top: double 3px $accent-color;
+            opacity: 0.5;
+        }
     }
     ul {
         margin: 0;
@@ -252,6 +277,20 @@
     .pricing-tablist [role="tab"] {
         padding: 10px 18px;
         font-size: 1.1rem;
+    }
+    // carte resserrée : le bandeau du titre déborde toujours, mais sans toucher le bord de l'écran
+    .pricing-group {
+        margin-left: 12px;
+        margin-right: 12px;
+        h3 {
+            gap: 10px;
+            padding: 12px 16px;
+            &::before,
+            &::after {
+                flex-shrink: 0;
+                width: 16px;
+            }
+        }
     }
 }
 
