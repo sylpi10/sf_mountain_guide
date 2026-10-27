@@ -46,6 +46,7 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkTo(PricingSectionCrudController::class, "Sections"),
             MenuItem::linkTo(PricingPageCrudController::class, "Saison et introduction"),
         ]);
+        yield MenuItem::linkTo(ReviewCrudController::class, "Avis clients", "fas fa-star");
         yield MenuItem::linkTo(LegalPageCrudController::class, "CGV / pages légales", "fas fa-file-contract");
         yield MenuItem::linkTo(AreaPageCrudController::class, "Pages secteurs (SEO)", "fas fa-map-marked-alt");
         yield MenuItem::linkTo(SiteImageCrudController::class, "Images du site", "fas fa-image");

@@ -1,0 +1,40 @@
+{# Slider des avis clients (voir App\Twig\Components\Reviews) #}
+{% set reviews = this.reviews %}
+{% if reviews %}
+	<section class="reviews" aria-labelledby="reviews-title" data-controller="carousel">
+		<div class="container">
+			<h2 id="reviews-title">{% trans %}Customer reviews{% endtrans %}</h2>
+
+			<div class="reviews-slider">
+				<button type="button" class="reviews-nav reviews-prev" data-carousel-target="prev" data-action="carousel#prev" aria-label="{% trans %}Previous reviews{% endtrans %}">&lsaquo;</button>
+				<ul class="reviews-track" data-carousel-target="track" data-action="scroll->carousel#update">
+					{% for review in reviews %}
+						<li class="review" data-carousel-target="item">
+							<div class="review-header">
+								<span class="review-avatar" aria-hidden="true">{{ review.authorName|first|upper }}</span>
+								<div>
+									<p class="review-author">{{ review.authorName }}</p>
+									{% set date = this.date(review) %}
+									{% if date %}<p class="review-date">{{ date }}</p>{% endif %}
+								</div>
+							</div>
+							<p class="review-stars" aria-label="{{ '{rating} out of 5 stars'|trans({'{rating}': review.rating}) }}">
+								{% for i in 1..5 %}<span aria-hidden="true"{% if i > review.rating %} class="review-star-off"{% endif %}>★</span>{% endfor %}
+							</p>
+							<blockquote class="review-text" data-carousel-target="text">{{ this.text(review)|nl2br }}</blockquote>
+							<button type="button" class="review-more" data-action="carousel#toggle" aria-expanded="false" hidden>
+								<span class="review-more-open">{% trans %}Read more{% endtrans %}</span>
+								<span class="review-more-close">{% trans %}Read less{% endtrans %}</span>
+							</button>
+						</li>
+					{% endfor %}
+				</ul>
+				<button type="button" class="reviews-nav reviews-next" data-carousel-target="next" data-action="carousel#next" aria-label="{% trans %}Next reviews{% endtrans %}">&rsaquo;</button>
+			</div>
+
+			<p class="reviews-google">
+				<a href="{{ google_reviews_url }}" target="_blank" rel="noopener">{% trans %}See all reviews on Google{% endtrans %}</a>
+			</p>
+		</div>
+	</section>
+{% endif %}

@@ -1,0 +1,182 @@
+@use "variables" as *;
+
+// slider des avis clients, juste avant le formulaire de contact
+.reviews {
+    position: relative;
+    z-index: 600;
+    padding: 80px 0;
+    background-color: #fff;
+    color: $text-color;
+    h2 {
+        margin-bottom: 2rem;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+}
+
+.reviews-slider {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.reviews-track {
+    display: flex;
+    gap: 20px;
+    flex: 1;
+    margin: 0;
+    padding: 4px 4px 12px;
+    list-style: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 4px;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+// même forme que les blocs de la page tarifs : fond clair, coins arrondis en bas, bandeau foncé en haut
+.review {
+    flex: 0 0 calc((100% - 40px) / 3);
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    padding: 22px 24px;
+    border-top: 4px solid $second-color;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    background-color: $bg-soft;
+    font-family: "montserrat";
+}
+.review-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    p {
+        margin: 0;
+    }
+}
+.review-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: $second-color;
+    color: #fff;
+    font-family: "Share Tech", sans-serif;
+    font-size: 1.3rem;
+}
+.review-author {
+    font-weight: 700;
+    color: $second-color;
+}
+.review-date {
+    font-size: 0.85rem;
+    color: #666;
+}
+.review-stars {
+    margin: 14px 0 8px;
+    font-size: 1.15rem;
+    letter-spacing: 2px;
+    color: $accent-color;
+}
+.review-star-off {
+    color: $border-soft;
+}
+.review-text {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 7;
+    line-clamp: 7;
+    overflow: hidden;
+    .is-open & {
+        display: block;
+    }
+}
+.review-more {
+    align-self: flex-start;
+    margin-top: 10px;
+    padding: 0;
+    border: 0;
+    background: none;
+    font-weight: 700;
+    color: $base-color;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+    .review-more-close {
+        display: none;
+    }
+    &[aria-expanded="true"] {
+        .review-more-open {
+            display: none;
+        }
+        .review-more-close {
+            display: inline;
+        }
+    }
+}
+
+.reviews-nav {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border: 1px solid $second-color;
+    border-radius: 50%;
+    background-color: #fff;
+    color: $second-color;
+    font-size: 1.8rem;
+    line-height: 1;
+    padding-bottom: 4px;
+    cursor: pointer;
+    transition:
+        background-color $transition-fast,
+        color $transition-fast,
+        opacity $transition-fast;
+    &:hover:not(:disabled),
+    &:focus-visible {
+        background-color: $second-color;
+        color: #fff;
+    }
+    &:disabled {
+        opacity: 0.3;
+        cursor: default;
+    }
+}
+
+.reviews-google {
+    margin: 1.5rem 0 0;
+    text-align: center;
+    a {
+        font-weight: 700;
+        color: $base-color;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+}
+
+@media screen and (max-width: 991px) {
+    .review {
+        flex-basis: calc((100% - 20px) / 2);
+    }
+}
+@media screen and (max-width: 600px) {
+    .reviews {
+        padding: 60px 0;
+    }
+    .review {
+        flex-basis: 85%;
+    }
+    // sur mobile on swipe : pas de boutons
+    .reviews-nav {
+        display: none;
+    }
+}
