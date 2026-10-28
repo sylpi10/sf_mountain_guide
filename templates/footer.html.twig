@@ -18,8 +18,9 @@
 
 			</div>
 			<div class="images-wrapper">
-				<img src="{{asset('images/logo-uiagm.webp')}}" alt="Logo uiagm" width="110">
-				<img src="{{asset('images/logo.webp')}}" alt="Logo Directicimes" width="110">
+				{# versions 2x / 3x : logos nets sur écrans haute densité (retina, mobiles) #}
+				<img src="{{asset('images/logo-uiagm.webp')}}" srcset="{{asset('images/logo-uiagm.webp')}} 1x, {{asset('images/logo-uiagm@2x.webp')}} 2x" alt="Logo uiagm" width="110" height="110" loading="lazy">
+				<img src="{{asset('images/logo.webp')}}" srcset="{{asset('images/logo.webp')}} 1x, {{asset('images/logo@2x.webp')}} 2x, {{asset('images/logo@3x.webp')}} 3x" alt="Logo Directicimes" width="110" height="110" loading="lazy">
 			</div>
 			<div class="coords-infos">
 				<ul class="coords">
