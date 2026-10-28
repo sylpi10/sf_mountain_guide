@@ -8,6 +8,8 @@
     background-color: #fff;
     color: $text-color;
     h2 {
+        @include title-dashes;
+        color: $second-color;
         margin-bottom: 2rem;
         text-align: center;
         text-transform: uppercase;

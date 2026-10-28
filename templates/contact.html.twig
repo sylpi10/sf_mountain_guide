@@ -54,7 +54,11 @@
 		Your Message
 		{% endtrans %}</label>
 	{{form_row(form.message)}}
-	<input type="submit" value="{% trans %} Send {% endtrans %}" class="btn button-link">
+
+	<button type="submit" class="btn button-link">
+		{{ icon('paper-plane') }}
+		{% trans %} Send {% endtrans %}
+	</button>
 	{{form_end(form)}}
 	</turbo-frame>
 

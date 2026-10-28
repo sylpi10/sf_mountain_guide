@@ -30,7 +30,7 @@
 						<a class="activity-image" href="{{ url }}" tabindex="-1" aria-hidden="true">
 							{% set img = upload_image(disci.image, constant('App\\Entity\\Discipline::IMAGE_WIDTHS')['discipline_images']) %}
 							{% if img %}
-								<img src="{{ img.src }}" {% if img.srcset %}srcset="{{ img.srcset }}" sizes="(max-width: 768px) 100vw, 490px"{% endif %} {% if img.width %}width="{{ img.width }}" height="{{ img.height }}"{% endif %} alt="" loading="{{ loop.first ? 'eager' : 'lazy' }}" decoding="async">
+								<img src="{{ img.src }}" {% if img.srcset %}srcset="{{ img.srcset }}" sizes="(max-width: 768px) 100vw, 540px"{% endif %} {% if img.width %}width="{{ img.width }}" height="{{ img.height }}"{% endif %} alt="" loading="{{ loop.first ? 'eager' : 'lazy' }}" decoding="async">
 							{% endif %}
 						</a>
 						<div class="activity-body">

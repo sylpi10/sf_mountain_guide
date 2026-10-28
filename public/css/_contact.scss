@@ -17,6 +17,9 @@
     color: #333;
     margin: 0;
 }
+.contact .contact-title {
+    @include title-dashes;
+}
 .contact .contact-infos {
     width: 80%;
     display: flex;
@@ -33,7 +36,7 @@
 }
 .contact .contact-infos img {
     border-radius: 50%;
-    border: solid 1px navy;
+    // border: solid 1px navy;
 }
 .contact-whatsapp {
     margin: 40px auto 0;

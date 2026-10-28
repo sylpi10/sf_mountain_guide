@@ -70,3 +70,41 @@ $transition-base: 0.4s ease;
         }
     }
 }
+
+// titre en bandeau-pilule foncé, encadré de petits traits orange (blocs de la page tarifs, cartes de /activites)
+@mixin title-pill {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 24px;
+    border-radius: 20px;
+    background-color: $second-color;
+    font-family: "Share Tech", sans-serif;
+    letter-spacing: 1px;
+    text-align: center;
+    color: #fff;
+    &::before,
+    &::after {
+        content: "";
+        flex-shrink: 0;
+        width: 30px;
+        border-top: double 3px $accent-color;
+        opacity: 0.4;
+    }
+}
+
+// titre de section encadré de deux traits doubles orange (« Avis clients », « Contact »)
+@mixin title-dashes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    &::before,
+    &::after {
+        content: "";
+        flex-shrink: 0;
+        width: 40px;
+        border-top: double 3px $accent-color;
+    }
+}

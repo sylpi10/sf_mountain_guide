@@ -35,10 +35,18 @@
     box-shadow: 0 10px 30px rgba($second-color, 0.12);
     &:nth-child(even) {
         flex-direction: row-reverse;
+        .activity-body {
+            align-items: flex-end;
+        }
+        .activity-body h2 {
+            margin-left: 0;
+            margin-right: -32px;
+            transform: translateX(50%);
+        }
     }
 }
 .activity-image {
-    flex: 0 0 45%;
+    flex: 0 0 50%;
     overflow: hidden;
     img {
         display: block;
@@ -53,23 +61,28 @@
     }
 }
 .activity-body {
+    position: relative;
+    z-index: 1;
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     padding: 28px 32px;
+    // titre en pilule à cheval sur l'image (même style que les blocs de la page tarifs)
     h2 {
-        margin: 0 0 0.75rem;
-        font-family: "Share Tech", sans-serif;
-        font-size: 2rem;
+        @include title-pill;
+        position: relative;
+        z-index: 1;
+        margin: -0.5rem 0 1rem -32px;
+        transform: translateX(-50%);
+        font-size: 1.8rem;
         text-transform: uppercase;
-        letter-spacing: 1px;
         a {
-            color: $second-color;
+            color: #fff;
             transition: color $transition-fast;
             &:hover,
             &:focus-visible {
-                color: $base-color;
+                color: $accent-color;
             }
         }
     }
@@ -79,8 +92,10 @@
     }
     .more-link {
         margin-top: auto;
+        background-color: $base-color;
         &:hover {
             transform: unset;
+            background-color: $second-color;
         }
     }
 }
@@ -103,6 +118,16 @@
         padding-top: 120px;
     }
 }
+@media screen and (max-width: 500px) {
+    .activity-body h2 {
+        gap: 10px;
+        padding: 10px 16px;
+        &::before,
+        &::after {
+            width: 16px;
+        }
+    }
+}
 @media screen and (max-width: 768px) {
     .activity,
     .activity:nth-child(even) {
@@ -112,10 +137,16 @@
         min-height: 0;
         height: 220px;
     }
-    .activity-body {
-        padding: 22px;
+    .activity-body,
+    .activity:nth-child(even) .activity-body {
+        align-items: flex-start;
+        padding: 0 22px 22px;
         h2 {
-            font-size: 1.6rem;
+            // pilule centrée, à cheval sur le bas de l'image
+            align-self: center;
+            margin: -26px 0 1rem;
+            transform: none;
+            font-size: 1.5rem;
         }
     }
 }
