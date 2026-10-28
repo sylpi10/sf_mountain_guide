@@ -1,13 +1,13 @@
 twig:
-    default_path: '%kernel.project_dir%/templates'
+    default_path: "%kernel.project_dir%/templates"
     # @images : logo intégré aux mails (email.image('@images/logo.png'))
     paths:
-        '%kernel.project_dir%/public/images': images
-    form_themes : ['bootstrap_4_layout.html.twig']
-    globals: 
-        locales: '%app.locales%'
-        site_url: 'https://directicimes.com'
+        "%kernel.project_dir%/public/images": images
+    form_themes: ["bootstrap_4_layout.html.twig"]
+    globals:
+        locales: "%app.locales%"
+        site_url: "https://directicimes.com"
         # numéro affiché (footer) ; tel: et WhatsApp en sont dérivés
-        contact_phone: '+33 6 45 98 45 68'
+        contact_phone: "+33 6 45 98 45 68"
         # fiche Google (lien « Voir tous les avis » du slider)
-        google_reviews_url: 'https://www.google.com/maps/place/Yoann+GEORGES+-+Guide+de+Haute+Montagne+-+directicimes/@44.8804219,6.6335354,17z/data=!4m8!3m7!1s0x4789e17b17898b35:0x122c110ef1575d8b!8m2!3d44.8804219!4d6.6361103!9m1!1b1'
+        google_reviews_url: "https://maps.app.goo.gl/ZuWb1H2MNuEqwVox6"
