@@ -26,6 +26,7 @@ RSYNC_EXCLUDES = \
 	--exclude '/public/uploads/' \
 	--exclude '/public/assets/' \
 	--exclude '/public/css/style.css.map' \
+	--exclude '/public/css/admin-editor.css.map' \
 	--exclude '/.env' \
 	--exclude '/.env.local' \
 	--exclude '/.env.local.php' \

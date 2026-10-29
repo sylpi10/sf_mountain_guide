@@ -9,6 +9,7 @@
 /public/bundles/
 /public/uploads/
 /public/css/style.css.map
+/public/css/admin-editor.css.map
 /src/.preload.php
 /config/reference.php
 .sass-cache/

@@ -74,6 +74,14 @@
     }
 }
 
+// article et commentaires sur la largeur de lecture (= largeur de l'éditeur en admin)
+.article-details,
+.article-wrapper .comments {
+    max-width: $reading-width;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 // intertitres du texte de l'article (h1 de l'éditeur passés en h2), après la règle ci-dessus
 .article-details h2 {
     font-size: 1.6rem;

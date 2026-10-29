@@ -12,6 +12,10 @@ $accent-color: #ff9f1c;
 $accent-color-dark: #e8890a;
 $whatsapp-color: #25d366; // vert officiel, texte foncé pour le contraste
 
+// largeur de lecture des textes écrits avec CKEditor (blog, pages secteurs), reprise par l'éditeur de l'admin :
+// les images redimensionnées en % y gardent la même taille par rapport au texte
+$reading-width: 830px;
+
 // transitions
 $transition-fast: 0.25s ease;
 $transition-base: 0.4s ease;

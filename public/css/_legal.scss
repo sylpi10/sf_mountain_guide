@@ -12,7 +12,7 @@
     }
 }
 .legal-container {
-    max-width: 860px;
+    max-width: calc(#{$reading-width} + 30px); // + padding du .container
 }
 .legal-updated {
     text-align: center;

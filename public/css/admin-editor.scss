@@ -1,0 +1,48 @@
+// Éditeur CKEditor 5 de l'admin (blog, pages secteurs), compilé en admin-editor.css.
+// Même largeur, police et taille de texte qu'en front : la mise en page (images redimensionnées
+// en %, images flottantes) est celle que verront les visiteurs.
+@use "variables" as *;
+
+$editor-padding: 16px;
+
+// police des intertitres du site (même fichier qu'en front, chemin relatif à public/css)
+@font-face {
+    font-family: "Share Tech";
+    src: url("../fonts/Share_Tech/ShareTech-Regular.ttf");
+    font-display: swap;
+}
+
+.ck.ck-editor {
+    max-width: calc(#{$reading-width} + #{2 * $editor-padding} + 2px); // + padding et bordures de la zone de texte
+}
+.ck-editor__editable_inline {
+    min-height: 400px;
+    max-height: 70vh;
+}
+.ck.ck-content {
+    padding: 0 $editor-padding;
+    // texte de l'article en front (.article-body) : police système, 1.1rem (17.6 px), interligne 1.7
+    font-family:
+        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+        Arial, "Noto Sans", sans-serif;
+    font-size: 17.6px;
+    line-height: 1.7;
+    color: #212529;
+    p {
+        margin: 0 0 1rem;
+    }
+    h2,
+    h3 {
+        font-family: "Share Tech", sans-serif;
+        font-weight: 400;
+    }
+    h2 {
+        font-size: 1.6em;
+    }
+    h3 {
+        font-size: 1.3em;
+    }
+    img {
+        max-width: 100%;
+    }
+}
