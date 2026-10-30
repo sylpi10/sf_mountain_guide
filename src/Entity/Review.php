@@ -58,6 +58,7 @@ class Review
     public function setAuthorName(?string $authorName): self
     {
         $this->authorName = $authorName;
+
         return $this;
     }
 
@@ -69,6 +70,7 @@ class Review
     public function setRating(?int $rating): self
     {
         $this->rating = (int) $rating;
+
         return $this;
     }
 
@@ -80,6 +82,7 @@ class Review
     public function setContent(?string $content): self
     {
         $this->content = $content;
+
         return $this;
     }
 
@@ -91,6 +94,7 @@ class Review
     public function setContentEn(?string $contentEn): self
     {
         $this->contentEn = $contentEn;
+
         return $this;
     }
 
@@ -102,6 +106,7 @@ class Review
     public function setReviewedAt(?\DateTimeImmutable $reviewedAt): self
     {
         $this->reviewedAt = $reviewedAt;
+
         return $this;
     }
 
@@ -113,6 +118,7 @@ class Review
     public function setPublished(bool $published): self
     {
         $this->published = $published;
+
         return $this;
     }
 }

@@ -16,7 +16,7 @@ class SiteImage
 
     /**
      * widths : largeurs générées à l'upload (jamais d'agrandissement)
-     * ratio  : recadrage centré largeur/hauteur, optionnel
+     * ratio  : recadrage centré largeur/hauteur, optionnel.
      */
     public const SLOTS = [
         'hero' => ['label' => 'Hero - image principale (ordinateur)', 'widths' => [768, 1280, 1920]],
@@ -84,6 +84,7 @@ class SiteImage
     public function setImage(?string $image): self
     {
         $this->image = $image;
+
         return $this;
     }
 
@@ -95,6 +96,7 @@ class SiteImage
     public function setAlt(?string $alt): self
     {
         $this->alt = $alt;
+
         return $this;
     }
 
@@ -106,6 +108,7 @@ class SiteImage
     public function setAltEn(?string $altEn): self
     {
         $this->altEn = $altEn;
+
         return $this;
     }
 
@@ -117,6 +120,7 @@ class SiteImage
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
         return $this;
     }
 }

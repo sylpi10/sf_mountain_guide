@@ -33,8 +33,8 @@ class DisciplineImageSubscriber implements EventSubscriberInterface
         }
 
         $mapping = $event->getMapping();
-        $webpName = preg_replace('/\.[^.\/]+$/', '', $mapping->getFileName($event->getObject())) . '.webp';
-        $webpPath = dirname($path) . '/' . basename($webpName);
+        $webpName = preg_replace('/\.[^.\/]+$/', '', $mapping->getFileName($event->getObject())).'.webp';
+        $webpPath = dirname($path).'/'.basename($webpName);
 
         $this->optimizer->process($path, $webpPath, Discipline::IMAGE_WIDTHS[$mapping->getMappingName()]);
 
@@ -67,6 +67,6 @@ class DisciplineImageSubscriber implements EventSubscriberInterface
 
         $dir = $mapping->getUploadDir($object);
 
-        return rtrim($mapping->getUploadDestination(), '/') . ($dir ? '/' . trim($dir, '/') : '') . '/' . $fileName;
+        return rtrim($mapping->getUploadDestination(), '/').($dir ? '/'.trim($dir, '/') : '').'/'.$fileName;
     }
 }

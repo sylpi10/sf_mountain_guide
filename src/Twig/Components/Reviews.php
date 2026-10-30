@@ -28,7 +28,7 @@ class Reviews
 
     public function isEn(): bool
     {
-        return $this->requestStack->getCurrentRequest()?->getLocale() === 'en';
+        return 'en' === $this->requestStack->getCurrentRequest()?->getLocale();
     }
 
     public function getText(Review $review): string

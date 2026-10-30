@@ -6,11 +6,10 @@ use App\Repository\PricingGroupRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use SortDirection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Bloc de tarifs (une carte sur la page) : « Secteur Glacier Blanc », « Tarifs cascade de glace »…
+ * Bloc de tarifs (une carte sur la page) : « Secteur Glacier Blanc », « Tarifs cascade de glace »….
  */
 #[ORM\Entity(repositoryClass: PricingGroupRepository::class)]
 class PricingGroup
@@ -43,7 +42,7 @@ class PricingGroup
 
     /** @var Collection<int, PricingLine> */
     #[ORM\OneToMany(targetEntity: PricingLine::class, mappedBy: 'pricingGroup', cascade: ['persist'], orphanRemoval: true)]
-    #[ORM\OrderBy(['position' => SortDirection::Ascending, 'id' => SortDirection::Ascending])]
+    #[ORM\OrderBy(['position' => \SortDirection::Ascending, 'id' => \SortDirection::Ascending])]
     #[Assert\Valid]
     private Collection $lines;
 
@@ -70,6 +69,7 @@ class PricingGroup
     public function setSection(?PricingSection $section): self
     {
         $this->section = $section;
+
         return $this;
     }
 
@@ -81,6 +81,7 @@ class PricingGroup
     public function setTitle(?string $title): self
     {
         $this->title = $title;
+
         return $this;
     }
 
@@ -92,6 +93,7 @@ class PricingGroup
     public function setTitleEn(?string $titleEn): self
     {
         $this->titleEn = $titleEn;
+
         return $this;
     }
 
@@ -103,6 +105,7 @@ class PricingGroup
     public function setNote(?string $note): self
     {
         $this->note = $note;
+
         return $this;
     }
 
@@ -114,6 +117,7 @@ class PricingGroup
     public function setNoteEn(?string $noteEn): self
     {
         $this->noteEn = $noteEn;
+
         return $this;
     }
 
@@ -125,6 +129,7 @@ class PricingGroup
     public function setPosition(?int $position): self
     {
         $this->position = (int) $position;
+
         return $this;
     }
 
@@ -140,12 +145,14 @@ class PricingGroup
             $this->lines->add($line);
             $line->setPricingGroup($this);
         }
+
         return $this;
     }
 
     public function removeLine(PricingLine $line): self
     {
         $this->lines->removeElement($line);
+
         return $this;
     }
 

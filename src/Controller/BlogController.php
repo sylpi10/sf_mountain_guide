@@ -9,14 +9,14 @@ use App\Repository\BlogRepository;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-// use Symfony\Component\Security\Core\Security;
-use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
+// use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class BlogController extends AbstractController
 {
@@ -43,47 +43,36 @@ class BlogController extends AbstractController
         $this->translator = $translator;
     }
 
-    /**
-     *
-     * @param Request $request
-     * @return Response
-     */
     #[Route(path: ['fr' => '/blog', 'en' => '/en/blog'], name: 'blog')]
     public function index(Request $request): Response
     {
         $displayBtn = true;
         $articles = $this->paginator->paginate(
             $this->blogRepository->findByDate(),
-            $request->query->getInt("page", 1),
+            $request->query->getInt('page', 1),
             4,
         );
 
-        return $this->render("blog/index.html.twig", [
-            "articles" => $articles,
-            "displayBtn" => $displayBtn,
+        return $this->render('blog/index.html.twig', [
+            'articles' => $articles,
+            'displayBtn' => $displayBtn,
         ]);
     }
 
-    /**
-     *
-     * @param Blog $post
-     * @param Request $request
-     * @return Response
-     */
     #[Route(path: ['fr' => '/blog/{slug}-{id}', 'en' => '/en/blog/{slug}-{id}'], name: 'blog_detail', requirements: ['slug' => '[a-z0-9\-]*'])]
     public function detail(#[MapEntity(id: 'id')] Blog $post, Request $request, string $slug): Response
     {
         $locale = $request->getLocale();
         if ($post->getSlug($locale) !== $slug) {
-            return $this->redirectToRoute("blog_detail", [
-                "id" => $post->getId(),
-                "slug" => $post->getSlug($locale),
+            return $this->redirectToRoute('blog_detail', [
+                'id' => $post->getId(),
+                'slug' => $post->getSlug($locale),
             ], 301);
         }
         // slugs des autres langues, pour le sélecteur de langue et les hreflang
-        $request->attributes->set("_locale_slugs", [
-            "fr" => $post->getSlug("fr"),
-            "en" => $post->getSlug("en"),
+        $request->attributes->set('_locale_slugs', [
+            'fr' => $post->getSlug('fr'),
+            'en' => $post->getSlug('en'),
         ]);
 
         $comment = new Comment();
@@ -101,24 +90,26 @@ class BlogController extends AbstractController
             $this->manager->persist($comment);
             $this->manager->flush();
             $message = $this->translator->trans(
-                "Your comment has been submitted, it will be displayed when the administartor validates it",
+                'Your comment has been submitted, it will be displayed when the administartor validates it',
             );
-            $this->addFlash("success", $message);
-            //without redirection, com will be re-posted on each reload (f5)
-            return $this->redirectToRoute("blog_detail", [
-                "id" => $post->getId(),
-                "slug" => $slug,
+            $this->addFlash('success', $message);
+
+            // without redirection, com will be re-posted on each reload (f5)
+            return $this->redirectToRoute('blog_detail', [
+                'id' => $post->getId(),
+                'slug' => $slug,
             ]);
         }
 
         $acceptedComments = $this->commentRepo->findByIsAccepted(
             $post->getId(),
         );
-        return $this->render("blog/details.html.twig", [
-            "article" => $post,
-            "form" => $form,
-            "displayBtn" => true,
-            "acceptedComments" => $acceptedComments,
+
+        return $this->render('blog/details.html.twig', [
+            'article' => $post,
+            'form' => $form,
+            'displayBtn' => true,
+            'acceptedComments' => $acceptedComments,
         ]);
     }
 }

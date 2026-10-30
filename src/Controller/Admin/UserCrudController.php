@@ -7,11 +7,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use Symfony\Bundle\SecurityBundle\Security;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 // use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -22,9 +22,6 @@ class UserCrudController extends AbstractCrudController
         return User::class;
     }
 
-    /**
-     * @var UserPasswordHasherInterface
-     */
     private UserPasswordHasherInterface $passwordEncoder;
     /**
      * @var Security
@@ -48,33 +45,28 @@ class UserCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            TextField::new("username", "utilisateurs"),
-            TextField::new("password")
+            TextField::new('username', 'utilisateurs'),
+            TextField::new('password')
                 ->setFormType(PasswordType::class)
                 ->onlyOnForms(),
-            ArrayField::new("roles"),
+            ArrayField::new('roles'),
         ];
     }
 
-    /**
-     *
-     * @param EntityManagerInterface $entityManager
-     * @param $entityInstance
-     */
     public function updateEntity(
         EntityManagerInterface $entityManager,
         $entityInstance,
     ): void {
         // set new password with encoder interface
-        if (method_exists($entityInstance, "setPassword")) {
+        if (method_exists($entityInstance, 'setPassword')) {
             $clearPassword = trim(
-                $this->get("request_stack")
+                $this->get('request_stack')
                     ->getCurrentRequest()
-                    ->request->all("User")["password"],
+                    ->request->all('User')['password'],
             );
 
             // if user password not change save the old one
-            if (isset($clearPassword) === true && $clearPassword === "") {
+            if (true === isset($clearPassword) && '' === $clearPassword) {
                 $entityInstance->setPassword($this->password);
             } else {
                 $encodedPassword = $this->passwordEncoder->hashPassword(

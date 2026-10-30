@@ -22,7 +22,6 @@ class CommentRepository extends ServiceEntityRepository
     /**
      * @return Comment[] Returns an array of Comment objects
      */
-
     public function findByIsAccepted($post)
     {
         return $this->createQueryBuilder('c')
@@ -37,7 +36,6 @@ class CommentRepository extends ServiceEntityRepository
     /**
      * @return Comment[] Returns an array of Comment objects
      */
-
     public function countIsAccepted($post)
     {
         return $this->createQueryBuilder('c')
@@ -49,7 +47,6 @@ class CommentRepository extends ServiceEntityRepository
             ->getQuery()
             ->execute();
     }
-
 
     /*
     public function findOneBySomeField($value): ?Comment

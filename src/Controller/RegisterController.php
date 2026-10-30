@@ -5,13 +5,13 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegisterType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RegisterController extends AbstractController
 {
@@ -26,12 +26,6 @@ class RegisterController extends AbstractController
         $this->translator = $translator;
     }
 
-    /**
-     *
-     * @param Request $request
-     * @param EntityManagerInterface $manager
-     * @return Response
-     */
     #[Route(path: '/register', name: 'register')]
     public function register(
         Request $request,
@@ -50,21 +44,22 @@ class RegisterController extends AbstractController
                 $user->getPassword(),
             );
             $user->setPassword($passWrdCrypt);
-            $user->setRoles("ROLE_USER");
+            $user->setRoles('ROLE_USER');
             $manager->persist($user);
             $manager->flush();
 
             $message = $this->translator->trans(
-                "You have been successfully registered",
+                'You have been successfully registered',
             );
-            $this->addFlash("success", $message);
-            return new RedirectResponse("/login");
+            $this->addFlash('success', $message);
+
+            return new RedirectResponse('/login');
         }
 
-        return $this->render("global/register.html.twig", [
-            "user" => $user,
-            "form" => $form,
-            "displayBtn" => true,
+        return $this->render('global/register.html.twig', [
+            'user' => $user,
+            'form' => $form,
+            'displayBtn' => true,
         ]);
     }
 }

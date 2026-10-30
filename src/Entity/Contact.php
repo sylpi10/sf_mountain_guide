@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ContactRepository;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ContactRepository::class)]
@@ -51,6 +51,7 @@ class Contact
     public function setName(?string $name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -62,6 +63,7 @@ class Contact
     public function setMessage(?string $message)
     {
         $this->message = $message;
+
         return $this;
     }
 
@@ -73,6 +75,7 @@ class Contact
     public function setEmail(?string $email): Contact
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -84,6 +87,7 @@ class Contact
     public function setReceivedAt(?\DateTimeImmutable $receivedAt): Contact
     {
         $this->receivedAt = $receivedAt;
+
         return $this;
     }
 }

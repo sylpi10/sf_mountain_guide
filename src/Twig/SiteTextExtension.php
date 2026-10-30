@@ -47,7 +47,7 @@ class SiteTextExtension extends AbstractExtension implements ResetInterface
             return [];
         }
 
-        $isEnglish = $this->requestStack->getCurrentRequest()?->getLocale() === 'en';
+        $isEnglish = 'en' === $this->requestStack->getCurrentRequest()?->getLocale();
         $content = ($isEnglish ? $siteText->getContentEn() : null) ?: $siteText->getContent();
 
         // une ligne vide sépare deux paragraphes

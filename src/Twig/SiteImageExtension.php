@@ -47,7 +47,7 @@ class SiteImageExtension extends AbstractExtension implements ResetInterface
             return null;
         }
 
-        $size = @getimagesize($this->publicDir . SiteImage::PUBLIC_DIR . '/' . $siteImage->getImage());
+        $size = @getimagesize($this->publicDir.SiteImage::PUBLIC_DIR.'/'.$siteImage->getImage());
 
         if (!$size) {
             return null;
@@ -55,18 +55,18 @@ class SiteImageExtension extends AbstractExtension implements ResetInterface
 
         [$width, $height] = $size;
         $base = preg_replace('/\.webp$/', '', $siteImage->getImage());
-        $src = SiteImage::PUBLIC_DIR . '/' . $siteImage->getImage();
+        $src = SiteImage::PUBLIC_DIR.'/'.$siteImage->getImage();
 
         $srcset = [];
         foreach ($siteImage->getWidths() as $variantWidth) {
-            $variant = SiteImage::PUBLIC_DIR . "/$base-$variantWidth.webp";
-            if ($variantWidth < $width && is_file($this->publicDir . $variant)) {
+            $variant = SiteImage::PUBLIC_DIR."/$base-$variantWidth.webp";
+            if ($variantWidth < $width && is_file($this->publicDir.$variant)) {
                 $srcset[] = "$variant {$variantWidth}w";
             }
         }
         $srcset[] = "$src {$width}w";
 
-        $isEnglish = $this->requestStack->getCurrentRequest()?->getLocale() === 'en';
+        $isEnglish = 'en' === $this->requestStack->getCurrentRequest()?->getLocale();
 
         return [
             'src' => $src,

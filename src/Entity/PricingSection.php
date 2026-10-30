@@ -7,7 +7,6 @@ use App\Repository\PricingSectionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use SortDirection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -37,7 +36,7 @@ class PricingSection
 
     /** @var Collection<int, PricingGroup> */
     #[ORM\OneToMany(targetEntity: PricingGroup::class, mappedBy: 'section')]
-    #[ORM\OrderBy(['position' => SortDirection::Ascending, 'id' => SortDirection::Ascending])]
+    #[ORM\OrderBy(['position' => \SortDirection::Ascending, 'id' => \SortDirection::Ascending])]
     private Collection $groups;
 
     public function __construct()
@@ -47,7 +46,7 @@ class PricingSection
 
     public function __toString(): string
     {
-        return $this->season?->label() . ($this->title ? ' – ' . $this->title : '');
+        return $this->season?->label().($this->title ? ' – '.$this->title : '');
     }
 
     public function getId(): ?int
@@ -63,6 +62,7 @@ class PricingSection
     public function setSeason(?PricingSeason $season): self
     {
         $this->season = $season;
+
         return $this;
     }
 
@@ -74,6 +74,7 @@ class PricingSection
     public function setTitle(?string $title): self
     {
         $this->title = $title;
+
         return $this;
     }
 
@@ -85,6 +86,7 @@ class PricingSection
     public function setTitleEn(?string $titleEn): self
     {
         $this->titleEn = $titleEn;
+
         return $this;
     }
 
@@ -96,6 +98,7 @@ class PricingSection
     public function setPosition(?int $position): self
     {
         $this->position = (int) $position;
+
         return $this;
     }
 
@@ -111,6 +114,7 @@ class PricingSection
             $this->groups->add($group);
             $group->setSection($this);
         }
+
         return $this;
     }
 }

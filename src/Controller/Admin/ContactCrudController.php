@@ -18,16 +18,16 @@ class ContactCrudController extends AbstractCrudController
 
     public function configureCrud(Crud $crud): Crud
     {
-        return $crud->setDefaultSort(["receivedAt" => "DESC"]);
+        return $crud->setDefaultSort(['receivedAt' => 'DESC']);
     }
 
     public function configureFields(string $pageName): iterable
     {
         return [
-            TextField::new("name"),
-            TextField::new("email"),
-            TextEditorField::new("message"),
-            DateTimeField::new("receivedAt", "Reçu le")->hideOnForm(),
+            TextField::new('name'),
+            TextField::new('email'),
+            TextEditorField::new('message'),
+            DateTimeField::new('receivedAt', 'Reçu le')->hideOnForm(),
         ];
     }
 }

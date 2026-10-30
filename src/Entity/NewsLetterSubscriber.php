@@ -2,10 +2,10 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use App\Repository\NewsLetterSubscriberRepository;
-use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: NewsLetterSubscriberRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'Vous avez déjà souscrit à la newsletter avec cet email')]
@@ -25,7 +25,6 @@ class NewsLetterSubscriber
 
     #[ORM\Column(type: 'boolean')]
     private $isRgpd = false;
-
 
     public function getId(): ?int
     {

@@ -56,7 +56,7 @@ class ImageOptimizer
      */
     public function deleteVariants(string $path): void
     {
-        foreach (glob($this->basePath($path) . '-[0-9]*.webp') ?: [] as $variant) {
+        foreach (glob($this->basePath($path).'-[0-9]*.webp') ?: [] as $variant) {
             @unlink($variant);
         }
     }

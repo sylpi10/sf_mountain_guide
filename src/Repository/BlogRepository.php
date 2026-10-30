@@ -3,10 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Blog;
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Query;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method Blog|null find($id, $lockMode = null, $lockVersion = null)
@@ -29,7 +27,7 @@ class BlogRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    /**
+    /*
      * @return Comment[] Returns an array of Comment objects
      */
 

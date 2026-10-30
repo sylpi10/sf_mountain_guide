@@ -43,26 +43,26 @@ class EditorUploadController extends AbstractController
             return $this->error($violations[0]->getMessage());
         }
 
-        $dir = $this->getParameter('kernel.project_dir') . '/public' . self::UPLOAD_DIR;
+        $dir = $this->getParameter('kernel.project_dir').'/public'.self::UPLOAD_DIR;
         if (!is_dir($dir)) {
             mkdir($dir, 0775, true);
         }
 
         $name = bin2hex(random_bytes(8));
         $filename = $this->saveAsWebp($file, $dir, $name);
-        if ($filename === null) {
+        if (null === $filename) {
             // GD sans webp ou GIF animé : on garde le fichier tel quel
-            $filename = $name . '.' . $file->guessExtension();
+            $filename = $name.'.'.$file->guessExtension();
             $file->move($dir, $filename);
         }
 
-        return new JsonResponse(['url' => self::UPLOAD_DIR . '/' . $filename]);
+        return new JsonResponse(['url' => self::UPLOAD_DIR.'/'.$filename]);
     }
 
     private function saveAsWebp(UploadedFile $file, string $dir, string $name): ?string
     {
         $mime = $file->getMimeType();
-        if ($mime === 'image/gif' || !\function_exists('imagewebp')) {
+        if ('image/gif' === $mime || !\function_exists('imagewebp')) {
             return null;
         }
 
@@ -73,15 +73,15 @@ class EditorUploadController extends AbstractController
             'image/webp' => @imagecreatefromwebp($path),
             default => false,
         };
-        if ($image === false) {
+        if (false === $image) {
             return null;
         }
 
         // photos de téléphone : appliquer la rotation EXIF avant de perdre les métadonnées
-        if ($mime === 'image/jpeg' && \function_exists('exif_read_data')) {
+        if ('image/jpeg' === $mime && \function_exists('exif_read_data')) {
             $orientation = @exif_read_data($path)['Orientation'] ?? 1;
             $angle = [3 => 180, 6 => -90, 8 => 90][$orientation] ?? 0;
-            if ($angle !== 0) {
+            if (0 !== $angle) {
                 $image = imagerotate($image, $angle, 0);
             }
         }
@@ -94,8 +94,8 @@ class EditorUploadController extends AbstractController
         imagealphablending($image, false);
         imagesavealpha($image, true);
 
-        $filename = $name . '.webp';
-        $saved = imagewebp($image, $dir . '/' . $filename, 82);
+        $filename = $name.'.webp';
+        $saved = imagewebp($image, $dir.'/'.$filename, 82);
         imagedestroy($image);
 
         return $saved ? $filename : null;

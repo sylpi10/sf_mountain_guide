@@ -41,23 +41,23 @@ class DisciplineWebpCommand
 
         foreach ($this->repository->findAll() as $discipline) {
             foreach (self::FIELDS as $property => $mapping) {
-                $getter = 'get' . ucfirst($property);
+                $getter = 'get'.ucfirst($property);
                 $fileName = $discipline->$getter();
 
                 if (!$fileName || str_ends_with(strtolower($fileName), '.webp')) {
                     continue;
                 }
 
-                $source = $this->uploadDir . '/' . $fileName;
+                $source = $this->uploadDir.'/'.$fileName;
                 if (!is_file($source)) {
                     $io->warning(sprintf('%s : fichier introuvable (%s)', $discipline->getTitle(), $fileName));
                     continue;
                 }
 
-                $webpName = preg_replace('/\.[^.]+$/', '', $fileName) . '.webp';
-                $this->optimizer->process($source, $this->uploadDir . '/' . $webpName, Discipline::IMAGE_WIDTHS[$mapping]);
+                $webpName = preg_replace('/\.[^.]+$/', '', $fileName).'.webp';
+                $this->optimizer->process($source, $this->uploadDir.'/'.$webpName, Discipline::IMAGE_WIDTHS[$mapping]);
 
-                $setter = 'set' . ucfirst($property);
+                $setter = 'set'.ucfirst($property);
                 $discipline->$setter($webpName);
                 // flush à chaque image : la base ne pointe jamais vers un fichier pas encore créé
                 $this->entityManager->flush();

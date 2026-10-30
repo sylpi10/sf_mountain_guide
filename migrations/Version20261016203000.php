@@ -44,11 +44,11 @@ final class Version20261016203000 extends AbstractMigration
         $this->addSql('INSERT INTO site_text (slot, content, content_en) VALUES (?, ?, ?)', [
             'activities_intro',
             "Été comme hiver, la montagne change de visage, et il y a toujours une belle aventure à vivre. Gravir votre premier sommet glaciaire, enchaîner les longueurs au soleil, tracer dans la poudreuse ou planter les piolets dans une cascade gelée : à chaque saison son terrain de jeu.\n\n"
-            . "Débutant curieux ou montagnard aguerri, on construit ensemble une sortie à votre mesure, selon votre niveau, vos envies et les conditions du moment. En petit groupe ou en privé, avec la sécurité comme priorité et le plaisir comme objectif.\n\n"
-            . "Découvrez les activités ci-dessous. Une hésitation, un projet un peu fou ? Écrivez-moi, on en parle !",
+            ."Débutant curieux ou montagnard aguerri, on construit ensemble une sortie à votre mesure, selon votre niveau, vos envies et les conditions du moment. En petit groupe ou en privé, avec la sécurité comme priorité et le plaisir comme objectif.\n\n"
+            .'Découvrez les activités ci-dessous. Une hésitation, un projet un peu fou ? Écrivez-moi, on en parle !',
             "Summer or winter, the mountains change their face, and there is always a great adventure waiting. Climb your first glaciated summit, link pitches in the sunshine, carve through fresh powder or swing your ice axes into a frozen waterfall: every season has its playground.\n\n"
-            . "Curious beginner or seasoned mountaineer, we build a trip that suits you, based on your level, your wishes and current conditions. In a small group or private, with safety as the priority and fun as the goal.\n\n"
-            . "Explore the activities below. Not sure which one to pick, or dreaming of a wild project? Drop me a line and let's talk!",
+            ."Curious beginner or seasoned mountaineer, we build a trip that suits you, based on your level, your wishes and current conditions. In a small group or private, with safety as the priority and fun as the goal.\n\n"
+            ."Explore the activities below. Not sure which one to pick, or dreaming of a wild project? Drop me a line and let's talk!",
         ]);
     }
 

@@ -31,7 +31,7 @@ class AreaPageCrudController extends AbstractCrudController
             ->setEntityLabelInSingular('Page secteur')
             ->setEntityLabelInPlural('Pages secteurs')
             ->setPageTitle('index', 'Pages secteurs (référencement local)')
-            ->setPageTitle('edit', fn (AreaPage $page) => 'Modifier : ' . $page->getName())
+            ->setPageTitle('edit', fn (AreaPage $page) => 'Modifier : '.$page->getName())
             ->setHelp('index', 'Une page par secteur, pour apparaître sur les recherches du type « guide Serre Chevalier ». Chaque texte doit rester unique (pas de copier-coller entre secteurs).')
             ->setHelp('new', 'La page n\'est visible sur le site (et dans le footer) qu\'une fois « Publiée » cochée.')
             ->setHelp('edit', 'La page n\'est visible sur le site (et dans le footer) qu\'une fois « Publiée » cochée.')

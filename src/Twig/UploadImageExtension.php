@@ -35,8 +35,8 @@ class UploadImageExtension extends AbstractExtension
             return null;
         }
 
-        $src = $this->publicPath . '/' . $fileName;
-        $size = @getimagesize($this->dir . '/' . $fileName);
+        $src = $this->publicPath.'/'.$fileName;
+        $size = @getimagesize($this->dir.'/'.$fileName);
         [$width, $height] = $size ?: [null, null];
 
         // largeur => url, de la plus petite à la plus grande

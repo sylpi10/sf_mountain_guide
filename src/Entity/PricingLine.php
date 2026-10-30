@@ -37,7 +37,7 @@ class PricingLine
 
     public function __toString(): string
     {
-        return trim($this->label . ' ' . $this->price);
+        return trim($this->label.' '.$this->price);
     }
 
     public function getId(): ?int
@@ -53,6 +53,7 @@ class PricingLine
     public function setPricingGroup(?PricingGroup $pricingGroup): self
     {
         $this->pricingGroup = $pricingGroup;
+
         return $this;
     }
 
@@ -64,6 +65,7 @@ class PricingLine
     public function setLabel(?string $label): self
     {
         $this->label = $label;
+
         return $this;
     }
 
@@ -75,6 +77,7 @@ class PricingLine
     public function setLabelEn(?string $labelEn): self
     {
         $this->labelEn = $labelEn;
+
         return $this;
     }
 
@@ -86,6 +89,7 @@ class PricingLine
     public function setPrice(?string $price): self
     {
         $this->price = $price;
+
         return $this;
     }
 
@@ -97,6 +101,7 @@ class PricingLine
     public function setPriceEn(?string $priceEn): self
     {
         $this->priceEn = $priceEn;
+
         return $this;
     }
 
@@ -108,6 +113,7 @@ class PricingLine
     public function setPosition(int $position): self
     {
         $this->position = $position;
+
         return $this;
     }
 }

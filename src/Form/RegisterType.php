@@ -15,20 +15,20 @@ class RegisterType extends AbstractType
     {
         $builder
             ->add('username', TextType::class, [
-                'label' => false
+                'label' => false,
             ])
             ->add('password', PasswordType::class, [
-                'label' => false
+                'label' => false,
             ])
             ->add('confirmPassword', PasswordType::class, [
-                'label' => false
+                'label' => false,
             ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => User::class
+            'data_class' => User::class,
         ]);
     }
 }

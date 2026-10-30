@@ -17,7 +17,6 @@ class CommentType extends AbstractType
                 'label' => false,
                 // chaîne vide plutôt que null : setContent() n'accepte qu'une string, NotBlank affiche l'erreur
                 'empty_data' => '',
-
             ]);
     }
 

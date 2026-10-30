@@ -2,15 +2,14 @@
 
 namespace App\Entity;
 
-use Cocur\Slugify\Slugify;
-use Doctrine\Common\Collections\Collection;
 use App\Repository\BlogRepository;
-use Doctrine\ORM\Mapping as ORM;
-use DateTime;
-use Symfony\Component\HttpFoundation\File\File;
+use Cocur\Slugify\Slugify;
 use Doctrine\Common\Collections\ArrayCollection;
-use Vich\UploaderBundle\Mapping\Attribute as Vich;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Attribute as Vich;
 
 #[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: BlogRepository::class)]
@@ -69,22 +68,20 @@ class Blog
     {
         return $this->image;
     }
+
     public function setImage($image): self
     {
         $this->image = $image;
+
         return $this;
     }
 
-    /**
-     * @return File|null
-     */
     public function getImageFile(): ?File
     {
         return $this->imageFile;
     }
+
     /**
-     *
-     * @param File $imageFile
      * @return void
      */
     public function setImageFile(?File $imageFile = null)
@@ -94,8 +91,9 @@ class Blog
         // otherwise the event listeners won't be called and the file is lost
         if (null !== $imageFile) {
             // if 'updatedAt' is not defined in your entity, use another property
-            $this->updated_at = new \DateTime("now");
+            $this->updated_at = new \DateTime('now');
         }
+
         return $this;
     }
 
@@ -156,6 +154,7 @@ class Blog
 
         return $this;
     }
+
     public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updated_at;

@@ -25,7 +25,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ContactFormHandler
 {
     // si aucun destinataire actif en admin, pour ne jamais perdre un message
-    private const FALLBACK_RECIPIENT = "contact@directicimes.com";
+    private const FALLBACK_RECIPIENT = 'contact@directicimes.com';
 
     public function __construct(
         private FormFactoryInterface $formFactory,
@@ -36,7 +36,8 @@ class ContactFormHandler
         private LoggerInterface $logger,
         private string $mailerFrom,
         private FailureAlerter $alerter,
-    ) {}
+    ) {
+    }
 
     /**
      * Traite la soumission éventuelle du formulaire.
@@ -44,8 +45,8 @@ class ContactFormHandler
      * @param string $redirectUrl page sur laquelle revenir après envoi (avec l'ancre du formulaire)
      *
      * @return RedirectResponse|array{form: FormInterface, contact_token: string, contact_time: int}
-     *         redirection si le formulaire a été soumis et valide, sinon les variables à passer au template
-     *         (le formulaire lui-même et non sa vue : render() répond alors en 422 s'il est invalide, ce qu'attend Turbo)
+     *                                                                                               redirection si le formulaire a été soumis et valide, sinon les variables à passer au template
+     *                                                                                               (le formulaire lui-même et non sa vue : render() répond alors en 422 s'il est invalide, ce qu'attend Turbo)
      */
     public function handle(
         Request $request,
@@ -61,8 +62,8 @@ class ContactFormHandler
                 $session = $request->getSession();
                 if ($session instanceof FlashBagAwareSessionInterface) {
                     $session->getFlashBag()->add(
-                        "success",
-                        $this->translator->trans("Your email has been send"),
+                        'success',
+                        $this->translator->trans('Your email has been send'),
                     );
                 }
             }
@@ -73,33 +74,33 @@ class ContactFormHandler
         [$token, $time] = $this->refreshGuards($request);
 
         return [
-            "form" => $form,
-            "contact_token" => $token,
-            "contact_time" => $time,
+            'form' => $form,
+            'contact_token' => $token,
+            'contact_time' => $time,
         ];
     }
 
     private function isSpam(Request $request): bool
     {
-        $honeypot = trim((string) $request->request->get("website", ""));
-        $token = (string) $request->request->get("contact_token", "");
-        $formTime = (int) $request->request->get("contact_time", 0);
+        $honeypot = trim((string) $request->request->get('website', ''));
+        $token = (string) $request->request->get('contact_token', '');
+        $formTime = (int) $request->request->get('contact_time', 0);
         $sessionToken = (string) $request
             ->getSession()
-            ->get("contact_form_token", "");
+            ->get('contact_form_token', '');
         $now = time();
         $isTooFast = $formTime > 0 ? $now - $formTime < 4 : true;
         $isTooOld = $formTime > 0 ? $now - $formTime > 86400 : true;
-        $tokenInvalid = $token === "" || $token !== $sessionToken;
+        $tokenInvalid = '' === $token || $token !== $sessionToken;
 
-        return $honeypot !== "" || $tokenInvalid || $isTooFast || $isTooOld;
+        return '' !== $honeypot || $tokenInvalid || $isTooFast || $isTooOld;
     }
 
     private function send(FormInterface $form, Request $request): void
     {
-        $name = $form->get("name")->getData();
-        $email = $form->get("email")->getData();
-        $message = $form->get("message")->getData();
+        $name = $form->get('name')->getData();
+        $email = $form->get('email')->getData();
+        $message = $form->get('message')->getData();
 
         // coordonnées du visiteur en tête du mail : le reply-to n'est pas affiché par toutes les messageries
         $body = sprintf(
@@ -112,7 +113,7 @@ class ContactFormHandler
 
         $mail = new Email()
             // expéditeur = le compte du MAILER_DSN (SPF/DMARC), le visiteur en reply-to
-            ->from(new Address($this->mailerFrom, "DirectiCimes"))
+            ->from(new Address($this->mailerFrom, 'DirectiCimes'))
             ->replyTo(new Address($email, $name))
             ->to(
                 ...$this->recipientRepo->findActiveEmails() ?: [
@@ -120,7 +121,7 @@ class ContactFormHandler
                 ],
             )
             // ->to("syl.pillet@hotmail.fr", "m2cclcvn9p@tanpony.com")
-            ->subject("Nouveau message de " . $name . " depuis DirectiCimes")
+            ->subject('Nouveau message de '.$name.' depuis DirectiCimes')
             ->text($body);
 
         $contact = new Contact();
@@ -136,12 +137,12 @@ class ContactFormHandler
         try {
             $this->mailer->send($mail);
         } catch (TransportExceptionInterface $e) {
-            $this->logger->error("Envoi du mail de contact impossible", [
-                "contact_id" => $contact->getId(),
-                "exception" => $e,
+            $this->logger->error('Envoi du mail de contact impossible', [
+                'contact_id' => $contact->getId(),
+                'exception' => $e,
             ]);
             $this->alerter->alert(
-                "Directicimes : mail de contact non envoye",
+                'Directicimes : mail de contact non envoye',
                 sprintf("Message n°%d enregistré mais pas envoyé (consultable dans l'admin).", $contact->getId()),
                 $e,
             );
@@ -154,8 +155,8 @@ class ContactFormHandler
         $time = time();
 
         $session = $request->getSession();
-        $session->set("contact_form_token", $token);
-        $session->set("contact_form_time", $time);
+        $session->set('contact_form_token', $token);
+        $session->set('contact_form_time', $time);
 
         return [$token, $time];
     }

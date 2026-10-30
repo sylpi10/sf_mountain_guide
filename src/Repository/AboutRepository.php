@@ -21,7 +21,7 @@ class AboutRepository extends ServiceEntityRepository
 
     public function findOneAbout(): ?About
     {
-        return $this->createQueryBuilder("a")
+        return $this->createQueryBuilder('a')
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();

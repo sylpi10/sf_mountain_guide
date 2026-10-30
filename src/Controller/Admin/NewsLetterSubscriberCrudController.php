@@ -26,12 +26,11 @@ class NewsLetterSubscriberCrudController extends AbstractCrudController
             ->setPageTitle('new', 'Créer');
     }
 
-
     public function configureFields(string $pageName): iterable
     {
         return [
             IdField::new('id'),
-            TextField::new('fullname', "Nom Prénom"),
+            TextField::new('fullname', 'Nom Prénom'),
             TextField::new('email'),
             // preuve du consentement donné à l'inscription : affiché en Oui/Non, pas modifiable depuis l'admin
             BooleanField::new('isRgpd', 'Consentement RGPD')
@@ -40,6 +39,7 @@ class NewsLetterSubscriberCrudController extends AbstractCrudController
                 ->setHelp("Case « J'accepte la collecte de mes données » cochée lors de l'inscription"),
         ];
     }
+
     public function configureActions(Actions $actions): Actions
     {
         return $actions

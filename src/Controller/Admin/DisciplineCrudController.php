@@ -8,16 +8,16 @@ use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
-use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlGenerator;
-use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlGenerator;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class DisciplineCrudController extends AbstractCrudController
@@ -35,6 +35,7 @@ class DisciplineCrudController extends AbstractCrudController
     {
         return Discipline::class;
     }
+
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
@@ -45,7 +46,6 @@ class DisciplineCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-
         return [
             TextField::new('title', 'Nom de discipline'),
             TextField::new('englishTitle', 'Nom de discipline en anglais'),
@@ -107,7 +107,6 @@ class DisciplineCrudController extends AbstractCrudController
                 ->onlyOnForms(),
         ];
     }
-
 
     public function configureActions(Actions $actions): Actions
     {

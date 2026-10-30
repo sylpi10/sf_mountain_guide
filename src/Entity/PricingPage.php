@@ -60,6 +60,7 @@ class PricingPage
     public function setSeason(?string $season): self
     {
         $this->season = $season;
+
         return $this;
     }
 
@@ -71,6 +72,7 @@ class PricingPage
     public function setSeasonEn(?string $seasonEn): self
     {
         $this->seasonEn = $seasonEn;
+
         return $this;
     }
 
@@ -82,6 +84,7 @@ class PricingPage
     public function setContent(?string $content): self
     {
         $this->content = $content;
+
         return $this;
     }
 
@@ -93,6 +96,7 @@ class PricingPage
     public function setContentEn(?string $contentEn): self
     {
         $this->contentEn = $contentEn;
+
         return $this;
     }
 
@@ -104,6 +108,7 @@ class PricingPage
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
         return $this;
     }
 
@@ -115,6 +120,7 @@ class PricingPage
     public function setWinterFromMonth(int $winterFromMonth): self
     {
         $this->winterFromMonth = $winterFromMonth;
+
         return $this;
     }
 
@@ -126,6 +132,7 @@ class PricingPage
     public function setSummerFromMonth(int $summerFromMonth): self
     {
         $this->summerFromMonth = $summerFromMonth;
+
         return $this;
     }
 }

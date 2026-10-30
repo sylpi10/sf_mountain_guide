@@ -62,6 +62,7 @@ class SiteText
     public function setContent(?string $content): self
     {
         $this->content = $content;
+
         return $this;
     }
 
@@ -73,6 +74,7 @@ class SiteText
     public function setContentEn(?string $contentEn): self
     {
         $this->contentEn = $contentEn;
+
         return $this;
     }
 
@@ -84,6 +86,7 @@ class SiteText
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
         return $this;
     }
 }

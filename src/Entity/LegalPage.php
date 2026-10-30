@@ -77,6 +77,7 @@ class LegalPage
     public function setTitle(?string $title): self
     {
         $this->title = (string) $title;
+
         return $this;
     }
 
@@ -88,6 +89,7 @@ class LegalPage
     public function setTitleEn(?string $titleEn): self
     {
         $this->titleEn = $titleEn;
+
         return $this;
     }
 
@@ -99,6 +101,7 @@ class LegalPage
     public function setContent(?string $content): self
     {
         $this->content = $content;
+
         return $this;
     }
 
@@ -110,6 +113,7 @@ class LegalPage
     public function setContentEn(?string $contentEn): self
     {
         $this->contentEn = $contentEn;
+
         return $this;
     }
 
@@ -121,6 +125,7 @@ class LegalPage
     public function setIsPublished(bool $isPublished): self
     {
         $this->isPublished = $isPublished;
+
         return $this;
     }
 
@@ -132,6 +137,7 @@ class LegalPage
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
         return $this;
     }
 }

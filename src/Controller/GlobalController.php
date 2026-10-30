@@ -4,9 +4,9 @@ namespace App\Controller;
 
 use App\Repository\DisciplineRepository;
 use App\Service\ContactFormHandler;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -18,16 +18,12 @@ class GlobalController extends AbstractController
     ) {
     }
 
-    /**
-     * @param Request $request
-     * @return Response
-     */
-    #[Route(path: ["fr" => "/", "en" => "/en"], name: "home")]
+    #[Route(path: ['fr' => '/', 'en' => '/en'], name: 'home')]
     public function index(Request $request): Response
     {
         $contact = $this->contactForm->handle(
             $request,
-            $this->generateUrl("home", ["_fragment" => "contact-form"]),
+            $this->generateUrl('home', ['_fragment' => 'contact-form']),
         );
         if ($contact instanceof RedirectResponse) {
             return $contact;
@@ -35,33 +31,32 @@ class GlobalController extends AbstractController
 
         // return every disciplines on home page
         $disciplines = $this->disciplineRepo->findAll();
-        return $this->render("global/index.html.twig", [
-            "disciplines" => $disciplines,
-            "displayBtn" => true,
+
+        return $this->render('global/index.html.twig', [
+            'disciplines' => $disciplines,
+            'displayBtn' => true,
         ] + $contact);
     }
 
     /**
      * Changement de langue pour les pages sans version par URL (login, newsletter…) ;
      * les pages traduites passent directement par leur URL /en.
+     *
      * @param [type] $locale
-     * @param Request $request
      */
-    #[
-        Route(
-            path: "/change-locale/{locale}",
-            name: "change-locale",
-            requirements: ["locale" => "en|fr"],
-        ),
-    ]
+    #[Route(
+        path: '/change-locale/{locale}',
+        name: 'change-locale',
+        requirements: ['locale' => 'en|fr'],
+    ),]
     public function changeLocale($locale, Request $request)
     {
-        //stock lang in session
-        $request->getSession()->set("_locale", $locale);
+        // stock lang in session
+        $request->getSession()->set('_locale', $locale);
 
-        //back to previous page, or home if no referer (e.g. direct/crawler request)
+        // back to previous page, or home if no referer (e.g. direct/crawler request)
         return $this->redirect(
-            $request->headers->get("referer") ?: $this->generateUrl("home"),
+            $request->headers->get('referer') ?: $this->generateUrl('home'),
         );
     }
 }

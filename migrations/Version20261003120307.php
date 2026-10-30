@@ -24,9 +24,9 @@ final class Version20261003120307 extends AbstractMigration
         $this->addSql('INSERT INTO site_text (slot, content, content_en) VALUES (?, ?, ?)', [
             'home_intro',
             "Guide de haute montagne diplômé de l'ENSA (UIAGM), je vous accompagne toute l'année au départ de Briançon, dans les Hautes-Alpes : massif des Écrins, vallée de la Clarée, Serre Chevalier et Queyras.\n\n"
-            . "Alpinisme, ski de randonnée et hors-piste, escalade en falaise et en grandes voies, cascade de glace : que vous débutiez ou que vous prépariez un projet ambitieux, je vous propose des sorties sur mesure, en petit groupe ou en privé, adaptées à votre niveau et aux conditions du moment.",
+            .'Alpinisme, ski de randonnée et hors-piste, escalade en falaise et en grandes voies, cascade de glace : que vous débutiez ou que vous prépariez un projet ambitieux, je vous propose des sorties sur mesure, en petit groupe ou en privé, adaptées à votre niveau et aux conditions du moment.',
             "IFMGA-certified mountain guide trained at ENSA, I take you out all year round from Briançon, in the French Hautes-Alpes: the Écrins massif, the Clarée valley, Serre Chevalier and the Queyras.\n\n"
-            . "Mountaineering, ski touring and off-piste, crag and multi-pitch rock climbing, ice climbing: whether you are a beginner or preparing an ambitious project, I offer tailor-made trips, in small groups or private, adapted to your level and to current conditions.",
+            .'Mountaineering, ski touring and off-piste, crag and multi-pitch rock climbing, ice climbing: whether you are a beginner or preparing an ambitious project, I offer tailor-made trips, in small groups or private, adapted to your level and to current conditions.',
         ]);
     }
 

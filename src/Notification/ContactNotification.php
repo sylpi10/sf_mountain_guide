@@ -4,10 +4,10 @@ namespace App\Notification;
 
 use App\Entity\Contact;
 
-class ContactNotification{
-
+class ContactNotification
+{
     public function notify(Contact $contact)
     {
-        # code...
+        // code...
     }
 }

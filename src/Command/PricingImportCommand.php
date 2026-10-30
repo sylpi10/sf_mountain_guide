@@ -166,7 +166,7 @@ class PricingImportCommand
         $html = preg_replace('#<(strong|em)>(\s*)</\1>#i', '$2', $html) ?? $html;
 
         $parts = preg_split('#<h1[^>]*>(.*?)</h1>#is', $html, -1, PREG_SPLIT_DELIM_CAPTURE);
-        if (count($parts) === 1) {
+        if (1 === count($parts)) {
             $groups = $this->groups($html);
 
             return ['intro' => null, 'sections' => $groups ? [['title' => null, 'groups' => $groups]] : []];
@@ -185,7 +185,7 @@ class PricingImportCommand
 
         $intro = trim(preg_replace('#^(\s|<br\s*/?>|<div>\s*</div>)+|(\s|<br\s*/?>)+(?=</div>\s*$)|(\s|<br\s*/?>)+$#i', '', $parts[0]) ?? '');
 
-        return ['intro' => $this->text($intro) !== '' ? $intro : null, 'sections' => $sections];
+        return ['intro' => '' !== $this->text($intro) ? $intro : null, 'sections' => $sections];
     }
 
     private function groups(string $html): array
@@ -198,34 +198,34 @@ class PricingImportCommand
         $current = null;
         foreach ($lines as $line) {
             $text = $this->text($line);
-            if ($text === '') {
+            if ('' === $text) {
                 continue;
             }
             $bold = $this->wrappedText($line, 'strong');
 
             // ligne tout en gras : nouveau bloc ; gras + prix (« <strong>Ponteil</strong> 300€ ») : bloc d'une seule ligne
-            if ($bold !== null && $bold !== '') {
+            if (null !== $bold && '' !== $bold) {
                 $rest = trim(mb_substr($text, mb_strlen($bold)));
-                if ($current !== null) {
+                if (null !== $current) {
                     $groups[] = $current;
                 }
                 $current = ['title' => $bold, 'rows' => []];
-                if ($rest !== '') {
+                if ('' !== $rest) {
                     $current['rows'][] = $this->row($rest);
                 }
                 continue;
             }
 
             $current ??= ['title' => null, 'rows' => []];
-            $current['rows'][] = $this->wrappedText($line, 'em') !== null
+            $current['rows'][] = null !== $this->wrappedText($line, 'em')
                 ? ['type' => 'note', 'text' => $text]
                 : $this->row($text);
         }
-        if ($current !== null) {
+        if (null !== $current) {
             $groups[] = $current;
         }
 
-        return array_values(array_filter($groups, fn ($g) => $g['title'] !== null || $g['rows'] !== []));
+        return array_values(array_filter($groups, fn ($g) => null !== $g['title'] || [] !== $g['rows']));
     }
 
     /**
@@ -233,12 +233,12 @@ class PricingImportCommand
      */
     private function row(string $text): array
     {
-        if (preg_match('#^(.*?)[\s:–-]*((?:[aà] partir de|from)\s*)?(' . self::PRICE . ')\s*$#iu', $text, $m) && $m[3] !== '') {
-            $from = $m[2] !== '' ? (preg_match('#^from#i', $m[2]) ? 'from ' : 'à partir de ') : '';
+        if (preg_match('#^(.*?)[\s:–-]*((?:[aà] partir de|from)\s*)?('.self::PRICE.')\s*$#iu', $text, $m) && '' !== $m[3]) {
+            $from = '' !== $m[2] ? (preg_match('#^from#i', $m[2]) ? 'from ' : 'à partir de ') : '';
 
-            return ['type' => 'price', 'label' => trim($m[1]), 'price' => $from . trim($m[3])];
+            return ['type' => 'price', 'label' => trim($m[1]), 'price' => $from.trim($m[3])];
         }
-        if (preg_match('#^(' . self::PRICE . '(?:\s?/\s?[^\s]+)?)\s*(.*)$#u', $text, $m)) {
+        if (preg_match('#^('.self::PRICE.'(?:\s?/\s?[^\s]+)?)\s*(.*)$#u', $text, $m)) {
             return ['type' => 'price', 'label' => trim($m[2]), 'price' => trim($m[1])];
         }
 
@@ -251,18 +251,18 @@ class PricingImportCommand
      */
     private function wrappedText(string $line, string $tag): ?string
     {
-        if (!preg_match('#^\s*<' . $tag . '[^>]*>(.*?)</' . $tag . '>#is', $line, $m)) {
+        if (!preg_match('#^\s*<'.$tag.'[^>]*>(.*?)</'.$tag.'>#is', $line, $m)) {
             return null;
         }
         $inner = $this->text($m[1]);
-        $after = $this->text(preg_replace('#^\s*<' . $tag . '[^>]*>.*?</' . $tag . '>#is', '', $line) ?? '');
+        $after = $this->text(preg_replace('#^\s*<'.$tag.'[^>]*>.*?</'.$tag.'>#is', '', $line) ?? '');
 
         // italique : toute la ligne ; gras : titre seul ou suivi d'un prix
-        if ($tag === 'em') {
-            return $after === '' ? $inner : null;
+        if ('em' === $tag) {
+            return '' === $after ? $inner : null;
         }
 
-        return $after === '' || preg_match('#' . self::PRICE . '#u', $after) ? $inner : null;
+        return '' === $after || preg_match('#'.self::PRICE.'#u', $after) ? $inner : null;
     }
 
     private function text(string $html): string

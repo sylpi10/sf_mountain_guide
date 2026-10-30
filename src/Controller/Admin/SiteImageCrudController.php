@@ -52,17 +52,17 @@ class SiteImageCrudController extends AbstractCrudController
             TextField::new('label', 'Emplacement')->hideOnForm(),
             ImageField::new('image', 'Image')
                 ->setBasePath(SiteImage::PUBLIC_DIR)
-                ->setUploadDir('public' . SiteImage::PUBLIC_DIR)
+                ->setUploadDir('public'.SiteImage::PUBLIC_DIR)
                 ->setUploadedFileNamePattern('[slug]-[timestamp].webp')
                 ->setFileConstraints(new Image(maxSize: '20M', mimeTypes: ['image/jpeg', 'image/png', 'image/webp']))
                 ->setRequired(false)
                 ->setHelp(sprintf(
                     'JPG, PNG ou WebP. Converti automatiquement en WebP et redimensionné (%s px de large%s).',
                     implode(' / ', $widths),
-                    $ratio === 1.0 ? ', recadré en carré' : ''
+                    1.0 === $ratio ? ', recadré en carré' : ''
                 ))
                 ->setFormTypeOptions([
-                    'upload_new' => fn (UploadedFile $file, string $uploadDir, string $fileName) => $this->optimizer->process($file->getPathname(), $uploadDir . $fileName, $widths, $ratio),
+                    'upload_new' => fn (UploadedFile $file, string $uploadDir, string $fileName) => $this->optimizer->process($file->getPathname(), $uploadDir.$fileName, $widths, $ratio),
                     // l'ancienne image est supprimée dans updateEntity(), une fois l'enregistrement réussi
                     'upload_delete' => static function () {
                     },
@@ -81,7 +81,7 @@ class SiteImageCrudController extends AbstractCrudController
         parent::updateEntity($entityManager, $entityInstance);
 
         if ($previousImage && $previousImage !== $entityInstance->getImage()) {
-            $this->optimizer->delete($this->getParameter('kernel.project_dir') . '/public' . SiteImage::PUBLIC_DIR . '/' . $previousImage);
+            $this->optimizer->delete($this->getParameter('kernel.project_dir').'/public'.SiteImage::PUBLIC_DIR.'/'.$previousImage);
         }
     }
 }

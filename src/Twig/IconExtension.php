@@ -31,11 +31,11 @@ class IconExtension extends AbstractExtension
     {
         // ?v= : le navigateur recharge le sprite dès qu'une icône est ajoutée
         $this->spriteUrl ??= htmlspecialchars(
-            $this->packages->getUrl('images/icons.svg') . '?v=' . @filemtime($this->spritePath),
+            $this->packages->getUrl('images/icons.svg').'?v='.@filemtime($this->spritePath),
             ENT_QUOTES
         );
         $sprite = $this->spriteUrl;
-        $class = trim('icon ' . htmlspecialchars($class, ENT_QUOTES));
+        $class = trim('icon '.htmlspecialchars($class, ENT_QUOTES));
 
         return sprintf(
             '<svg class="%s" aria-hidden="true" focusable="false"><use href="%s#%s"/></svg>',

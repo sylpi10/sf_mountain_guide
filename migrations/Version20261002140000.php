@@ -21,7 +21,7 @@ final class Version20261002140000 extends AbstractMigration
     public function up(Schema $schema): void
     {
         $this->skipIf(
-            $schema->getTable('discipline')->getPrimaryKey() !== null,
+            null !== $schema->getTable('discipline')->getPrimaryKey(),
             'discipline a déjà une clé primaire'
         );
 

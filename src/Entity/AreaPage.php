@@ -92,6 +92,7 @@ class AreaPage
     public function setSlug(?string $slug): self
     {
         $this->slug = (string) $slug;
+
         return $this;
     }
 
@@ -103,6 +104,7 @@ class AreaPage
     public function setSlugEn(?string $slugEn): self
     {
         $this->slugEn = (string) $slugEn;
+
         return $this;
     }
 
@@ -114,6 +116,7 @@ class AreaPage
     public function setName(?string $name): self
     {
         $this->name = (string) $name;
+
         return $this;
     }
 
@@ -125,6 +128,7 @@ class AreaPage
     public function setTitle(?string $title): self
     {
         $this->title = (string) $title;
+
         return $this;
     }
 
@@ -136,6 +140,7 @@ class AreaPage
     public function setTitleEn(?string $titleEn): self
     {
         $this->titleEn = $titleEn;
+
         return $this;
     }
 
@@ -147,6 +152,7 @@ class AreaPage
     public function setSeoTitle(?string $seoTitle): self
     {
         $this->seoTitle = $seoTitle;
+
         return $this;
     }
 
@@ -158,6 +164,7 @@ class AreaPage
     public function setSeoTitleEn(?string $seoTitleEn): self
     {
         $this->seoTitleEn = $seoTitleEn;
+
         return $this;
     }
 
@@ -169,6 +176,7 @@ class AreaPage
     public function setMetaDescription(?string $metaDescription): self
     {
         $this->metaDescription = $metaDescription;
+
         return $this;
     }
 
@@ -180,6 +188,7 @@ class AreaPage
     public function setMetaDescriptionEn(?string $metaDescriptionEn): self
     {
         $this->metaDescriptionEn = $metaDescriptionEn;
+
         return $this;
     }
 
@@ -191,6 +200,7 @@ class AreaPage
     public function setContent(?string $content): self
     {
         $this->content = $content;
+
         return $this;
     }
 
@@ -202,6 +212,7 @@ class AreaPage
     public function setContentEn(?string $contentEn): self
     {
         $this->contentEn = $contentEn;
+
         return $this;
     }
 
@@ -213,6 +224,7 @@ class AreaPage
     public function setIsPublished(bool $isPublished): self
     {
         $this->isPublished = $isPublished;
+
         return $this;
     }
 
@@ -224,6 +236,7 @@ class AreaPage
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
         return $this;
     }
 }

@@ -26,7 +26,7 @@ class LegalPageCrudController extends AbstractCrudController
             ->setEntityLabelInSingular('Page légale')
             ->setEntityLabelInPlural('Pages légales')
             ->setPageTitle('index', 'Pages légales (CGV…)')
-            ->setPageTitle('edit', fn (LegalPage $page) => 'Modifier : ' . $page->getTitle())
+            ->setPageTitle('edit', fn (LegalPage $page) => 'Modifier : '.$page->getTitle())
             ->setHelp('edit', 'La page n\'est visible sur le site (et dans le footer) qu\'une fois « Publiée » cochée.')
             ->setDefaultSort(['id' => 'ASC']);
     }

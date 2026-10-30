@@ -15,29 +15,30 @@ class FailureAlerter
         private HttpClientInterface $httpClient,
         private LoggerInterface $logger,
         private string $ntfyTopic,
-    ) {}
+    ) {
+    }
 
     /**
      * @param string $title en ASCII : il part dans un en-tête HTTP
      */
     public function alert(string $title, string $message, \Throwable $e): void
     {
-        if ($this->ntfyTopic === "") {
+        if ('' === $this->ntfyTopic) {
             return;
         }
 
         try {
-            $this->httpClient->request("POST", "https://ntfy.sh/" . $this->ntfyTopic, [
-                "headers" => [
-                    "Title" => $title,
-                    "Priority" => "high",
-                    "Tags" => "warning",
+            $this->httpClient->request('POST', 'https://ntfy.sh/'.$this->ntfyTopic, [
+                'headers' => [
+                    'Title' => $title,
+                    'Priority' => 'high',
+                    'Tags' => 'warning',
                 ],
-                "body" => $message . "\n" . mb_substr($e->getMessage(), 0, 300),
-                "timeout" => 5,
+                'body' => $message."\n".mb_substr($e->getMessage(), 0, 300),
+                'timeout' => 5,
             ])->getStatusCode();
         } catch (\Throwable $alertError) {
-            $this->logger->error("Alerte ntfy impossible", ["exception" => $alertError]);
+            $this->logger->error('Alerte ntfy impossible', ['exception' => $alertError]);
         }
     }
 }

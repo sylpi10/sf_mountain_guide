@@ -49,7 +49,8 @@ class ContactRecipient
 
     public function setEmail(?string $email): self
     {
-        $this->email = $email !== null ? trim($email) : null;
+        $this->email = null !== $email ? trim($email) : null;
+
         return $this;
     }
 
@@ -61,6 +62,7 @@ class ContactRecipient
     public function setName(?string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -72,6 +74,7 @@ class ContactRecipient
     public function setIsActive(bool $isActive): self
     {
         $this->isActive = $isActive;
+
         return $this;
     }
 }

@@ -6,9 +6,9 @@ use App\Entity\About;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class AboutCrudController extends AbstractCrudController
 {
@@ -28,16 +28,17 @@ class AboutCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            TextField::new('whoTitle', "Titre"),
-            TextField::new('whoEnglishTitle', "Titre anglais"),
-            TextEditorField::new('whoText', "Texte"),
-            TextEditorField::new('whoEnglishText', "Texte anglais")->onlyOnForms(),
-            TextField::new('whyTitle', "Titre Pourquoi"),
-            TextField::new('whyEnglishTitle', "Titre anglais Pourquoi")->onlyOnForms(),
-            TextEditorField::new('whyText', "Texte pourquoi"),
-            TextEditorField::new('whyEnglishText', "Texte anglais pourquoi")->onlyOnForms()
+            TextField::new('whoTitle', 'Titre'),
+            TextField::new('whoEnglishTitle', 'Titre anglais'),
+            TextEditorField::new('whoText', 'Texte'),
+            TextEditorField::new('whoEnglishText', 'Texte anglais')->onlyOnForms(),
+            TextField::new('whyTitle', 'Titre Pourquoi'),
+            TextField::new('whyEnglishTitle', 'Titre anglais Pourquoi')->onlyOnForms(),
+            TextEditorField::new('whyText', 'Texte pourquoi'),
+            TextEditorField::new('whyEnglishText', 'Texte anglais pourquoi')->onlyOnForms(),
         ];
     }
+
     public function configureActions(Actions $actions): Actions
     {
         return $actions

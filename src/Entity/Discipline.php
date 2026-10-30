@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
+use App\Enum\PriceUnit;
+use App\Repository\DisciplineRepository;
 use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
-use Vich\UploaderBundle\Mapping\Attribute as Vich;
-use App\Repository\DisciplineRepository;
-use App\Enum\PriceUnit;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Attribute as Vich;
 
 #[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: DisciplineRepository::class)]
@@ -309,22 +309,20 @@ class Discipline
     {
         return $this->image;
     }
+
     public function setImage($image): self
     {
         $this->image = $image;
+
         return $this;
     }
 
-    /**
-     * @return File|null
-     */
     public function getImageFile(): ?File
     {
         return $this->imageFile;
     }
+
     /**
-     *
-     * @param File $imageFile
      * @return void
      */
     public function setImageFile(?File $imageFile = null)
@@ -334,14 +332,13 @@ class Discipline
         // otherwise the event listeners won't be called and the file is lost
         if (null !== $imageFile) {
             // if 'updatedAt' is not defined in your entity, use another property
-            $this->updatedAt = new \DateTime("now");
+            $this->updatedAt = new \DateTime('now');
         }
+
         return $this;
     }
 
     /**
-     *
-     * @param File $image_detailFile
      * @return void
      */
     public function setImageDetailFile(?File $imageDetailFile = null)
@@ -351,21 +348,19 @@ class Discipline
         // otherwise the event listeners won't be called and the file is lost
         if (null !== $imageDetailFile) {
             // if 'updatedAt' is not defined in your entity, use another property
-            $this->updatedAt = new \DateTime("now");
+            $this->updatedAt = new \DateTime('now');
         }
+
         return $this;
     }
 
-    /**
-     * @return File|null
-     */
     public function getImageDetailFile(): ?File
     {
         return $this->imageDetailFile;
     }
 
     /**
-     * Get the value of image_detail
+     * Get the value of image_detail.
      *
      * @return  string|null;
      */
@@ -375,11 +370,11 @@ class Discipline
     }
 
     /**
-     * Set the value of image_detail
+     * Set the value of image_detail.
      *
      * @param  string|null;  $image_detail
      *
-     * @return  self
+     * @return self
      */
     public function setImageDetail($imageDetail)
     {
@@ -389,9 +384,7 @@ class Discipline
     }
 
     /**
-     * Get the value of updatedAt
-     *
-     * @return  \DateTimeInterface
+     * Get the value of updatedAt.
      */
     public function getUpdatedAt(): ?\DateTimeInterface
     {

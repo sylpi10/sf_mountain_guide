@@ -8,59 +8,32 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: AboutRepository::class)]
 class About
 {
-    /**
-     * @var int
-     */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private int $id;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(type: 'string', length: 255)]
     private string $whoTitle;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(type: 'text')]
     private string $whoText;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(type: 'string', length: 255)]
     private string $whoEnglishTitle;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(type: 'text')]
     private string $whoEnglishText;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(type: 'string', length: 255)]
     private string $whyTitle;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(type: 'text')]
     private string $whyText;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(type: 'string', length: 255)]
     private string $whyEnglishTitle;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(type: 'text')]
     private string $whyEnglishText;
 

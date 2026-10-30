@@ -6,13 +6,13 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class LocaleSubscriber implements EventSubscriberInterface{
-
+class LocaleSubscriber implements EventSubscriberInterface
+{
     private $defaultLocale;
 
     public function __construct($defaultLocale = 'fr')
     {
-        $this->defaultLocale=$defaultLocale;
+        $this->defaultLocale = $defaultLocale;
     }
 
     public function onKernelRequest(RequestEvent $event)
@@ -25,6 +25,7 @@ class LocaleSubscriber implements EventSubscriberInterface{
             if ($request->hasPreviousSession()) {
                 $request->getSession()->set('_locale', $locale);
             }
+
             return;
         }
 
@@ -32,14 +33,14 @@ class LocaleSubscriber implements EventSubscriberInterface{
             return;
         }
         $request->setLocale($request->getSession()->get('_locale',
-        $this->defaultLocale));
+            $this->defaultLocale));
     }
 
     public static function getSubscribedEvents(): array
     {
         return [
             // après le routeur (32) pour lire le _locale de la route
-            KernelEvents :: REQUEST => [['onKernelRequest', 20]],
+            KernelEvents::REQUEST => [['onKernelRequest', 20]],
         ];
     }
 }

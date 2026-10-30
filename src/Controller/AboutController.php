@@ -2,18 +2,13 @@
 
 namespace App\Controller;
 
-use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\AboutRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 class AboutController extends AbstractController
 {
-    /**
-     *
-     * @param AboutRepository $aboutRepo
-     * @return Response
-     */
     #[Route(path: ['fr' => '/about', 'en' => '/en/about'], name: 'about')]
     public function about(AboutRepository $aboutRepo): Response
     {
@@ -21,9 +16,9 @@ class AboutController extends AbstractController
         $about = $aboutRepo->findOneAbout();
         $displayBtn = true;
 
-        return $this->render("about/about.html.twig", [
-            "about" => $about,
-            "displayBtn" => $displayBtn,
+        return $this->render('about/about.html.twig', [
+            'about' => $about,
+            'displayBtn' => $displayBtn,
         ]);
     }
 }
