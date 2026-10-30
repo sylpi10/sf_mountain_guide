@@ -7,6 +7,7 @@ use App\Repository\PricingSectionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use SortDirection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -36,7 +37,7 @@ class PricingSection
 
     /** @var Collection<int, PricingGroup> */
     #[ORM\OneToMany(targetEntity: PricingGroup::class, mappedBy: 'section')]
-    #[ORM\OrderBy(['position' => 'ASC', 'id' => 'ASC'])]
+    #[ORM\OrderBy(['position' => SortDirection::Ascending, 'id' => SortDirection::Ascending])]
     private Collection $groups;
 
     public function __construct()

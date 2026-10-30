@@ -6,6 +6,7 @@ use App\Repository\PricingGroupRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use SortDirection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -42,7 +43,7 @@ class PricingGroup
 
     /** @var Collection<int, PricingLine> */
     #[ORM\OneToMany(targetEntity: PricingLine::class, mappedBy: 'pricingGroup', cascade: ['persist'], orphanRemoval: true)]
-    #[ORM\OrderBy(['position' => 'ASC', 'id' => 'ASC'])]
+    #[ORM\OrderBy(['position' => SortDirection::Ascending, 'id' => SortDirection::Ascending])]
     #[Assert\Valid]
     private Collection $lines;
 

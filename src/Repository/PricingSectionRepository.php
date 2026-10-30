@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\PricingSection;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use SortDirection;
 
 /**
  * @extends ServiceEntityRepository<PricingSection>
@@ -26,9 +27,9 @@ class PricingSectionRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('s')
             ->leftJoin('s.groups', 'g')->addSelect('g')
             ->leftJoin('g.lines', 'l')->addSelect('l')
-            ->orderBy('s.position')->addOrderBy('s.id')
-            ->addOrderBy('g.position')->addOrderBy('g.id')
-            ->addOrderBy('l.position')->addOrderBy('l.id')
+            ->orderBy('s.position', SortDirection::Ascending)->addOrderBy('s.id', SortDirection::Ascending)
+            ->addOrderBy('g.position', SortDirection::Ascending)->addOrderBy('g.id', SortDirection::Ascending)
+            ->addOrderBy('l.position', SortDirection::Ascending)->addOrderBy('l.id', SortDirection::Ascending)
             ->getQuery()
             ->getResult();
     }

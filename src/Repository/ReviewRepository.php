@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Review;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use SortDirection;
 
 /**
  * @extends ServiceEntityRepository<Review>
@@ -25,8 +26,8 @@ class ReviewRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.published = true')
-            ->orderBy('r.reviewedAt', 'DESC')
-            ->addOrderBy('r.id', 'DESC')
+            ->orderBy('r.reviewedAt', SortDirection::Descending)
+            ->addOrderBy('r.id', SortDirection::Descending)
             ->getQuery()
             ->getResult();
     }
