@@ -14,65 +14,63 @@
 		<div class="mt-5 p-5 article-wrapper">
 			<h1>Blog</h1>
 			<hr>
-			{% for article in articles %}
-				<div class="article">
+			{# filtres + liste dans un frame : changer de catégorie ou de page ne recharge que la liste, l'URL suit (advance) #}
+			<turbo-frame id="blog-list" data-turbo-action="advance">
+			{% if categories is not empty %}
+				<nav class="blog-filters" aria-label="{% trans %}Blog categories{% endtrans %}">
+					<a href="{{ path('blog') }}" class="blog-filter{{ currentCategory is null ? ' active' }}" {{ currentCategory is null ? 'aria-current="page"' }}>
+						{% trans %}All{% endtrans %}
+						<span class="count">{{ totalCount }}</span>
+					</a>
+					{% for row in categories %}
+						{% set active = currentCategory and currentCategory.id == row.category.id %}
+						<a href="{{ path('blog', {categorie: row.category.slug}) }}" class="blog-filter{{ active ? ' active' }}" {{ active ? 'aria-current="page"' }}>
+							{{ row.category.label(app.request.locale) }}
+							<span class="count">{{ row.count }}</span>
+						</a>
+					{% endfor %}
+				</nav>
+			{% endif %}
 
-					{% for locale in locales %}
-						{% if locale == app.request.locale %}
-							{% if locale == 'fr' %}
-								<h2>{{article.title|title}}</h2>
-							{% else %}
-								<h2>{{article.englishTitle|title}}</h2>
-							{% endif %}
-							<span class="date-loc">
-								{{ icon('calendar') }}
-								{{ article.createdAt|date("m/d/Y", "Europe/Paris")}},
-								{{ icon('map-marker') }}
-								{{article.location}}
-							</span>
-							<div class="article-content">
-								{% if locale == 'fr' %}
-									<p>{{ article.content|plain_text(300) }}
-										<a href="{{ path('blog_detail', {id: article.id, slug: article.slug(app.request.locale)}) }}" title="details">
-											[...]
-											{% trans %}Read the post{% endtrans %}
-										</a>
-									</p>
-								{% else %}
-									<p>{{ article.englishContent|plain_text(300) }}
-										<a href="{{ path('blog_detail', {id: article.id, slug: article.slug(app.request.locale)}) }}" title="details">
-											[...]
-											{% trans %}Read the post{% endtrans %}
-										</a>
-									</p>
+			{# colonnes selon le nombre d'articles de la page : 1, 2 ou 3 sur une ligne, 4 en 2 × 2 #}
+			{% set nb = articles|length %}
+			<div class="articles-wrapper" style="--cols: {{ nb == 3 ? 3 : min(nb, 2) }}">
+				{% set en = app.request.locale == 'en' %}
+				{% for article in articles %}
+					{% set url = path('blog_detail', {id: article.id, slug: article.slug(app.request.locale)}) %}
+					{% set title = ((en ? article.englishTitle : null) ?: article.title)|title %}
+					{# carte au style des blocs de la page tarifs : titre en bandeau foncé qui déborde #}
+					<article class="article-card">
+						<h2><a href="{{ url }}" data-turbo-frame="_top">{{ title }}</a></h2>
+						<div class="article-card-body">
+							<div class="article-card-meta">
+								{% if article.category %}
+									<a href="{{ path('blog', {categorie: article.category.slug}) }}" class="blog-category">{{ article.category.label(app.request.locale) }}</a>
 								{% endif %}
+								<span class="date-loc">
+									{{ icon('calendar') }}
+									{{ article.createdAt|date("d/m/Y", "Europe/Paris") }}
+									{% if article.location %}
+										{{ icon('map-marker') }}
+										{{ article.location }}
+									{% endif %}
+								</span>
+							</div>
+							{% if article.image %}
+								<img src="{{ asset('uploads/' ~ article.image) }}" alt="{{ title }}" loading="lazy" width="600" height="400">
 							{% endif %}
-
-						{% endfor %}
-						{% if article.image %}
-							<img src="{{asset('uploads/' ~ article.image)}}" alt="{{article.title|title }}" class="d-block img-fluid" width="140" height="140">
-						{% endif %}
-					</div>
-
-
-					{# <div class="read-more">
-																																																																																																					<a href="{{ path('blog_detail', {id: article.id, slug: article.slug(app.request.locale)}) }}" title="details">
-																																																																																																						{% trans %}Read the post{% endtrans %}
-																																																																																																					</a>
-																																																																																																				</div> #}
-
-				</div>
-
-				<hr class="bg-dark">
-
-
-			{% endfor %}
+							<p>{{ ((en ? article.englishContent : null) ?: article.content)|plain_text(220) }}</p>
+							<a href="{{ url }}" class="article-card-more" data-turbo-frame="_top">{% trans %}Read the post{% endtrans %}</a>
+						</div>
+					</article>
+				{% endfor %}
+			</div>
 
 			<div class="navigation shadow">
 				{{ knp_pagination_render(articles) }}
 			</div>
+			</turbo-frame>
 		</div>
-
 
 	</div>
 

@@ -78,7 +78,7 @@
 
 					{% endfor %}
 				{% else %}
-					<p>
+					<p class="no-comment">
 						{% trans %}No comment yet{% endtrans %}
 					</p>
 				{% endif %}
@@ -106,6 +106,17 @@
 					</turbo-frame>
 				{% else %}
 					<p>{% trans %}You must be logged to post a comment{% endtrans %}</p>
+
+					<div class="links">
+						<a class="nav-link" href="{{path('login')}}" title="{% trans %} Login to your account {% endtrans %}">{% trans %}
+							Login
+							{% endtrans %}</a>
+						<a class="nav-link" href="{{path('register')}}" title="{% trans %} Create an account {% endtrans %}">{% trans %}
+							Register
+							{% endtrans %}</a>
+
+					</div>
+
 				{% endif %}
 			</div>
 

@@ -55,7 +55,10 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkTo(NewsLetterSubscriberCrudController::class, 'Abonnés à la Newsletter', 'far fa-paper-plane');
         yield MenuItem::linkTo(ContactCrudController::class, 'Mails reçus', 'fas fa-envelope-open-text');
         yield MenuItem::linkTo(ContactRecipientCrudController::class, 'Destinataires des mails', 'fas fa-at');
-        yield MenuItem::linkTo(BlogCrudController::class, 'Blog', 'fas fa-newspaper');
+        yield MenuItem::subMenu('Blog', 'fas fa-newspaper')->setSubItems([
+            MenuItem::linkTo(BlogCrudController::class, 'Articles'),
+            MenuItem::linkTo(BlogCategoryCrudController::class, 'Catégories'),
+        ]);
         yield MenuItem::linkTo(CommentCrudController::class, 'Commentaires', 'fas fa-solid fa-comments');
     }
     // public function configureCrud(): Crud

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Blog;
 use App\Entity\Comment;
 use App\Form\CommentType;
+use App\Repository\BlogCategoryRepository;
 use App\Repository\BlogRepository;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -44,18 +45,35 @@ class BlogController extends AbstractController
     }
 
     #[Route(path: ['fr' => '/blog', 'en' => '/en/blog'], name: 'blog')]
-    public function index(Request $request): Response
+    public function index(Request $request, BlogCategoryRepository $categoryRepository): Response
     {
-        $displayBtn = true;
+        // filtres : catégories ayant des articles, avec leur nombre ; ?categorie=slug sélectionne l'une d'elles
+        $categories = $categoryRepository->findUsedWithCount();
+        $slug = $request->query->getString('categorie');
+        $current = null;
+        if ('' !== $slug) {
+            foreach ($categories as $row) {
+                if ($row['category']->getSlug() === $slug) {
+                    $current = $row['category'];
+                }
+            }
+            if (null === $current) {
+                throw $this->createNotFoundException('Catégorie inconnue');
+            }
+        }
+
         $articles = $this->paginator->paginate(
-            $this->blogRepository->findByDate(),
+            $this->blogRepository->queryByDate($current),
             $request->query->getInt('page', 1),
             4,
         );
 
         return $this->render('blog/index.html.twig', [
             'articles' => $articles,
-            'displayBtn' => $displayBtn,
+            'categories' => $categories,
+            'currentCategory' => $current,
+            'totalCount' => $this->blogRepository->count([]),
+            'displayBtn' => true,
         ]);
     }
 

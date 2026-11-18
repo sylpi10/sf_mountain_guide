@@ -34,6 +34,8 @@ class BlogCrudController extends AbstractCrudController
             $this->richTextField('content', 'Mon texte'),
             $this->richTextField('englishContent', 'Mon texte en anglais'),
             TextField::new('location', 'Lieu'),
+            AssociationField::new('category', 'Catégorie')
+                ->setHelp('Filtre du blog. Les catégories se gèrent dans « Blog > Catégories ».'),
             ImageField::new('image', 'Image')
                 ->onlyOnIndex()
                 ->setBasePath('/uploads'),

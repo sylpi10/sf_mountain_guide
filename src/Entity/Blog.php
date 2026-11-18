@@ -61,6 +61,10 @@ class Blog
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $location;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(onDelete: 'SET NULL')]
+    private ?BlogCategory $category = null;
+
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'post', fetch: 'EAGER', cascade: ['remove'])]
     private $comments;
 
@@ -199,6 +203,18 @@ class Blog
     public function setLocation(?string $location): self
     {
         $this->location = $location;
+
+        return $this;
+    }
+
+    public function getCategory(): ?BlogCategory
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?BlogCategory $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }

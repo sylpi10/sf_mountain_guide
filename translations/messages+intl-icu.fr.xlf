@@ -483,6 +483,14 @@
         <source>Back to the website</source>
         <target>Retour au site</target>
       </trans-unit>
+      <trans-unit id="blogAll" resname="All">
+        <source>All</source>
+        <target>Tous</target>
+      </trans-unit>
+      <trans-unit id="blogCats" resname="Blog categories">
+        <source>Blog categories</source>
+        <target>Catégories du blog</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

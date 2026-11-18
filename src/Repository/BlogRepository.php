@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Blog;
+use App\Entity\BlogCategory;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,12 +21,18 @@ class BlogRepository extends ServiceEntityRepository
         parent::__construct($registry, Blog::class);
     }
 
-    public function findByDate()
+    // articles les plus récents d'abord, éventuellement d'une seule catégorie (requête passée au paginateur)
+    public function queryByDate(?BlogCategory $category = null): Query
     {
-        return $this->createQueryBuilder('b')
-            ->orderBy('b.updated_at', 'DESC')
-            ->getQuery()
-            ->getResult();
+        $qb = $this->createQueryBuilder('b')
+            ->addSelect('c')
+            ->leftJoin('b.category', 'c')
+            ->orderBy('b.updated_at', \SortDirection::Descending);
+        if (null !== $category) {
+            $qb->andWhere('b.category = :category')->setParameter('category', $category);
+        }
+
+        return $qb->getQuery();
     }
 
     /*
