@@ -38,7 +38,7 @@
         .activity-body {
             align-items: flex-end;
         }
-        .activity-body h2 {
+        .activity-body h3 {
             margin-left: 0;
             margin-right: -32px;
             transform: translateX(50%);
@@ -69,7 +69,7 @@
     align-items: flex-start;
     padding: 28px 32px;
     // titre en pilule à cheval sur l'image (même style que les blocs de la page tarifs)
-    h2 {
+    h3 {
         @include title-pill;
         position: relative;
         z-index: 1;
@@ -119,7 +119,7 @@
     }
 }
 @media screen and (max-width: 500px) {
-    .activity-body h2 {
+    .activity-body h3 {
         gap: 10px;
         padding: 10px 16px;
         &::before,
@@ -141,7 +141,7 @@
     .activity:nth-child(even) .activity-body {
         align-items: flex-start;
         padding: 0 22px 22px;
-        h2 {
+        h3 {
             // pilule centrée, à cheval sur le bas de l'image
             align-self: center;
             margin: -26px 0 1rem;
@@ -149,4 +149,41 @@
             font-size: 1.5rem;
         }
     }
+}
+
+// sections par groupe du menu (Hiver, Été…)
+.activities-groups-nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: -1.5rem 0 3rem;
+    a {
+        padding: 8px 22px;
+        border: 1px solid $base-color;
+        border-radius: 50px;
+        color: $base-color;
+        font-weight: 600;
+        transition:
+            background-color $transition-fast,
+            color $transition-fast;
+        &:hover,
+        &:focus-visible {
+            background-color: $base-color;
+            color: #fff;
+        }
+    }
+}
+.activities-group {
+    scroll-margin-top: 110px;
+    & + & {
+        margin-top: 4.5rem;
+    }
+}
+.activities-group-title {
+    @include title-dashes;
+    margin-bottom: 2.5rem;
+    font-family: "Share Tech", sans-serif;
+    font-size: 2rem;
+    text-transform: uppercase;
 }

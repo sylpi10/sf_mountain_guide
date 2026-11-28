@@ -96,8 +96,8 @@
     .more-link {
         @include title-pill;
         &:hover {
-            color: rgba(255, 159, 28, 0.5);
-            padding: 0.8rem 2rem;
+            color: $accent-color-dark;
+            padding: 0.7rem 2rem;
         }
     }
 }

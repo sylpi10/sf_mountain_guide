@@ -1,0 +1,13 @@
+{# Fil d'Ariane pour Google (BreadcrumbList) : items = [{name, url (chemin)}] #}
+<script type="application/ld+json">
+{{ {
+	'@context': 'https://schema.org',
+	'@type': 'BreadcrumbList',
+	'itemListElement': items|map((item, i) => {
+		'@type': 'ListItem',
+		'position': i + 1,
+		'name': item.name,
+		'item': site_url ~ item.url,
+	}),
+}|json_encode(constant('JSON_UNESCAPED_UNICODE') b-or constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_HEX_TAG'))|raw }}
+</script>

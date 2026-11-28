@@ -1,108 +1,125 @@
 {% extends 'base.html.twig' %}
 {% block title %}
 	{% set seo_title = (app.request.locale == 'en' ? discipline.seoTitleEn : null) ?: discipline.seoTitle %}
-	{% if seo_title %}{{ seo_title }}{% elseif app.request.locale == 'fr' %}{{ discipline.title }} - Directicimes{% else %}{{ discipline.englishTitle }} - Directicimes{% endif %}
+	{{ seo_title ?: discipline.titleFor(app.request.locale) ~ ' - Directicimes' }}
 {% endblock %}
 {% block description %}
-	{% if app.request.locale == 'fr' %}{{ discipline.content|plain_text }}{% else %}{{ discipline.englishContent|plain_text }}{% endif %}
+	{{ ((app.request.locale == 'en' ? (discipline.teaserEn ?: discipline.englishContent) : null) ?: discipline.teaser ?: discipline.content)|plain_text }}
 {% endblock %}
 
-{% block body %}
-	{# image de fond (dans le body et non le head : Turbo fusionne les <head>, les styles des pages précédentes resteraient) : la plus petite déclinaison par défaut, une plus grande dès que l'écran la dépasse #}
-	{% set bg = upload_image(discipline.imageDetail, constant('App\\Entity\\Discipline::IMAGE_WIDTHS')['discipline_images_detail']) %}
-	{% if bg %}
-		<style>
-			{% set previous = null %}
-			{% for width, url in bg.variants|default({0: bg.src}) %}
-				{% if previous %}@media (min-width: {{ previous + 1 }}px) { {% endif %}
-				.discipline-bg { background-image: url('{{ url }}'); }
-				{% if previous %}}{% endif %}
-				{% set previous = width %}
-			{% endfor %}
-		</style>
+{% block head_extra %}
+	{% set hero = upload_image(discipline.imageDetail, constant('App\\Entity\\Discipline::IMAGE_WIDTHS')['discipline_images_detail']) %}
+	{% if hero and hero.srcset %}
+		<link rel="preload" as="image" imagesrcset="{{ hero.srcset }}" imagesizes="100vw">
 	{% endif %}
-	<main class="details">
-		{% for locale in locales %}
-			{% if locale == app.request.locale %}
-				{# <div class="disciplines {{discipline|replace({" ":" -"})|lower|trim}}" id=""> #}
-				<div data-jarallax data-speed="0.4" class="disciplines discipline-bg jarallax {{discipline.slug|lower}}" id="">
-					<div class=" container-fluid">
-						<div class="text-wrapper">
-							<div class="text">
+{% endblock %}
 
-								{% if locale =='fr' %}
-									<h1>{{discipline.title}}</h1>
-								{% endif %}
-								{% if locale =='en' %}
-									<h1>{{discipline.englishTitle}}</h1>
-								{% endif %}
+{% block body_class %}detail-page outing-page discipline-page{% endblock %}
 
-								<hr class="under-title">
+{% block body %}
+	{% set locale = app.request.locale %}
+	{% set is_en = locale == 'en' %}
+	{% set title = discipline.titleFor(locale) %}
+	{% set teaser = (is_en ? discipline.teaserEn : null) ?: discipline.teaser %}
+	{% set hero = upload_image(discipline.imageDetail, constant('App\\Entity\\Discipline::IMAGE_WIDTHS')['discipline_images_detail']) %}
+	{% set content = (is_en ? discipline.englishContent : null) ?: discipline.content %}
 
-								{% if locale =='fr' %}
-									<div>{{discipline.content|replace({'<h1>': '<h2>', '</h1>': "</h2>"})|raw }}</div>
-								{% endif %}
-								{% if locale =='en' %}
-									<div>{{discipline.englishContent|replace({'<h1>': '<h2>', '</h1>': "</h2>"})|raw }}</div>
-								{% endif %}
+	{# même mise en page que la fiche sortie : photo pleine largeur, fil d'Ariane et titre dessus #}
+	<main class="outing">
+		<header class="outing-hero">
+			{% if hero %}
+				<img class="outing-hero-img" src="{{ hero.src }}" {% if hero.srcset %}srcset="{{ hero.srcset }}" sizes="100vw"{% endif %} {% if hero.width %}width="{{ hero.width }}" height="{{ hero.height }}"{% endif %} alt="{{ '{activity} with a mountain guide in Briançon'|trans({'{activity}': title}) }}" fetchpriority="high" decoding="async">
+			{% endif %}
+			<div class="outing-hero-content container">
+				<nav class="breadcrumb" aria-label="{% trans %}Breadcrumb{% endtrans %}">
+					<a href="{{ path('activities') }}">{% trans %}Activities{% endtrans %}</a>
+					{% if discipline.activityGroup %}
+						<span aria-hidden="true">›</span>
+						<a href="{{ path('activities', {'_fragment': discipline.activityGroup.season ? discipline.activityGroup.season.anchor : 'groupe-' ~ discipline.activityGroup.id}) }}">{{ discipline.activityGroup.name(locale) }}</a>
+					{% endif %}
+				</nav>
+				<h1>{{ title }}</h1>
+				{% if not discipline.published %}<p class="outing-draft">{% trans %}Draft (visible to admin only){% endtrans %}</p>{% endif %}
+				{% if teaser %}<p class="outing-teaser">{{ teaser }}</p>{% endif %}
+			</div>
+		</header>
 
-								<a href="#contact-form" class="btn contact-btn goto-contact">{% trans %}Book{% endtrans %}</a>
-							</div>
-
-							<div class="info-details">
-								<div class="nb-persons">
-									{{ icon('users') }}
-									{% if locale == 'fr' %}
-										<span>{{discipline.persNumber|raw}}</span>
-									{% else %}
-										<span>{{discipline.englishNbPers|raw}}</span>
-									{% endif %}
-								</div>
-								<hr>
-								<div class="duration">
-									{{ icon('clock') }}
-									{% if locale == 'fr' %}
-										<span>{{discipline.duration|raw}}</span>
-									{% else %}
-										<span>{{discipline.englishDuration|raw}}</span>
-									{% endif %}
-								</div>
-								<hr>
-								{% if discipline.location %}
-									<div class="place">
-										{{ icon('map') }}
-										{% if locale == 'fr' %}
-											<span>{{discipline.location|raw}}</span>
-										{% else %}
-											<span>{{discipline.englishLocation|raw}}</span>
-										{% endif %}
-									</div>
-								{% endif %}
-								<hr>
-								<a class="price" href="{{ path('pricing') }}">
-									{{ icon('tag') }}
-									<span class="price-more">{% trans %}See prices{% endtrans %}</span>
-								</a>
-							</div>
-						</div>
-
-					</div>
+		<section class="outings-section container" id="outings" aria-labelledby="outings-title">
+			<h2 id="outings-title">{{ 'Our {activity} outings'|trans({'{activity}': title|lower}) }}</h2>
+			{% if outings %}
+				<p class="outings-count">{{ (outings|length > 1 ? '{count} outings' : '{count} outing')|trans({'{count}': outings|length}) }}</p>
+				<div class="outing-grid">
+					{% for outing in outings %}
+						<twig:OutingCard :outing="outing" :eager="loop.index <= 3" />
+					{% endfor %}
 				</div>
 			{% endif %}
-		{% endfor %}
-	</main>
-	<div class="list-details">
+			<div class="outings-custom">
+				<p>{% trans %}Looking for another route or a tailor-made outing? I adapt each day to your level, your wishes and the conditions.{% endtrans %}</p>
+				<a class="btn more-link" href="#contact-form">{% trans %}Contact me{% endtrans %}</a>
+				<a class="outings-prices" href="{{ path('pricing') }}">{% trans %}See all prices{% endtrans %} &rarr;</a>
+			</div>
+		</section>
 
-		<div class="disciplines-list">
+		{% if content|striptags|trim %}
+			<section class="discipline-text container" aria-labelledby="discipline-text-title">
+				<h2 id="discipline-text-title">{{ 'The activity: {activity}'|trans({'{activity}': title|lower}) }}</h2>
+				<div class="outing-content legal-content">
+					{{ content|replace({'<h1>': '<h2>', '</h1>': '</h2>'})|raw }}
+				</div>
+			</section>
+		{% endif %}
 
-			{# titre invisible : évite le saut h1 -> h3 des cartes quand le texte n'a pas de h2 #}
-			<h2 class="sr-only">{% trans %}Other activities{% endtrans %}</h2>
-			{% for disci in disciplines|filter(d => d.id != discipline.id) %}
-				<twig:DisciplineCard :discipline="disci" />
-			{% endfor %}
-
+		{# infos générales de la discipline (pers., durée, lieu) : masquées, les détails sont désormais dans chaque sortie
+		{% set pers = is_en ? discipline.englishNbPers : discipline.persNumber %}
+		{% set duration = is_en ? discipline.englishDuration : discipline.duration %}
+		{% set place = is_en ? discipline.englishLocation : discipline.location %}
+		<div class="info-details">
+			{% if pers|striptags|trim %}
+				<div class="nb-persons">
+					{{ icon('users') }}
+					<span>{{ pers|raw }}</span>
+				</div>
+				<hr>
+			{% endif %}
+			{% if duration|striptags|trim %}
+				<div class="duration">
+					{{ icon('clock') }}
+					<span>{{ duration|raw }}</span>
+				</div>
+				<hr>
+			{% endif %}
+			{% if place|striptags|trim %}
+				<div class="place">
+					{{ icon('map') }}
+					<span>{{ place|raw }}</span>
+				</div>
+				<hr>
+			{% endif %}
+			<a class="price" href="{{ path('pricing') }}">
+				{{ icon('tag') }}
+				<span class="price-more">{% trans %}See prices{% endtrans %}</span>
+			</a>
 		</div>
-	</div>
+		#}
+	</main>
+
+	{% set others = discipline.activityGroup ? discipline.activityGroup.publishedDisciplines|filter(d => d.id != discipline.id) : [] %}
+	{% if others %}
+		<div class="list-details">
+			<div class="disciplines-list">
+				<h2 class="list-details-title">{{ 'Other activities – {group}'|trans({'{group}': discipline.activityGroup.name(locale)}) }}</h2>
+				{% for disci in others %}
+					<twig:DisciplineCard :discipline="disci" />
+				{% endfor %}
+			</div>
+		</div>
+	{% endif %}
+
+	{% include 'outing/_breadcrumb_jsonld.html.twig' with {items: [
+		{name: 'Activities'|trans, url: path('activities')},
+		{name: title, url: path('discipline', {id: discipline.id, slug: discipline.slug(locale)})},
+	]} %}
 
 	<twig:Reviews />
 

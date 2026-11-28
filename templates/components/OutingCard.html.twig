@@ -1,0 +1,39 @@
+{# Carte d'une sortie : photo, discipline, titre, durée / niveau / pers. max, prix à partir de #}
+{% props outing, showDiscipline = false, eager = false %}
+{% set locale = app.request.locale %}
+{% set discipline = outing.discipline %}
+{% set title = outing.titleFor(locale) %}
+{% set url = path('outing', {disciplineSlug: discipline.slug(locale), slug: outing.slug(locale), id: outing.id}) %}
+{# carte entièrement cliquable via le ::after du lien du titre #}
+<article class="outing-card{{ outing.published ? '' : ' is-draft' }}">
+	<div class="outing-card-image">
+		{% set img = upload_image(outing.image, constant('App\\Entity\\Outing::IMAGE_WIDTHS')['outing_images']) %}
+		{% if img %}
+			<img src="{{ img.src }}" {% if img.srcset %}srcset="{{ img.srcset }}" sizes="(max-width: 640px) 100vw, 360px"{% endif %} {% if img.width %}width="{{ img.width }}" height="{{ img.height }}"{% endif %} alt="{{ outing.imageAlt ?: title }}" loading="{{ eager ? 'eager' : 'lazy' }}" decoding="async">
+		{% endif %}
+		{% if outing.level %}
+			<span class="outing-level level-{{ outing.level.value }}">{{ outing.level.label(locale) }}</span>
+		{% endif %}
+	</div>
+	<div class="outing-card-body">
+		{% if showDiscipline %}
+			<p class="outing-card-discipline">{{ discipline.titleFor(locale) }}</p>
+		{% endif %}
+		<h3><a href="{{ url }}">{{ title }}</a></h3>
+		{% if not outing.published %}<p class="outing-draft">{% trans %}Draft (visible to admin only){% endtrans %}</p>{% endif %}
+		<ul class="outing-facts">
+			{% set duration = outing.durationFor(locale) %}
+			{% if duration %}<li>{{ icon('clock') }} {{ duration }}</li>{% endif %}
+			{% if outing.maxPeople %}<li>{{ icon('users') }} {{ 'Up to {max} people'|trans({'{max}': outing.maxPeople}) }}</li>{% endif %}
+			{% if outing.elevation %}<li>{{ icon('mountain') }} {{ outing.elevation }} m D+</li>{% endif %}
+		</ul>
+		<p class="outing-card-price">
+			{% if outing.price %}
+				<span>{% trans %}From{% endtrans %}</span> <strong>{{ outing.price }} €</strong>
+			{% else %}
+				<strong>{% trans %}On quotation{% endtrans %}</strong>
+			{% endif %}
+			<span class="outing-card-more" aria-hidden="true">&rarr;</span>
+		</p>
+	</div>
+</article>

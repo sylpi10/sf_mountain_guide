@@ -1,8 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file source-language="fr" target-language="fr" datatype="plaintext" original="file.ext">
+  <file
+        source-language="fr"
+        target-language="fr"
+        datatype="plaintext"
+        original="file.ext"
+    >
     <header>
-      <tool tool-id="symfony" tool-name="Symfony"/>
+      <tool tool-id="symfony" tool-name="Symfony" />
     </header>
     <body>
       <trans-unit id=".oieBhI" resname="Your email has been send">
@@ -97,8 +102,12 @@
         <source>High Mountain guide</source>
         <target>Guide de Haute Montagne</target>
       </trans-unit>
-      <trans-unit id="cIUFvpm" resname="Whatever you fancy doing on the mountains, I will quickly reply to your request. So feel free to contact me and get ready for new adventures together !">
-        <source>Whatever you fancy doing on the mountains, I will quickly reply to your request. So feel free to contact me and get ready for new adventures together !</source>
+      <trans-unit
+                id="cIUFvpm"
+                resname="Whatever you fancy doing on the mountains, I will quickly reply to your request. So feel free to contact me and get ready for new adventures together !"
+            >
+        <source
+                >Whatever you fancy doing on the mountains, I will quickly reply to your request. So feel free to contact me and get ready for new adventures together !</source>
         <target>
           Quelque soit votre demande, je m’engage à vous donner une réponse rapide, alors n’hésitez pas à me contacter pour discuter de vos envies et construire un projet ensemble.
         </target>
@@ -107,25 +116,44 @@
         <source>home</source>
         <target>accueil</target>
       </trans-unit>
-      <trans-unit id="home_h1" resname="Mountain guide in Briançon, French Alps">
+      <trans-unit
+                id="home_h1"
+                resname="Mountain guide in Briançon, French Alps"
+            >
         <source>Mountain guide in Briançon, French Alps</source>
         <target>Guide de haute montagne à Briançon</target>
       </trans-unit>
-      <trans-unit id="home_subtitle" resname="Ski touring, mountaineering, rock climbing">
+      <trans-unit
+                id="home_subtitle"
+                resname="Ski touring, mountaineering, rock climbing"
+            >
         <source>Ski touring, mountaineering, rock climbing</source>
         <target>Ski, alpinisme, escalade</target>
       </trans-unit>
-      <trans-unit id="rezL_Hs" resname="Montain Guide in Briançon, I have many mountain activities to show you:">
-        <source>Montain Guide in Briançon, I have many mountain activities to show you:</source>
-        <target>Guide de Haute Montagne à Briançon, je peux vous faire découvrir les activités suivantes:</target>
+      <trans-unit
+                id="rezL_Hs"
+                resname="Montain Guide in Briançon, I have many mountain activities to show you:"
+            >
+        <source
+                >Montain Guide in Briançon, I have many mountain activities to show you:</source>
+        <target
+                >Guide de Haute Montagne à Briançon, je peux vous faire découvrir les activités suivantes:</target>
       </trans-unit>
-      <trans-unit id="pX.0H_2" resname="You have been registered to our newsletter">
+      <trans-unit
+                id="pX.0H_2"
+                resname="You have been registered to our newsletter"
+            >
         <source>You have been registered to our newsletter</source>
         <target>Vous avez bien été enregistré pour notre Newsletter</target>
       </trans-unit>
-      <trans-unit id="iGIZNP3" resname="Subscribe to our Newsletter to be aware of our latest news !">
-        <source>Subscribe to our Newsletter to be aware of our latest news !</source>
-        <target>Abonnez-vous à notre Newsletter pour recevoir nos dernières nouvelles !</target>
+      <trans-unit
+                id="iGIZNP3"
+                resname="Subscribe to our Newsletter to be aware of our latest news !"
+            >
+        <source
+                >Subscribe to our Newsletter to be aware of our latest news !</source>
+        <target
+                >Abonnez-vous à notre Newsletter pour recevoir nos dernières nouvelles !</target>
       </trans-unit>
       <trans-unit id="zA442px" resname="Subscribe">
         <source>Subscribe</source>
@@ -147,25 +175,44 @@
         <source>What appened ?</source>
         <target>Que s'est-il passé ?</target>
       </trans-unit>
-      <trans-unit id="4S5fA8h" resname="If you typed the URL directly, please make sure the spelling is correct.">
-        <source>If you typed the URL directly, please make sure the spelling is correct.</source>
-        <target>Si vous avez tapé l’adresse de ce lien directement, assurez-vous de l’avoir tapée correctement.</target>
+      <trans-unit
+                id="4S5fA8h"
+                resname="If you typed the URL directly, please make sure the spelling is correct."
+            >
+        <source
+                >If you typed the URL directly, please make sure the spelling is correct.</source>
+        <target
+                >Si vous avez tapé l’adresse de ce lien directement, assurez-vous de l’avoir tapée correctement.</target>
       </trans-unit>
-      <trans-unit id="yWAXKTd" resname="If you clicked on a link to get here, the link is outdated.">
-        <source>If you clicked on a link to get here, the link is outdated.</source>
-        <target>Si vous avez cliqué sur un lien pour arriver là, le lien n’est pas à jour ou la page n’existe plus.</target>
+      <trans-unit
+                id="yWAXKTd"
+                resname="If you clicked on a link to get here, the link is outdated."
+            >
+        <source
+                >If you clicked on a link to get here, the link is outdated.</source>
+        <target
+                >Si vous avez cliqué sur un lien pour arriver là, le lien n’est pas à jour ou la page n’existe plus.</target>
       </trans-unit>
       <trans-unit id="93_dkTh" resname="What can you do now ?">
         <source>What can you do now ?</source>
         <target>Que faire maintenant ?</target>
       </trans-unit>
-      <trans-unit id="EUuQCrP" resname="You may find what you are looking for on the top menu.">
+      <trans-unit
+                id="EUuQCrP"
+                resname="You may find what you are looking for on the top menu."
+            >
         <source>You may find what you are looking for on the top menu.</source>
-        <target>Vous pourrez retrouver ce que vous cherchiez dans le menu principal.</target>
+        <target
+                >Vous pourrez retrouver ce que vous cherchiez dans le menu principal.</target>
       </trans-unit>
-      <trans-unit id="eqfeMnX" resname="Or follow this link to return directly to our Home page :">
-        <source>Or follow this link to return directly to our Home page :</source>
-        <target>Ou suivre ce lien pour retourner directement à la page d'accueil :</target>
+      <trans-unit
+                id="eqfeMnX"
+                resname="Or follow this link to return directly to our Home page :"
+            >
+        <source
+                >Or follow this link to return directly to our Home page :</source>
+        <target
+                >Ou suivre ce lien pour retourner directement à la page d'accueil :</target>
       </trans-unit>
       <trans-unit id="EdWLCN6" resname="Home page">
         <source>Home page</source>
@@ -211,9 +258,14 @@
         <source>Logged as</source>
         <target>Bienvenue </target>
       </trans-unit>
-      <trans-unit id="jxw6PPw" resname="Your comment has been submitted, it will be displayed when the administartor validates it">
-        <source>Your comment has been submitted, it will be displayed when the administartor validates it</source>
-        <target>Votre commentaire a bien été enregistré, il s'affichera quand l'administarteur l'aura validé</target>
+      <trans-unit
+                id="jxw6PPw"
+                resname="Your comment has been submitted, it will be displayed when the administartor validates it"
+            >
+        <source
+                >Your comment has been submitted, it will be displayed when the administartor validates it</source>
+        <target
+                >Votre commentaire a bien été enregistré, il s'affichera quand l'administarteur l'aura validé</target>
       </trans-unit>
       <trans-unit id="qWnQTsL" resname="User Name">
         <source>User Name</source>
@@ -255,9 +307,14 @@
         <source>Discover the activities</source>
         <target>Découvrir les activités</target>
       </trans-unit>
-      <trans-unit id="meta_description_default" resname="IFMGA mountain guide in Briançon: mountaineering, ski touring, rock and ice climbing in the Écrins, Clarée and Queyras. Tailor-made trips for all levels.">
-        <source>IFMGA mountain guide in Briançon: mountaineering, ski touring, rock and ice climbing in the Écrins, Clarée and Queyras. Tailor-made trips for all levels.</source>
-        <target>Guide de haute montagne UIAGM à Briançon : alpinisme, ski de rando, escalade et cascade de glace dans les Écrins, la Clarée et le Queyras. Sorties sur mesure.</target>
+      <trans-unit
+                id="meta_description_default"
+                resname="IFMGA mountain guide in Briançon: mountaineering, ski touring, rock and ice climbing in the Écrins, Clarée and Queyras. Tailor-made trips for all levels."
+            >
+        <source
+                >IFMGA mountain guide in Briançon: mountaineering, ski touring, rock and ice climbing in the Écrins, Clarée and Queyras. Tailor-made trips for all levels.</source>
+        <target
+                >Guide de haute montagne UIAGM à Briançon : alpinisme, ski de rando, escalade et cascade de glace dans les Écrins, la Clarée et le Queyras. Sorties sur mesure.</target>
       </trans-unit>
       <trans-unit id="whatsapp_prefer" resname="Prefer WhatsApp?">
         <source>Prefer WhatsApp?</source>
@@ -267,9 +324,14 @@
         <source>Chat on WhatsApp</source>
         <target>Discuter sur WhatsApp</target>
       </trans-unit>
-      <trans-unit id="whatsapp_prefill" resname="Hello, I would like some information about your mountain trips.">
-        <source>Hello, I would like some information about your mountain trips.</source>
-        <target>Bonjour, je souhaiterais des informations sur vos sorties en montagne.</target>
+      <trans-unit
+                id="whatsapp_prefill"
+                resname="Hello, I would like some information about your mountain trips."
+            >
+        <source
+                >Hello, I would like some information about your mountain trips.</source>
+        <target
+                >Bonjour, je souhaiterais des informations sur vos sorties en montagne.</target>
       </trans-unit>
       <trans-unit id="whatsapp_or" resname="or use the form below">
         <source>or use the form below</source>
@@ -295,9 +357,14 @@
         <source>See the activity</source>
         <target>Voir l'activité</target>
       </trans-unit>
-      <trans-unit id="pricing_5" resname="A project in mind? I will send you a personalised quote.">
-        <source>A project in mind? I will send you a personalised quote.</source>
-        <target>Un projet en tête ? Je vous envoie un devis personnalisé.</target>
+      <trans-unit
+                id="pricing_5"
+                resname="A project in mind? I will send you a personalised quote."
+            >
+        <source
+                >A project in mind? I will send you a personalised quote.</source>
+        <target
+                >Un projet en tête ? Je vous envoie un devis personnalisé.</target>
       </trans-unit>
       <trans-unit id="pricing_6" resname="Contact me">
         <source>Contact me</source>
@@ -343,21 +410,36 @@
         <source>See all reviews on Google</source>
         <target>Voir tous les avis sur Google</target>
       </trans-unit>
-      <trans-unit id="pricing_7" resname="Mountain guide prices in Briançon: mountaineering, rock climbing, ski touring and ice climbing, per day or half-day. Personalised quote on request.">
-        <source>Mountain guide prices in Briançon: mountaineering, rock climbing, ski touring and ice climbing, per day or half-day. Personalised quote on request.</source>
-        <target>Tarifs de guide de haute montagne à Briançon : alpinisme, escalade, ski de randonnée et cascade de glace, à la journée ou à la demi-journée. Devis personnalisé sur demande.</target>
+      <trans-unit
+                id="pricing_7"
+                resname="Mountain guide prices in Briançon: mountaineering, rock climbing, ski touring and ice climbing, per day or half-day. Personalised quote on request."
+            >
+        <source
+                >Mountain guide prices in Briançon: mountaineering, rock climbing, ski touring and ice climbing, per day or half-day. Personalised quote on request.</source>
+        <target
+                >Tarifs de guide de haute montagne à Briançon : alpinisme, escalade, ski de randonnée et cascade de glace, à la journée ou à la demi-journée. Devis personnalisé sur demande.</target>
       </trans-unit>
       <trans-unit id="legal_updated" resname="Last updated:">
         <source>Last updated:</source>
         <target>Dernière mise à jour :</target>
       </trans-unit>
-      <trans-unit id="home_title" resname="Mountain guide in Briançon, French Alps – Ski touring, mountaineering">
-        <source>Mountain guide in Briançon, French Alps – Ski touring, mountaineering</source>
-        <target>Guide de haute montagne à Briançon – Ski, alpinisme, escalade</target>
+      <trans-unit
+                id="home_title"
+                resname="Mountain guide in Briançon, French Alps – Ski touring, mountaineering"
+            >
+        <source
+                >Mountain guide in Briançon, French Alps – Ski touring, mountaineering</source>
+        <target
+                >Guide de haute montagne à Briançon – Ski, alpinisme, escalade</target>
       </trans-unit>
-      <trans-unit id="area_1" resname="IFMGA mountain guide in Briançon: off-piste skiing and ski touring in Serre Chevalier, Montgenèvre and the Clarée valley. Tailor-made days for all levels.">
-        <source>IFMGA mountain guide in Briançon: off-piste skiing and ski touring in Serre Chevalier, Montgenèvre and the Clarée valley. Tailor-made days for all levels.</source>
-        <target>Guide de haute montagne UIAGM à Briançon : ski hors-piste et ski de rando à Serre Chevalier, Montgenèvre et dans la vallée de la Clarée. Sorties sur mesure.</target>
+      <trans-unit
+                id="area_1"
+                resname="IFMGA mountain guide in Briançon: off-piste skiing and ski touring in Serre Chevalier, Montgenèvre and the Clarée valley. Tailor-made days for all levels."
+            >
+        <source
+                >IFMGA mountain guide in Briançon: off-piste skiing and ski touring in Serre Chevalier, Montgenèvre and the Clarée valley. Tailor-made days for all levels.</source>
+        <target
+                >Guide de haute montagne UIAGM à Briançon : ski hors-piste et ski de rando à Serre Chevalier, Montgenèvre et dans la vallée de la Clarée. Sorties sur mesure.</target>
       </trans-unit>
       <trans-unit id="area_2" resname="Activities">
         <source>Activities</source>
@@ -375,23 +457,40 @@
         <source>Areas:</source>
         <target>Secteurs :</target>
       </trans-unit>
-      <trans-unit id="about_description" resname="About Yoann Georges, IFMGA mountain guide based in Briançon: his background, his passion for the mountains and his approach to guiding in the Écrins and beyond.">
-        <source>About Yoann Georges, IFMGA mountain guide based in Briançon: his background, his passion for the mountains and his approach to guiding in the Écrins and beyond.</source>
-        <target>À propos de Yoann Georges, guide de haute montagne UIAGM basé à Briançon : son parcours, sa passion de la montagne et sa façon de guider dans les Écrins.</target>
+      <trans-unit
+                id="about_description"
+                resname="About Yoann Georges, IFMGA mountain guide based in Briançon: his background, his passion for the mountains and his approach to guiding in the Écrins and beyond."
+            >
+        <source
+                >About Yoann Georges, IFMGA mountain guide based in Briançon: his background, his passion for the mountains and his approach to guiding in the Écrins and beyond.</source>
+        <target
+                >À propos de Yoann Georges, guide de haute montagne UIAGM basé à Briançon : son parcours, sa passion de la montagne et sa façon de guider dans les Écrins.</target>
       </trans-unit>
-      <trans-unit id="about_title" resname="About Yoann Georges, mountain guide in Briançon">
+      <trans-unit
+                id="about_title"
+                resname="About Yoann Georges, mountain guide in Briançon"
+            >
         <source>About Yoann Georges, mountain guide in Briançon</source>
-        <target>À propos : Yoann Georges, guide de haute montagne à Briançon</target>
+        <target
+                >À propos : Yoann Georges, guide de haute montagne à Briançon</target>
       </trans-unit>
-      <trans-unit id="newsletter_title" resname="Directicimes newsletter: news from your guide in Briançon">
-        <source>Directicimes newsletter: news from your guide in Briançon</source>
-        <target>Newsletter Directicimes : actus de votre guide à Briançon</target>
+      <trans-unit
+                id="newsletter_title"
+                resname="Directicimes newsletter: news from your guide in Briançon"
+            >
+        <source
+                >Directicimes newsletter: news from your guide in Briançon</source>
+        <target
+                >Newsletter Directicimes : actus de votre guide à Briançon</target>
       </trans-unit>
       <trans-unit id="other_activities" resname="Other activities">
         <source>Other activities</source>
         <target>Autres activités</target>
       </trans-unit>
-      <trans-unit id="card_people_beginner" resname="Up to {max} people for beginners">
+      <trans-unit
+                id="card_people_beginner"
+                resname="Up to {max} people for beginners"
+            >
         <source>Up to {max} people for beginners</source>
         <target>{max} pers. max en initiation</target>
       </trans-unit>
@@ -399,11 +498,17 @@
         <source>Up to {max} people</source>
         <target>{max} pers. max</target>
       </trans-unit>
-      <trans-unit id="card_people_technical_range" resname="{min} to {max} people on technical routes">
+      <trans-unit
+                id="card_people_technical_range"
+                resname="{min} to {max} people on technical routes"
+            >
         <source>{min} to {max} people on technical routes</source>
         <target>{min} à {max} pers. sur itinéraire technique</target>
       </trans-unit>
-      <trans-unit id="card_people_technical" resname="Up to {max} people on technical routes">
+      <trans-unit
+                id="card_people_technical"
+                resname="Up to {max} people on technical routes"
+            >
         <source>Up to {max} people on technical routes</source>
         <target>{max} pers. max sur itinéraire technique</target>
       </trans-unit>
@@ -411,7 +516,10 @@
         <source>From {price} € per day</source>
         <target>Dès {price} € / jour</target>
       </trans-unit>
-      <trans-unit id="card_price_half_day" resname="From {price} € per half day">
+      <trans-unit
+                id="card_price_half_day"
+                resname="From {price} € per half day"
+            >
         <source>From {price} € per half day</source>
         <target>Dès {price} € / demi-journée</target>
       </trans-unit>
@@ -423,9 +531,14 @@
         <source>Mountain activities in Briançon</source>
         <target>Activités de montagne à Briançon</target>
       </trans-unit>
-      <trans-unit id="activities_2" resname="Mountaineering, rock climbing, off-piste skiing and ice climbing with a mountain guide in Briançon: beginner or experienced, tailor-made trips in small groups or private.">
-        <source>Mountaineering, rock climbing, off-piste skiing and ice climbing with a mountain guide in Briançon: beginner or experienced, tailor-made trips in small groups or private.</source>
-        <target>Alpinisme, escalade, ski hors-piste et cascade de glace avec un guide de haute montagne à Briançon : débutant ou confirmé, sorties sur mesure en petit groupe ou en privé.</target>
+      <trans-unit
+                id="activities_2"
+                resname="Mountaineering, rock climbing, off-piste skiing and ice climbing with a mountain guide in Briançon: beginner or experienced, tailor-made trips in small groups or private."
+            >
+        <source
+                >Mountaineering, rock climbing, off-piste skiing and ice climbing with a mountain guide in Briançon: beginner or experienced, tailor-made trips in small groups or private.</source>
+        <target
+                >Alpinisme, escalade, ski hors-piste et cascade de glace avec un guide de haute montagne à Briançon : débutant ou confirmé, sorties sur mesure en petit groupe ou en privé.</target>
       </trans-unit>
       <trans-unit id="activities_3" resname="Discover the activity">
         <source>Discover the activity</source>
@@ -435,7 +548,10 @@
         <source>See all my activities</source>
         <target>Voir toutes mes activités</target>
       </trans-unit>
-      <trans-unit id="newsletter_mail_1" resname="Welcome to the Directicimes newsletter">
+      <trans-unit
+                id="newsletter_mail_1"
+                resname="Welcome to the Directicimes newsletter"
+            >
         <source>Welcome to the Directicimes newsletter</source>
         <target>Bienvenue dans la newsletter Directicimes</target>
       </trans-unit>
@@ -443,41 +559,72 @@
         <source>Hello {name},</source>
         <target>Bonjour {name},</target>
       </trans-unit>
-      <trans-unit id="newsletter_mail_3" resname="Thank you for subscribing to the Directicimes newsletter!">
-        <source>Thank you for subscribing to the Directicimes newsletter!</source>
-        <target>Merci pour votre inscription à la newsletter Directicimes !</target>
+      <trans-unit
+                id="newsletter_mail_3"
+                resname="Thank you for subscribing to the Directicimes newsletter!"
+            >
+        <source
+                >Thank you for subscribing to the Directicimes newsletter!</source>
+        <target
+                >Merci pour votre inscription à la newsletter Directicimes !</target>
       </trans-unit>
-      <trans-unit id="newsletter_mail_4" resname="From time to time, you will receive news from the mountains: trip reports, current conditions and outing ideas around Briançon.">
-        <source>From time to time, you will receive news from the mountains: trip reports, current conditions and outing ideas around Briançon.</source>
-        <target>De temps en temps, vous recevrez des nouvelles de la montagne : récits de sorties, conditions du moment et idées de courses autour de Briançon.</target>
+      <trans-unit
+                id="newsletter_mail_4"
+                resname="From time to time, you will receive news from the mountains: trip reports, current conditions and outing ideas around Briançon."
+            >
+        <source
+                >From time to time, you will receive news from the mountains: trip reports, current conditions and outing ideas around Briançon.</source>
+        <target
+                >De temps en temps, vous recevrez des nouvelles de la montagne : récits de sorties, conditions du moment et idées de courses autour de Briançon.</target>
       </trans-unit>
       <trans-unit id="newsletter_mail_5" resname="Discover my activities">
         <source>Discover my activities</source>
         <target>Découvrir mes activités</target>
       </trans-unit>
-      <trans-unit id="newsletter_mail_6" resname="See you soon in the mountains,">
+      <trans-unit
+                id="newsletter_mail_6"
+                resname="See you soon in the mountains,"
+            >
         <source>See you soon in the mountains,</source>
         <target>À bientôt en montagne,</target>
       </trans-unit>
-      <trans-unit id="newsletter_mail_7" resname="You are receiving this email because you subscribed on directicimes.com.">
-        <source>You are receiving this email because you subscribed on directicimes.com.</source>
-        <target>Vous recevez ce mail car vous vous êtes inscrit sur directicimes.com.</target>
+      <trans-unit
+                id="newsletter_mail_7"
+                resname="You are receiving this email because you subscribed on directicimes.com."
+            >
+        <source
+                >You are receiving this email because you subscribed on directicimes.com.</source>
+        <target
+                >Vous recevez ce mail car vous vous êtes inscrit sur directicimes.com.</target>
       </trans-unit>
       <trans-unit id="newsletter_mail_8" resname="Unsubscribe">
         <source>Unsubscribe</source>
         <target>Se désabonner</target>
       </trans-unit>
-      <trans-unit id="newsletter_mail_9" resname="Unsubscribe from the newsletter">
+      <trans-unit
+                id="newsletter_mail_9"
+                resname="Unsubscribe from the newsletter"
+            >
         <source>Unsubscribe from the newsletter</source>
         <target>Désabonnement de la newsletter</target>
       </trans-unit>
-      <trans-unit id="newsletter_mail_10" resname="Do you want to unsubscribe {email} from the Directicimes newsletter?">
-        <source>Do you want to unsubscribe {email} from the Directicimes newsletter?</source>
-        <target>Voulez-vous désabonner {email} de la newsletter Directicimes ?</target>
+      <trans-unit
+                id="newsletter_mail_10"
+                resname="Do you want to unsubscribe {email} from the Directicimes newsletter?"
+            >
+        <source
+                >Do you want to unsubscribe {email} from the Directicimes newsletter?</source>
+        <target
+                >Voulez-vous désabonner {email} de la newsletter Directicimes ?</target>
       </trans-unit>
-      <trans-unit id="newsletter_mail_11" resname="You have been unsubscribed from the newsletter. You will no longer receive our emails.">
-        <source>You have been unsubscribed from the newsletter. You will no longer receive our emails.</source>
-        <target>Vous êtes désabonné de la newsletter. Vous ne recevrez plus nos mails.</target>
+      <trans-unit
+                id="newsletter_mail_11"
+                resname="You have been unsubscribed from the newsletter. You will no longer receive our emails."
+            >
+        <source
+                >You have been unsubscribed from the newsletter. You will no longer receive our emails.</source>
+        <target
+                >Vous êtes désabonné de la newsletter. Vous ne recevrez plus nos mails.</target>
       </trans-unit>
       <trans-unit id="newsletter_mail_12" resname="Back to the website">
         <source>Back to the website</source>
@@ -491,13 +638,201 @@
         <source>Blog categories</source>
         <target>Catégories du blog</target>
       </trans-unit>
-      <trans-unit id="discipline_img_alt" resname="{activity} with a mountain guide in Briançon">
+      <trans-unit
+                id="discipline_img_alt"
+                resname="{activity} with a mountain guide in Briançon"
+            >
         <source>{activity} with a mountain guide in Briançon</source>
         <target>{activity} avec un guide de haute montagne à Briançon</target>
       </trans-unit>
       <trans-unit id="footer_credit" resname="Website by">
         <source>Website by</source>
         <target>Site réalisé par</target>
+      </trans-unit>
+      <trans-unit id="outings_1" resname="Draft (visible to admin only)">
+        <source>Draft (visible to admin only)</source>
+        <target>Brouillon (visible par l'admin uniquement)</target>
+      </trans-unit>
+      <trans-unit id="outings_2" resname="From">
+        <source>From</source>
+        <target>À partir de</target>
+      </trans-unit>
+      <trans-unit id="outings_3" resname="On quotation">
+        <source>On quotation</source>
+        <target>Sur devis</target>
+      </trans-unit>
+      <trans-unit id="outings_4" resname="{count} outings">
+        <source>{count} outings</source>
+        <target>{count} sorties</target>
+      </trans-unit>
+      <trans-unit id="outings_5" resname="{count} outing">
+        <source>{count} outing</source>
+        <target>{count} sortie</target>
+      </trans-unit>
+      <trans-unit id="outings_6" resname="Show activities">
+        <source>Show activities</source>
+        <target>Afficher les activités</target>
+      </trans-unit>
+      <trans-unit id="outings_7" resname="All activities">
+        <source>All activities</source>
+        <target>Toutes les activités</target>
+      </trans-unit>
+      <trans-unit id="outings_8" resname="Winter season">
+        <source>Winter season</source>
+        <target>Saison d'hiver</target>
+      </trans-unit>
+      <trans-unit id="outings_9" resname="Summer season">
+        <source>Summer season</source>
+        <target>Saison d'été</target>
+      </trans-unit>
+      <trans-unit id="outings_10" resname="This winter in the mountains">
+        <source>This winter in the mountains</source>
+        <target>Cet hiver en montagne</target>
+      </trans-unit>
+      <trans-unit id="outings_11" resname="This summer in the mountains">
+        <source>This summer in the mountains</source>
+        <target>Cet été en montagne</target>
+      </trans-unit>
+      <trans-unit id="outings_12" resname="Outings not to be missed">
+        <source>Outings not to be missed</source>
+        <target>Les sorties à ne pas manquer</target>
+      </trans-unit>
+      <trans-unit id="outings_13" resname="See summer activities">
+        <source>See summer activities</source>
+        <target>Voir les activités d'été</target>
+      </trans-unit>
+      <trans-unit id="outings_14" resname="See winter activities">
+        <source>See winter activities</source>
+        <target>Voir les activités d'hiver</target>
+      </trans-unit>
+      <trans-unit id="outings_15" resname="Seasons">
+        <source>Seasons</source>
+        <target>Saisons</target>
+      </trans-unit>
+      <trans-unit id="outings_16" resname="Breadcrumb">
+        <source>Breadcrumb</source>
+        <target>Fil d'Ariane</target>
+      </trans-unit>
+      <trans-unit id="outings_17" resname="See the outings">
+        <source>See the outings</source>
+        <target>Voir les sorties</target>
+      </trans-unit>
+      <trans-unit id="outings_18" resname="Our {activity} outings">
+        <source>Our {activity} outings</source>
+        <target>Les sorties {activity}</target>
+      </trans-unit>
+      <trans-unit
+                id="outings_19"
+                resname="Looking for another route or a tailor-made outing? I adapt each day to your level, your wishes and the conditions."
+            >
+        <source
+                >Looking for another route or a tailor-made outing? I adapt each day to your level, your wishes and the conditions.</source>
+        <target
+                >Vous cherchez un autre itinéraire ou une sortie sur mesure ? J'adapte chaque journée à votre niveau, à vos envies et aux conditions.</target>
+      </trans-unit>
+      <trans-unit id="outings_20" resname="Other activities – {group}">
+        <source>Other activities – {group}</source>
+        <target>Autres activités – {group}</target>
+      </trans-unit>
+      <trans-unit id="outings_21" resname="Duration">
+        <source>Duration</source>
+        <target>Durée</target>
+      </trans-unit>
+      <trans-unit id="outings_22" resname="Level">
+        <source>Level</source>
+        <target>Niveau</target>
+      </trans-unit>
+      <trans-unit id="outings_23" resname="Group">
+        <source>Group</source>
+        <target>Groupe</target>
+      </trans-unit>
+      <trans-unit id="outings_24" resname="Elevation gain">
+        <source>Elevation gain</source>
+        <target>Dénivelé</target>
+      </trans-unit>
+      <trans-unit id="outings_25" resname="Price">
+        <source>Price</source>
+        <target>Prix</target>
+      </trans-unit>
+      <trans-unit id="outings_26" resname="From {price} €">
+        <source>From {price} €</source>
+        <target>À partir de {price} €</target>
+      </trans-unit>
+      <trans-unit id="outings_27" resname="Required level">
+        <source>Required level</source>
+        <target>Niveau requis</target>
+      </trans-unit>
+      <trans-unit id="outings_28" resname="For whom">
+        <source>For whom</source>
+        <target>Public</target>
+      </trans-unit>
+      <trans-unit id="outings_29" resname="Best period">
+        <source>Best period</source>
+        <target>Période propice</target>
+      </trans-unit>
+      <trans-unit id="outings_30" resname="Area">
+        <source>Area</source>
+        <target>Secteur</target>
+      </trans-unit>
+      <trans-unit id="outings_31" resname="Meeting point">
+        <source>Meeting point</source>
+        <target>Rendez-vous</target>
+      </trans-unit>
+      <trans-unit id="outings_32" resname="Practical information">
+        <source>Practical information</source>
+        <target>Infos pratiques</target>
+      </trans-unit>
+      <trans-unit id="outings_33" resname="What the price includes">
+        <source>The price includes</source>
+        <target>Le prix comprend</target>
+      </trans-unit>
+      <trans-unit id="outings_34" resname="Included">
+        <source>Included</source>
+        <target>Inclus</target>
+      </trans-unit>
+      <trans-unit id="outings_35" resname="Not included">
+        <source>Not included</source>
+        <target>Non inclus</target>
+      </trans-unit>
+      <trans-unit id="outings_36" resname="Equipment">
+        <source>Equipment</source>
+        <target>Matériel</target>
+      </trans-unit>
+      <trans-unit id="outings_37" resname="To bring">
+        <source>To bring</source>
+        <target>À prévoir</target>
+      </trans-unit>
+      <trans-unit id="outings_38" resname="Provided">
+        <source>Provided</source>
+        <target>Fourni</target>
+      </trans-unit>
+      <trans-unit id="outings_39" resname="Booking">
+        <source>Booking</source>
+        <target>Réservation</target>
+      </trans-unit>
+      <trans-unit id="outings_40" resname="Book">
+        <source>Book </source>
+        <target>Réserver </target>
+      </trans-unit>
+      <trans-unit
+                id="outings_41"
+                resname="On the date of your choice, with an IFMGA mountain guide."
+            >
+        <source>On the date of your choice, with an IFMGA mountain guide.</source>
+        <target
+                >À la date de votre choix, avec un guide de haute montagne UIAGM.</target>
+      </trans-unit>
+      <trans-unit id="outings_42" resname="Other {activity} outings">
+        <source>Other {activity} outings</source>
+        <target>Autres sorties {activity}</target>
+      </trans-unit>
+      <trans-unit id="outings_43" resname="All {activity} outings">
+        <source>All {activity} outings</source>
+        <target>Toutes les sorties {activity}</target>
+      </trans-unit>
+      <trans-unit id="outings_44" resname="The activity: {activity}">
+        <source>The activity: {activity}</source>
+        <target>L'activité : {activity}</target>
       </trans-unit>
     </body>
   </file>

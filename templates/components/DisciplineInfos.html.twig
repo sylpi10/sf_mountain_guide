@@ -3,6 +3,7 @@
 {% set fr = app.request.locale == 'fr' %}
 {% set duration = fr ? discipline.duration : discipline.englishDuration %}
 {% set beginner = discipline.maxPeopleBeginner %}
+{% set outings_count = discipline.publishedOutings|length %}
 {% set technicalMin = discipline.maxPeopleTechnicalMin %}
 {% set technicalMax = discipline.maxPeopleTechnicalMax %}
 <ul class="discipline-infos">
@@ -28,6 +29,9 @@
 	{% endif %}
 	{% if duration %}
 		<li>{{ icon('clock') }} {{ duration|striptags }}</li>
+	{% endif %}
+	{% if outings_count %}
+		<li>{{ icon('map') }} {{ (outings_count > 1 ? '{count} outings' : '{count} outing')|trans({'{count}': outings_count}) }}</li>
 	{% endif %}
 	<li class="discipline-price">
 		{{ icon('tag') }}

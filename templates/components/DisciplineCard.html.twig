@@ -1,4 +1,4 @@
-{# Carte produit d'une discipline (accueil, « autres activités » de la page détail) #}
+{# Carte produit d'une discipline (accueil, « autres activités » de la page discipline) #}
 {% props discipline %}
 {% set fr = app.request.locale == 'fr' %}
 {% set title = fr ? discipline.title : discipline.englishTitle %}
@@ -14,5 +14,5 @@
 		</div>
 	</div>
 	<twig:DisciplineInfos :discipline="discipline" />
-	<a href="{{ path('detail', {id: discipline.id, slug: discipline.slug(app.request.locale)}) }}" class="discipline-more" title="Détails {{ title }}">{% trans %}See details{% endtrans %} &rarr;</a>
+	<a href="{{ path('discipline', {id: discipline.id, slug: discipline.slug(app.request.locale)}) }}" class="discipline-more" title="Détails {{ title }}">{% trans %}See details{% endtrans %} &rarr;</a>
 </article>

@@ -1,0 +1,193 @@
+{% extends 'base.html.twig' %}
+
+{% set locale = app.request.locale %}
+{% set title = outing.titleFor(locale) %}
+{% set discipline_title = discipline.titleFor(locale) %}
+{% set discipline_url = path('discipline', {id: discipline.id, slug: discipline.slug(locale)}) %}
+{% set teaser = outing.teaserFor(locale) %}
+{% set img = upload_image(outing.image, constant('App\\Entity\\Outing::IMAGE_WIDTHS')['outing_images']) %}
+
+{% block title %}
+	{{ outing.seoTitleFor(locale) ?: title ~ ' - Directicimes' }}
+{% endblock %}
+{% block description %}
+	{{ (teaser ?: outing.contentFor(locale))|plain_text }}
+{% endblock %}
+{% block og_image %}{{ img ? site_url ~ img.src : parent() }}{% endblock %}
+
+{% block head_extra %}
+	{% if img and img.srcset %}
+		<link rel="preload" as="image" imagesrcset="{{ img.srcset }}" imagesizes="100vw">
+	{% endif %}
+{% endblock %}
+
+{% block body_class %}detail-page outing-page{% endblock %}
+
+{% block body %}
+	<main class="outing">
+		<header class="outing-hero">
+			{% if img %}
+				<img class="outing-hero-img" src="{{ img.src }}" {% if img.srcset %}srcset="{{ img.srcset }}" sizes="100vw"{% endif %} {% if img.width %}width="{{ img.width }}" height="{{ img.height }}"{% endif %} alt="{{ outing.imageAlt ?: title }}" fetchpriority="high" decoding="async">
+			{% endif %}
+			<div class="outing-hero-content container">
+				<nav class="breadcrumb" aria-label="{% trans %}Breadcrumb{% endtrans %}">
+					<a href="{{ path('activities') }}">{% trans %}Activities{% endtrans %}</a>
+					<span aria-hidden="true">›</span>
+					<a href="{{ discipline_url }}">{{ discipline_title }}</a>
+				</nav>
+				<h1>{{ title }}</h1>
+				{% if not outing.published or not discipline.published %}<p class="outing-draft">{% trans %}Draft (visible to admin only){% endtrans %}</p>{% endif %}
+				{% if teaser %}<p class="outing-teaser">{{ teaser }}</p>{% endif %}
+			</div>
+		</header>
+
+		{# chiffres clés #}
+		{% set duration = outing.durationFor(locale) %}
+		<ul class="outing-keyfacts container">
+			{% if duration %}
+				<li>{{ icon('clock') }}<span><small>{% trans %}Duration{% endtrans %}</small>{{ duration }}</span></li>
+			{% endif %}
+			{% if outing.level %}
+				<li class="outing-keyfact-level">
+					{{ icon('signal') }}
+					<span>
+						<small>{% trans %}Level{% endtrans %}</small>
+						{{ outing.level.label(locale) }}
+						<span class="level-gauge" aria-hidden="true">{% for i in 1..4 %}<i class="{{ i <= outing.level.rank ? 'on' }}"></i>{% endfor %}</span>
+					</span>
+				</li>
+			{% endif %}
+			{% if outing.maxPeople %}
+				<li>{{ icon('users') }}<span><small>{% trans %}Group{% endtrans %}</small>{{ 'Up to {max} people'|trans({'{max}': outing.maxPeople}) }}</span></li>
+			{% endif %}
+			{% if outing.elevation %}
+				<li>{{ icon('mountain') }}<span><small>{% trans %}Elevation gain{% endtrans %}</small>{{ outing.elevation }} m</span></li>
+			{% endif %}
+			<li>{{ icon('tag') }}<span><small>{% trans %}Price{% endtrans %}</small>{{ outing.price ? 'From {price} €'|trans({'{price}': outing.price}) : 'On quotation'|trans }}</span></li>
+		</ul>
+
+		<div class="outing-layout container">
+			<div class="outing-main">
+				<div class="outing-content legal-content">
+					{{ outing.contentFor(locale)|replace({'<h1>': '<h2>', '</h1>': '</h2>'})|raw }}
+				</div>
+
+				{# infos pratiques #}
+				{% set practical = [
+					{label: 'Required level'|trans, value: outing.prerequisitesFor(locale)},
+					{label: 'For whom'|trans, value: outing.audienceFor(locale)},
+					{label: 'Best period'|trans, value: outing.periodFor(locale)},
+					{label: 'Area'|trans, value: outing.locationFor(locale)},
+					{label: 'Meeting point'|trans, value: outing.meetingPointFor(locale)},
+				]|filter(row => row.value) %}
+				{% if practical %}
+					<section class="outing-block" aria-labelledby="practical-title">
+						<h2 id="practical-title">{% trans %}Practical information{% endtrans %}</h2>
+						<dl class="outing-practical">
+							{% for row in practical %}
+								<div>
+									<dt>{{ row.label }}</dt>
+									<dd>{{ row.value|nl2br }}</dd>
+								</div>
+							{% endfor %}
+						</dl>
+					</section>
+				{% endif %}
+
+				{% set included = outing.listFor('included', locale) %}
+				{% set not_included = outing.listFor('notIncluded', locale) %}
+				{% if included or not_included %}
+					<section class="outing-block" aria-labelledby="included-title">
+						<h2 id="included-title">{% trans %}What the price includes{% endtrans %}</h2>
+						<div class="outing-columns">
+							{% if included %}
+								<div>
+									<h3>{% trans %}Included{% endtrans %}</h3>
+									<ul class="outing-list is-yes">
+										{% for item in included %}<li>{{ icon('check') }} {{ item }}</li>{% endfor %}
+									</ul>
+								</div>
+							{% endif %}
+							{% if not_included %}
+								<div>
+									<h3>{% trans %}Not included{% endtrans %}</h3>
+									<ul class="outing-list is-no">
+										{% for item in not_included %}<li>{{ icon('times') }} {{ item }}</li>{% endfor %}
+									</ul>
+								</div>
+							{% endif %}
+						</div>
+					</section>
+				{% endif %}
+
+				{% set to_bring = outing.listFor('equipmentToBring', locale) %}
+				{% set provided = outing.listFor('equipmentProvided', locale) %}
+				{% if to_bring or provided %}
+					<section class="outing-block" aria-labelledby="equipment-title">
+						<h2 id="equipment-title">{% trans %}Equipment{% endtrans %}</h2>
+						<div class="outing-columns">
+							{% if to_bring %}
+								<div>
+									<h3>{% trans %}To bring{% endtrans %}</h3>
+									<ul class="outing-list">
+										{% for item in to_bring %}<li>{{ item }}</li>{% endfor %}
+									</ul>
+								</div>
+							{% endif %}
+							{% if provided %}
+								<div>
+									<h3>{% trans %}Provided{% endtrans %}</h3>
+									<ul class="outing-list is-yes">
+										{% for item in provided %}<li>{{ icon('check') }} {{ item }}</li>{% endfor %}
+									</ul>
+								</div>
+							{% endif %}
+						</div>
+					</section>
+				{% endif %}
+			</div>
+
+			{# encart de réservation, collant sur grand écran #}
+			<aside class="outing-booking" aria-label="{% trans %}Booking{% endtrans %}">
+				<p class="outing-booking-price">
+					{% if outing.price %}
+						<small>{% trans %}From{% endtrans %}</small>
+						<strong>{{ outing.price }} €</strong>
+					{% else %}
+						<strong>{% trans %}On quotation{% endtrans %}</strong>
+					{% endif %}
+				</p>
+				{% set note = outing.priceNoteFor(locale) %}
+				{% if note %}<p class="outing-booking-note">{{ note }}</p>{% endif %}
+				<a href="#contact-form" class="btn contact-btn goto-contact">{% trans %}Book{% endtrans %}</a>
+				<a class="outing-booking-prices" href="{{ path('pricing') }}">{% trans %}See all prices{% endtrans %} &rarr;</a>
+				<p class="outing-booking-info">{% trans %}On the date of your choice, with an IFMGA mountain guide.{% endtrans %}</p>
+			</aside>
+		</div>
+	</main>
+
+	<section class="outings-section container" aria-labelledby="similar-title">
+		<h2 id="similar-title">{{ similar ? 'Other {activity} outings'|trans({'{activity}': discipline_title|lower}) : discipline_title }}</h2>
+		{% if similar %}
+			<div class="outing-grid">
+				{% for other in similar %}
+					<twig:OutingCard :outing="other" />
+				{% endfor %}
+			</div>
+		{% endif %}
+		<p class="outings-back"><a class="btn more-link" href="{{ discipline_url }}">{{ 'All {activity} outings'|trans({'{activity}': discipline_title|lower}) }}</a></p>
+	</section>
+
+	{% include 'outing/_breadcrumb_jsonld.html.twig' with {items: [
+		{name: 'Activities'|trans, url: path('activities')},
+		{name: discipline_title, url: discipline_url},
+		{name: title, url: path('outing', {disciplineSlug: discipline.slug(locale), slug: outing.slug(locale), id: outing.id})},
+	]} %}
+
+	<twig:Reviews />
+
+	<div class="contact" id="contact-form">
+		{% include "contact.html.twig" %}
+		{% include "footer.html.twig" %}
+	</div>
+{% endblock %}

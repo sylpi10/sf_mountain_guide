@@ -1,0 +1,612 @@
+@use "variables" as *;
+
+// ---------- accueil : mise en avant de la saison ----------
+.season-highlight,
+.season-outings {
+    width: 100%;
+    margin-top: 2rem;
+    h2 {
+        @include title-dashes;
+        font-family: "Share Tech", sans-serif;
+        font-size: 2rem;
+        text-transform: uppercase;
+        color: $text-color;
+    }
+}
+.season-kicker {
+    margin: 0 0 0.3rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: $accent-color-dark;
+}
+.season-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0 3%;
+    .discipline {
+        width: 30%;
+        min-width: 300px;
+        margin: 20px 0;
+    }
+}
+.season-outings {
+    margin-top: 3.5rem;
+}
+.season-more {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2.5rem;
+    .more-link {
+        margin-top: 0;
+    }
+}
+.season-other {
+    font-weight: 600;
+    color: $base-color;
+    &:hover,
+    &:focus-visible {
+        color: $accent-color-dark;
+    }
+}
+
+// ---------- grille et carte de sortie ----------
+.outing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 350px));
+    justify-content: center;
+    gap: 28px;
+    margin-top: 2rem;
+    text-align: left;
+}
+.outing-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 14px;
+    background-color: #fff;
+    color: $text-color;
+    box-shadow: 0 10px 30px rgba($second-color, 0.12);
+    transition:
+        transform $transition-base,
+        box-shadow $transition-base;
+    &:hover,
+    &:focus-within {
+        transform: translateY(-4px);
+        box-shadow: 0 16px 36px rgba($second-color, 0.18);
+        img {
+            transform: scale(1.06);
+        }
+        h3 a,
+        .outing-card-more {
+            color: $accent-color-dark;
+        }
+    }
+    &.is-draft {
+        opacity: 0.7;
+        outline: 2px dashed $accent-color;
+    }
+}
+.outing-card-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    background-color: $bg-brand-soft;
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+    }
+}
+.outing-level {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #fff;
+    background-color: $second-color;
+    &.level-discovery {
+        background-color: #2e7d32;
+    }
+    &.level-initiated {
+        background-color: $base-color;
+    }
+    &.level-confirmed {
+        background-color: #c62828;
+    }
+    &.level-expert {
+        background-color: #111;
+    }
+}
+.outing-card-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 18px 22px 20px;
+    h3 {
+        margin: 0 0 0.8rem;
+        font-size: 1.2rem;
+        line-height: 1.3;
+        a {
+            color: $text-color;
+            transition: color $transition-fast;
+            // lien étiré : toute la carte mène à la fiche
+            &::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                z-index: 2;
+            }
+        }
+    }
+}
+.outing-card-discipline {
+    margin: 0 0 0.3rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: $accent-color-dark;
+}
+.outing-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    margin: 0 0 1rem;
+    padding: 0;
+    list-style: none;
+    font-size: 0.9rem;
+    li {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .icon {
+        width: 15px;
+        height: 15px;
+        fill: $base-color;
+    }
+}
+.outing-card-price {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin: auto 0 0;
+    padding-top: 12px;
+    border-top: 1px solid $border-soft;
+    span {
+        font-size: 0.85rem;
+    }
+    strong {
+        font-size: 1.15rem;
+        color: $base-color;
+    }
+}
+.outing-card-more {
+    margin-left: auto;
+    font-size: 1.3rem !important;
+    color: $base-color;
+    transition: color $transition-fast;
+}
+.outing-draft {
+    display: inline-block;
+    margin: 0 0 0.8rem;
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    background-color: $accent-color;
+    color: $second-color;
+}
+
+// ---------- bloc « sorties » (page discipline, fiche sortie) ----------
+.outings-section {
+    max-width: 1124px;
+    padding: 70px 15px;
+    text-align: center;
+    color: $text-color;
+    scroll-margin-top: 90px;
+    > h2 {
+        @include title-dashes;
+        font-family: "Share Tech", sans-serif;
+        font-size: 2rem;
+        text-transform: uppercase;
+    }
+}
+.outings-count {
+    margin: 0;
+    color: #6c757d;
+}
+.outings-custom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    max-width: 680px;
+    margin: 3rem auto 0;
+    padding: 28px;
+    border-radius: 14px;
+    background-color: $bg-brand-soft;
+    p {
+        margin: 0;
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+    .more-link {
+        align-self: center; // annule l'align-self: start du bouton sur mobile
+    }
+}
+.outings-prices,
+.outing-booking-prices {
+    margin-top: 0.6rem;
+    font-weight: 600;
+    color: $base-color;
+    &:hover,
+    &:focus-visible {
+        color: $accent-color-dark;
+    }
+}
+.outings-back {
+    margin-top: 2rem;
+}
+.list-details-title {
+    width: 100%;
+    font-family: "Share Tech", sans-serif;
+    text-transform: uppercase;
+    color: $text-color;
+}
+
+// fil d'Ariane (page discipline, fiche sortie)
+.breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 0.9rem;
+    a {
+        color: inherit;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        &:hover,
+        &:focus-visible {
+            color: $accent-color;
+        }
+    }
+}
+.disciplines .text .breadcrumb {
+    justify-content: center;
+    padding-top: 110px;
+    margin-bottom: -100px; // le h1 garde son padding-top
+    color: $base-color;
+}
+
+// ---------- fiche sortie ----------
+.outing {
+    color: $text-color;
+}
+.outing-hero {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: 62vh;
+    padding: 140px 0 60px;
+    background-color: $second-color;
+    color: #fff;
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        background: linear-gradient(
+            to top,
+            rgba($second-color, 0.85) 0%,
+            rgba($second-color, 0.25) 65%,
+            rgba($second-color, 0.45) 100%
+        );
+    }
+}
+.outing-hero-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    margin-top: 80px;
+    height: calc(100% - 80px);
+    object-fit: cover;
+}
+.outing-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1124px;
+    h1 {
+        margin: 0.6rem 0;
+        font-size: clamp(2rem, 4.5vw, 3.2rem);
+        text-transform: uppercase;
+        color: #fff;
+    }
+}
+.outing-teaser {
+    max-width: 720px;
+    margin: 0;
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+
+.outing-keyfacts {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 18px 28px;
+    max-width: 1124px;
+    margin: -38px auto 0;
+    padding: 22px 28px;
+    list-style: none;
+    border-radius: 14px;
+    background-color: #fff;
+    box-shadow: 0 14px 40px rgba($second-color, 0.16);
+    li {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 600;
+    }
+    li > .icon {
+        flex-shrink: 0;
+        width: 26px;
+        height: 26px;
+        fill: $base-color;
+    }
+    small {
+        display: block;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #6c757d;
+    }
+}
+.level-gauge {
+    display: inline-flex;
+    gap: 3px;
+    margin-left: 6px;
+    vertical-align: middle;
+    i {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: $border-soft;
+        &.on {
+            background-color: $accent-color;
+        }
+    }
+}
+
+.outing-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 48px;
+    max-width: 1124px;
+    padding-top: 50px;
+    padding-bottom: 30px;
+}
+.outing-content {
+    margin-top: 0;
+    font-size: 1.08rem;
+    @include ck-images;
+}
+.outing-block {
+    margin-top: 2.8rem;
+    h2 {
+        margin-bottom: 1.2rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid $border-soft;
+        font-family: "Share Tech", sans-serif;
+        font-size: 1.6rem;
+        text-transform: uppercase;
+    }
+    h3 {
+        font-size: 1.05rem;
+        margin-bottom: 0.6rem;
+    }
+}
+.outing-practical {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 0;
+    > div {
+        padding: 14px 18px;
+        border-radius: 10px;
+        background-color: $bg-soft;
+    }
+    dt {
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #6c757d;
+    }
+    dd {
+        margin: 4px 0 0;
+        font-weight: 600;
+    }
+}
+.outing-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+}
+.outing-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    li {
+        display: flex;
+        gap: 10px;
+        align-items: baseline;
+        padding: 6px 0;
+        & + li {
+            border-top: 1px solid $border-soft;
+        }
+    }
+    &:not(.is-yes):not(.is-no) li::before {
+        content: "•";
+        color: $base-color;
+    }
+    .icon {
+        flex-shrink: 0;
+        width: 16px;
+        height: 16px;
+        transform: translateY(3px);
+    }
+    &.is-yes .icon {
+        fill: #2e7d32;
+    }
+    &.is-no .icon {
+        fill: #c62828;
+    }
+}
+
+.outing-booking {
+    position: sticky;
+    top: 110px;
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 26px 24px;
+    border-radius: 14px;
+    // background-color: $second-color;
+    background-image: linear-gradient(
+        rgba(11, 11, 37, 1),
+        rgba(11, 11, 37, 0.94),
+        rgba(11, 11, 37, 0.8),
+        rgba(11, 11, 37, 0.7),
+        rgba(11, 11, 37, 0.7),
+        rgba(11, 11, 37, 0.8),
+        rgba(11, 11, 37, 0.94),
+        rgba(11, 11, 37, 1)
+    );
+    color: #fff;
+    text-align: center;
+    .btn.contact-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-width: 0;
+        margin: 1rem 0 0;
+        color: #fff;
+        background-color: $accent-color-dark;
+        &:hover {
+            color: #fff;
+            background-color: $second-color;
+        }
+    }
+    .outing-booking-prices {
+        color: #fff;
+        &:hover,
+        &:focus-visible {
+            color: $accent-color;
+        }
+    }
+}
+.outing-booking-price {
+    margin: 0;
+    small {
+        display: block;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        opacity: 0.8;
+    }
+    strong {
+        font-size: 2.2rem;
+        font-family: "Share Tech", sans-serif;
+    }
+}
+.outing-booking-note {
+    margin: 0;
+    opacity: 0.85;
+}
+.outing-booking-info {
+    margin: 1.2rem 0 0;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    font-size: 0.9rem;
+    opacity: 0.85;
+}
+
+@media screen and (max-width: 991px) {
+    .outing-layout {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    .outing-booking {
+        position: static;
+        order: -1;
+    }
+    .outing-hero {
+        min-height: 50vh;
+        padding-top: 120px;
+    }
+}
+@media screen and (max-width: 640px) {
+    .outing-keyfacts {
+        justify-content: flex-start;
+        width: auto;
+        margin: -24px 12px 0;
+        padding: 18px;
+    }
+    .season-cards .discipline {
+        width: 100%;
+        min-width: 0;
+    }
+    .season-highlight h2,
+    .season-outings h2,
+    .outings-section > h2,
+    .activities-group-title {
+        font-size: 1.5rem;
+        &::before,
+        &::after {
+            width: 20px;
+        }
+    }
+}
+
+// ---------- page discipline : texte de présentation sous la liste des sorties ----------
+.discipline-text {
+    max-width: $reading-width;
+    padding: 10px 15px 70px;
+    color: $text-color;
+    > h2 {
+        @include title-dashes;
+        margin-bottom: 1.5rem;
+        font-family: "Share Tech", sans-serif;
+        font-size: 2rem;
+        text-align: center;
+        text-transform: uppercase;
+    }
+    .outing-content {
+        line-height: 1.7;
+    }
+}
+@media screen and (max-width: 640px) {
+    .discipline-text > h2 {
+        font-size: 1.5rem;
+        &::before,
+        &::after {
+            width: 20px;
+        }
+    }
+}

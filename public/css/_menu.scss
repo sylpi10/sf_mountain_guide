@@ -88,11 +88,19 @@ ul.right-nav {
             li a.nav-link {
                 width: 100%;
                 text-align: center;
-                &.active,
-                &:hover {
+                &.active {
                     background-color: #fff;
                     color: $second-color !important;
                     font-weight: bold !important;
+                }
+                // survol seulement avec une souris : au doigt, le :hover reste collé au lien touché
+                // (visible sur « Activités », qui ouvre le sous-menu sans changer de page)
+                @media (hover: hover) {
+                    &:hover {
+                        background-color: #fff;
+                        color: $second-color !important;
+                        font-weight: bold !important;
+                    }
                 }
             }
         }
@@ -130,5 +138,156 @@ ul.right-nav {
     ul li a {
         color: #fff;
         font-weight: normal;
+    }
+}
+
+// sous-menu « Activités » : panneau par groupes (Hiver, Été…) sur desktop, accordéon sur mobile
+.nav-dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.nav-dropdown-toggle {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px;
+    margin-left: -6px;
+    border: 0;
+    background: none;
+    color: rgba(255, 255, 255, 0.85);
+    cursor: pointer;
+    .icon,
+    svg {
+        width: 12px;
+        height: 12px;
+        fill: currentColor;
+        transition: transform $transition-fast;
+    }
+    &:hover,
+    &:focus-visible {
+        color: $accent-color;
+    }
+}
+.nav-dropdown.open .nav-dropdown-toggle svg {
+    transform: rotate(180deg);
+}
+.nav-dropdown-panel {
+    display: none;
+    text-align: left;
+}
+.nav-dropdown.open .nav-dropdown-panel {
+    display: grid;
+}
+.nav-dropdown-title {
+    margin: 0 0 0.6rem;
+    font-family: "Share Tech", sans-serif;
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: $accent-color;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    // border-bottom: solid 1px rgba(255, 159, 28, 0.1);
+    &::after {
+        content: "";
+        display: flex;
+        // height: 4px;
+        border-bottom: double 3px rgba(255, 159, 28, 0.16);
+        width: 40px;
+    }
+}
+.nav-dropdown-group ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    a {
+        display: block;
+        padding: 5px 0;
+        color: #fff;
+        transition: color $transition-fast;
+        &:hover,
+        &:focus-visible {
+            color: $accent-color;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+    }
+}
+.nav-dropdown-all {
+    grid-column: 1 / -1;
+    padding-top: 0.8rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    font-weight: 600;
+    color: #fff;
+    &:hover,
+    &:focus-visible {
+        color: $accent-color;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .nav-dropdown-panel {
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        gap: 1.2rem 2.5rem;
+        min-width: 420px;
+        margin-top: 8px;
+        padding: 22px 28px;
+        border-radius: 12px;
+        // background-color: $second-color;
+        background-image: linear-gradient(
+            rgba(11, 11, 37, 1),
+            rgba(11, 11, 37, 1),
+            rgba(11, 11, 37, 0.93),
+            rgba(11, 11, 37, 0.93),
+            rgba(11, 11, 37, 1)
+        );
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+        // pont invisible : le survol ne se perd pas entre le lien et le panneau
+        &::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: -12px;
+            height: 12px;
+        }
+    }
+}
+@media screen and (max-width: 991px) {
+    .nav-dropdown {
+        > .nav-link {
+            flex: 1;
+        }
+    }
+    .nav-dropdown-toggle {
+        position: absolute;
+        right: 8px;
+        top: 2px;
+        padding: 8px 12px;
+    }
+    .nav-dropdown-panel {
+        width: 100%;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        padding: 14px 18px;
+        background-color: rgba(255, 255, 255, 0.06);
+        text-align: center;
+        border: solid 1px rgba(255, 255, 255, 0.4);
+        border-top: none;
+    }
+    .nav-dropdown-all {
+        text-align: left;
+    }
+    .menu ul.navbar-nav .nav-dropdown-group li a {
+        width: auto;
+        text-align: left;
     }
 }

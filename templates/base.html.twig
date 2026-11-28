@@ -139,8 +139,26 @@
 										{% endtrans %}
 									</a>
 								</li>
-								<li class="nav-item{{ current_route in ['activities', 'detail'] ? ' active' }}">
-									<a class="nav-link" href="{{path('activities')}}"{{ current_route in ['activities', 'detail'] ? ' aria-current="page"' }} title="{% trans %}See all my activities{% endtrans %}">{% trans %}Activities{% endtrans %}</a>
+								{% set activities_active = current_route in ['activities', 'discipline', 'outing'] %}
+								{% set groups = activity_groups() %}
+								<li class="nav-item nav-dropdown{{ activities_active ? ' active' }}" data-menu-target="dropdown" data-action="mouseenter->menu#openDropdown mouseleave->menu#closeDropdown keydown.esc->menu#closeDropdown">
+									<a class="nav-link" href="{{path('activities')}}"{{ current_route == 'activities' ? ' aria-current="page"' }}{% if groups %} aria-controls="menu-activities" data-action="menu#openFromLink"{% endif %} title="{% trans %}See all my activities{% endtrans %}">{% trans %}Activities{% endtrans %}</a>
+									{% if groups %}
+										<button type="button" class="nav-dropdown-toggle" aria-expanded="false" aria-controls="menu-activities" aria-label="{% trans %}Show activities{% endtrans %}" data-menu-target="dropdownToggle" data-action="menu#toggleDropdown">{{ icon('angle-down') }}</button>
+										<div class="nav-dropdown-panel" id="menu-activities" data-menu-target="dropdownPanel">
+											{% for group in groups %}
+												<div class="nav-dropdown-group{{ group.season and group.season == current_season() ? ' is-current' }}">
+													<p class="nav-dropdown-title">{{ group.name(app.request.locale) }}</p>
+													<ul>
+														{% for disci in group.publishedDisciplines %}
+															<li><a href="{{ path('discipline', {id: disci.id, slug: disci.slug(app.request.locale)}) }}">{{ disci.titleFor(app.request.locale) }}</a></li>
+														{% endfor %}
+													</ul>
+												</div>
+											{% endfor %}
+											<a class="nav-dropdown-all" href="{{ path('activities') }}">{% trans %}All activities{% endtrans %} &rarr;</a>
+										</div>
+									{% endif %}
 								</li>
 								<li class="nav-item">
 									<a class="nav-link" href="{{path('home', {'_fragment':'contact-form'})}}" title="{% trans %}To get in touch with me{% endtrans %}">Contact

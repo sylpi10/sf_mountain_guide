@@ -21,29 +21,43 @@
 				{% endfor %}
 			</div>
 
-			<div class="activities-list">
-				{% for disci in disciplines %}
-					{% set title = is_en ? disci.englishTitle : disci.title %}
-					{% set teaser = (is_en ? disci.teaserEn : null) ?: disci.teaser %}
-					{% set url = path('detail', {id: disci.id, slug: disci.slug(app.request.locale)}) %}
-					<article class="activity">
-						<a class="activity-image" href="{{ url }}" tabindex="-1" aria-hidden="true">
-							{% set img = upload_image(disci.image, constant('App\\Entity\\Discipline::IMAGE_WIDTHS')['discipline_images']) %}
-							{% if img %}
-								<img src="{{ img.src }}" {% if img.srcset %}srcset="{{ img.srcset }}" sizes="(max-width: 768px) 100vw, 540px"{% endif %} {% if img.width %}width="{{ img.width }}" height="{{ img.height }}"{% endif %} alt="{{ '{activity} with a mountain guide in Briançon'|trans({'{activity}': title}) }}" loading="{{ loop.first ? 'eager' : 'lazy' }}" decoding="async">
-							{% endif %}
-						</a>
-						<div class="activity-body">
-							<h2><a href="{{ url }}">{{ title }}</a></h2>
-							{% if teaser %}
-								<p class="activity-teaser">{{ teaser }}</p>
-							{% endif %}
-							<twig:DisciplineInfos :discipline="disci" />
-							<a class="btn more-link" href="{{ url }}">{% trans %}Discover the activity{% endtrans %}</a>
-						</div>
-					</article>
-				{% endfor %}
-			</div>
+			{# un bloc par groupe du menu (Hiver, Été…), la saison en cours en premier #}
+			{% if groups|length > 1 %}
+				<nav class="activities-groups-nav" aria-label="{% trans %}Seasons{% endtrans %}">
+					{% for group in groups %}
+						<a href="#{{ group.season ? group.season.anchor : 'groupe-' ~ group.id }}">{{ group.name(app.request.locale) }}</a>
+					{% endfor %}
+				</nav>
+			{% endif %}
+
+			{% for group in groups %}
+				<section class="activities-group" id="{{ group.season ? group.season.anchor : 'groupe-' ~ group.id }}" aria-labelledby="group-title-{{ group.id }}">
+					<h2 class="activities-group-title" id="group-title-{{ group.id }}">{{ group.name(app.request.locale) }}</h2>
+					<div class="activities-list">
+						{% for disci in group.publishedDisciplines %}
+							{% set title = disci.titleFor(app.request.locale) %}
+							{% set teaser = (is_en ? disci.teaserEn : null) ?: disci.teaser %}
+							{% set url = path('discipline', {id: disci.id, slug: disci.slug(app.request.locale)}) %}
+							<article class="activity">
+								<a class="activity-image" href="{{ url }}" tabindex="-1" aria-hidden="true">
+									{% set img = upload_image(disci.image, constant('App\\Entity\\Discipline::IMAGE_WIDTHS')['discipline_images']) %}
+									{% if img %}
+										<img src="{{ img.src }}" {% if img.srcset %}srcset="{{ img.srcset }}" sizes="(max-width: 768px) 100vw, 540px"{% endif %} {% if img.width %}width="{{ img.width }}" height="{{ img.height }}"{% endif %} alt="{{ '{activity} with a mountain guide in Briançon'|trans({'{activity}': title}) }}" loading="{{ loop.parent.loop.first and loop.first ? 'eager' : 'lazy' }}" decoding="async">
+									{% endif %}
+								</a>
+								<div class="activity-body">
+									<h3><a href="{{ url }}">{{ title }}</a></h3>
+									{% if teaser %}
+										<p class="activity-teaser">{{ teaser }}</p>
+									{% endif %}
+									<twig:DisciplineInfos :discipline="disci" />
+									<a class="btn more-link" href="{{ url }}">{% trans %}Discover the activity{% endtrans %}</a>
+								</div>
+							</article>
+						{% endfor %}
+					</div>
+				</section>
+			{% endfor %}
 
 			<div class="activities-cta">
 				<p>{% trans %}A project in mind? I will send you a personalised quote.{% endtrans %}</p>

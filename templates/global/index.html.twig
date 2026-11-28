@@ -108,11 +108,33 @@
 			{% endfor %}
 		</div>
 
-		{# titre invisible : évite le saut h1 -> h3 des cartes #}
-		<h2 class="sr-only">{% trans %}Activities{% endtrans %}</h2>
-		{% for disci in disciplines %}
-			<twig:DisciplineCard :discipline="disci" />
-		{% endfor %}
+		{# mise en avant de la saison en cours (mois réglés en admin, comme l'onglet ouvert de la page tarifs) #}
+		{% set is_winter = season.value == 'winter' %}
+		<section class="season-highlight" aria-labelledby="season-title">
+			<p class="season-kicker">{{ is_winter ? 'Winter season'|trans : 'Summer season'|trans }}</p>
+			<h2 id="season-title">{{ is_winter ? 'This winter in the mountains'|trans : 'This summer in the mountains'|trans }}</h2>
+			<div class="season-cards">
+				{% for disci in disciplines %}
+					<twig:DisciplineCard :discipline="disci" />
+				{% endfor %}
+			</div>
+		</section>
+
+		{% if outings %}
+			<section class="season-outings" aria-labelledby="outings-title">
+				<h2 id="outings-title">{% trans %}Outings not to be missed{% endtrans %}</h2>
+				<div class="outing-grid">
+					{% for outing in outings %}
+						<twig:OutingCard :outing="outing" :showDiscipline="true" />
+					{% endfor %}
+				</div>
+			</section>
+		{% endif %}
+
+		<p class="season-more">
+			<a class="btn more-link" href="{{ path('activities') }}">{% trans %}All activities{% endtrans %}</a>
+			<a class="season-other" href="{{ path('activities', {'_fragment': is_winter ? 'ete' : 'hiver'}) }}">{{ is_winter ? 'See summer activities'|trans : 'See winter activities'|trans }} &rarr;</a>
+		</p>
 	</main>
 
 	{# </main> #}
