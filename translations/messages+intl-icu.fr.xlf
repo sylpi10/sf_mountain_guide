@@ -495,6 +495,10 @@
         <source>{activity} with a mountain guide in Briançon</source>
         <target>{activity} avec un guide de haute montagne à Briançon</target>
       </trans-unit>
+      <trans-unit id="footer_credit" resname="Website by">
+        <source>Website by</source>
+        <target>Site réalisé par</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
