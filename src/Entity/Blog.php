@@ -15,6 +15,11 @@ use Vich\UploaderBundle\Mapping\Attribute as Vich;
 #[ORM\Entity(repositoryClass: BlogRepository::class)]
 class Blog
 {
+    // largeurs WebP générées à l'upload (la plus grande = image principale, en tête de l'article)
+    public const IMAGE_WIDTHS = [
+        'blog_images' => [600, 1200, 1920],
+    ];
+
     public function __construct()
     {
         $this->created_at = new \DateTime();

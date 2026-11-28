@@ -34,7 +34,10 @@
 
 			{# colonnes selon le nombre d'articles de la page : 1, 2 ou 3 sur une ligne, 4 en 2 × 2 #}
 			{% set nb = articles|length %}
-			<div class="articles-wrapper" style="--cols: {{ nb == 3 ? 3 : min(nb, 2) }}">
+			{% set cols = nb == 3 ? 3 : min(nb, 2) %}
+			{# largeur affichée de l'image de carte, pour choisir la bonne déclinaison WebP (cf. .articles-wrapper) #}
+			{% set img_sizes = cols == 1 ? '(max-width: 1320px) 100vw, 1200px' : (cols == 2 ? '(max-width: 860px) 100vw, 50vw' : '(max-width: 860px) 100vw, (max-width: 1199px) 50vw, 33vw') %}
+			<div class="articles-wrapper" style="--cols: {{ cols }}">
 				{% set en = app.request.locale == 'en' %}
 				{% for article in articles %}
 					{% set url = path('blog_detail', {id: article.id, slug: article.slug(app.request.locale)}) %}
@@ -56,8 +59,9 @@
 									{% endif %}
 								</span>
 							</div>
-							{% if article.image %}
-								<img src="{{ asset('uploads/' ~ article.image) }}" alt="{{ title }}" loading="lazy" width="600" height="400">
+							{% set img = upload_image(article.image, constant('App\\Entity\\Blog::IMAGE_WIDTHS')['blog_images']) %}
+							{% if img %}
+								<img src="{{ img.src }}" {% if img.srcset %}srcset="{{ img.srcset }}" sizes="{{ img_sizes }}"{% endif %} {% if img.width %}width="{{ img.width }}" height="{{ img.height }}"{% endif %} alt="{{ title }}" loading="lazy" decoding="async">
 							{% endif %}
 							<p>{{ ((en ? article.englishContent : null) ?: article.content)|plain_text(220) }}</p>
 							<a href="{{ url }}" class="article-card-more" data-turbo-frame="_top">{% trans %}Read the post{% endtrans %}</a>

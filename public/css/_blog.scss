@@ -234,6 +234,16 @@
     margin-right: auto;
 }
 
+// image de couverture en tête d'article (hors .article-body : pas de marge de 20px des img de .article-details)
+.article-details img.article-cover {
+    display: block;
+    width: 100%;
+    max-height: 520px;
+    margin: 30px 0 0;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
 // intertitres du texte de l'article (h1 de l'éditeur passés en h2), après la règle ci-dessus
 .article-details h2 {
     font-size: 1.6rem;

@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Blog;
 use App\Entity\BlogCategory;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -26,7 +27,7 @@ class BlogCategoryRepository extends ServiceEntityRepository
     {
         $rows = $this->createQueryBuilder('c')
             ->select('c AS category', 'COUNT(b.id) AS count')
-            ->innerJoin(Blog::class, 'b', 'WITH', 'b.category = c')
+            ->innerJoin(Blog::class, 'b', Join::ON, 'b.category = c')
             ->groupBy('c.id')
             ->orderBy('c.position', \SortDirection::Ascending)
             ->addOrderBy('c.name', \SortDirection::Ascending)

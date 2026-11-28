@@ -2,6 +2,7 @@
 
 namespace App\EventSubscriber;
 
+use App\Entity\Blog;
 use App\Entity\Discipline;
 use App\Service\ImageOptimizer;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -9,10 +10,10 @@ use Vich\UploaderBundle\Event\Event;
 use Vich\UploaderBundle\Event\Events;
 
 /**
- * Images des disciplines : converties en WebP (plusieurs largeurs) juste après l'upload Vich,
+ * Images des disciplines et des articles du blog : converties en WebP (plusieurs largeurs) juste après l'upload Vich,
  * déclinaisons supprimées avec l'image (Vich supprime lui-même l'image principale).
  */
-class DisciplineImageSubscriber implements EventSubscriberInterface
+class UploadedImageSubscriber implements EventSubscriberInterface
 {
     public function __construct(private ImageOptimizer $optimizer)
     {
@@ -36,7 +37,7 @@ class DisciplineImageSubscriber implements EventSubscriberInterface
         $webpName = preg_replace('/\.[^.\/]+$/', '', $mapping->getFileName($event->getObject())).'.webp';
         $webpPath = dirname($path).'/'.basename($webpName);
 
-        $this->optimizer->process($path, $webpPath, Discipline::IMAGE_WIDTHS[$mapping->getMappingName()]);
+        $this->optimizer->process($path, $webpPath, $this->widths($event));
 
         if ($webpPath !== $path) {
             @unlink($path);
@@ -51,12 +52,27 @@ class DisciplineImageSubscriber implements EventSubscriberInterface
         }
     }
 
+    /**
+     * Largeurs WebP du champ uploadé (Discipline::IMAGE_WIDTHS, Blog::IMAGE_WIDTHS), vide pour les autres entités.
+     *
+     * @return int[]
+     */
+    private function widths(Event $event): array
+    {
+        $object = $event->getObject();
+        if (!$object instanceof Discipline && !$object instanceof Blog) {
+            return [];
+        }
+
+        return $object::IMAGE_WIDTHS[$event->getMapping()->getMappingName()] ?? [];
+    }
+
     private function imagePath(Event $event): ?string
     {
         $object = $event->getObject();
         $mapping = $event->getMapping();
 
-        if (!$object instanceof Discipline || !isset(Discipline::IMAGE_WIDTHS[$mapping->getMappingName()])) {
+        if (!$this->widths($event)) {
             return null;
         }
 
