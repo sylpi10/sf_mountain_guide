@@ -5,7 +5,8 @@ when@dev:
                 type: stream
                 path: "%kernel.logs_dir%/%kernel.environment%.log"
                 level: debug
-                channels: ["!event"]
+                # requêtes SQL : visibles dans le profiler, inutile de les recopier dans le log (et la console de symfony serve)
+                channels: ["!event", "!doctrine"]
 
 when@prod:
     monolog:

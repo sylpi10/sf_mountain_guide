@@ -491,6 +491,10 @@
         <source>Blog categories</source>
         <target>Catégories du blog</target>
       </trans-unit>
+      <trans-unit id="discipline_img_alt" resname="{activity} with a mountain guide in Briançon">
+        <source>{activity} with a mountain guide in Briançon</source>
+        <target>{activity} avec un guide de haute montagne à Briançon</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

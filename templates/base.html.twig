@@ -41,12 +41,13 @@
 		<meta name="twitter:title" content="{{ block('title')|striptags|trim }}">
 		<meta name="twitter:description" content="{{ page_description }}">
 		{# Données structurées : nom, adresse, téléphone alignés sur la fiche Google Business Profile ;
-		   la description reprend le texte de présentation modifiable en admin #}
+		   la description reprend le texte de présentation modifiable en admin ;
+		   note moyenne et avis : ceux publiés en admin (review_schema) #}
 		{% set guide_description = site_text('home_intro')|join(' ') ?: page_description %}
 		<script type="application/ld+json">
 		{{ {
 			'@context': 'https://schema.org',
-			'@type': 'SportsActivityLocation',
+			'@type': ['LocalBusiness', 'SportsActivityLocation'],
 			'@id': site_url ~ '/#guide',
 			'name': 'Yoann GEORGES - Guide de Haute Montagne - directicimes',
 			'alternateName': 'Directicimes',
@@ -71,6 +72,7 @@
 			},
 			'areaServed': ['Serre Chevalier', 'Montgenèvre', 'Vallée de la Clarée', 'Briançon', 'Massif des Écrins', 'Queyras', 'Hautes-Alpes'],
 			'knowsAbout': ['Alpinisme', 'Ski de randonnée', 'Ski hors-piste', 'Escalade', 'Grandes voies', 'Cascade de glace'],
+			'hasMap': google_reviews_url,
 			'sameAs': ['https://www.facebook.com/directicimes/', 'https://www.instagram.com/directicimes'],
 			'founder': {
 				'@type': 'Person',
@@ -84,7 +86,7 @@
 					'recognizedBy': {'@type': 'Organization', 'name': "École nationale de ski et d'alpinisme (ENSA)"},
 				},
 			},
-		}|json_encode(constant('JSON_UNESCAPED_UNICODE') b-or constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_HEX_TAG'))|raw }}
+		}|merge(review_schema())|json_encode(constant('JSON_UNESCAPED_UNICODE') b-or constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_HEX_TAG'))|raw }}
 		</script>
 		{# nom de site affiché par Google au-dessus de l'URL (lu sur la page d'accueil) #}
 		{% if app.request.attributes.get('_route') == 'home' %}
