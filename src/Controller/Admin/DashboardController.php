@@ -39,7 +39,11 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Mon Dashboard', 'fa fa-home');
-        yield MenuItem::linkTo(DisciplineCrudController::class, 'Disciplines', 'fas fa-skiing');
+        yield MenuItem::subMenu('Activités', 'fas fa-skiing')->setSubItems([
+            MenuItem::linkTo(OutingCrudController::class, 'Sorties'),
+            MenuItem::linkTo(DisciplineCrudController::class, 'Disciplines'),
+            MenuItem::linkTo(ActivityGroupCrudController::class, 'Groupes (Hiver, Été…)'),
+        ]);
         yield MenuItem::linkTo(UserCrudController::class, 'Utilisateurs', 'fas fa-user');
         yield MenuItem::linkTo(AboutCrudController::class, 'About', 'fas fa-address-card');
         yield MenuItem::subMenu('Tarifs', 'fas fa-euro-sign')->setSubItems([

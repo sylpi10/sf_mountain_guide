@@ -4,13 +4,14 @@ namespace App\EventSubscriber;
 
 use App\Entity\Blog;
 use App\Entity\Discipline;
+use App\Entity\Outing;
 use App\Service\ImageOptimizer;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Vich\UploaderBundle\Event\Event;
 use Vich\UploaderBundle\Event\Events;
 
 /**
- * Images des disciplines et des articles du blog : converties en WebP (plusieurs largeurs) juste après l'upload Vich,
+ * Images des disciplines, des sorties et des articles du blog : converties en WebP (plusieurs largeurs) juste après l'upload Vich,
  * déclinaisons supprimées avec l'image (Vich supprime lui-même l'image principale).
  */
 class UploadedImageSubscriber implements EventSubscriberInterface
@@ -53,14 +54,14 @@ class UploadedImageSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Largeurs WebP du champ uploadé (Discipline::IMAGE_WIDTHS, Blog::IMAGE_WIDTHS), vide pour les autres entités.
+     * Largeurs WebP du champ uploadé (Discipline::IMAGE_WIDTHS, Outing::IMAGE_WIDTHS, Blog::IMAGE_WIDTHS), vide pour les autres entités.
      *
      * @return int[]
      */
     private function widths(Event $event): array
     {
         $object = $event->getObject();
-        if (!$object instanceof Discipline && !$object instanceof Blog) {
+        if (!$object instanceof Discipline && !$object instanceof Outing && !$object instanceof Blog) {
             return [];
         }
 

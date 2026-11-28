@@ -38,7 +38,7 @@ class AreaPageController extends AbstractController
 
         return $this->render('area/show.html.twig', [
             'page' => $page,
-            'disciplines' => $disciplineRepo->findAll(),
+            'disciplines' => $disciplineRepo->findPublished(),
             'displayBtn' => true,
         ] + $contact);
     }

@@ -9,6 +9,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
@@ -41,7 +43,9 @@ class DisciplineCrudController extends AbstractCrudController
         return $crud
             ->setPageTitle('index', 'Disciplines - Activités')
             ->setPageTitle('edit', 'Modifier une discipline')
-            ->setPageTitle('new', 'Ajouter Un Discipline');
+            ->setPageTitle('new', 'Ajouter Un Discipline')
+            ->setHelp('index', 'Les activités « parentes » (Ski de rando, Alpinisme…) : chacune a sa page listant ses sorties. Visible sur le site et dans le menu une fois « Publiée » cochée et rangée dans un groupe.')
+            ->setDefaultSort(['activityGroup' => 'ASC', 'position' => 'ASC']);
     }
 
     public function configureFields(string $pageName): iterable
@@ -49,6 +53,12 @@ class DisciplineCrudController extends AbstractCrudController
         return [
             TextField::new('title', 'Nom de discipline'),
             TextField::new('englishTitle', 'Nom de discipline en anglais'),
+            AssociationField::new('activityGroup', 'Groupe du menu')
+                ->setHelp('Hiver, Été… (gérés dans Activités > Groupes).'),
+            IntegerField::new('position', 'Ordre')->setHelp('Ordre dans le groupe : plus petit = en premier.'),
+            BooleanField::new('isPublished', 'Publiée'),
+            BooleanField::new('featuredOnHome', 'Sur l\'accueil')
+                ->setHelp('Mise en avant sur l\'accueil quand la saison de son groupe est en cours.'),
             TextField::new('seoTitle', 'Titre Google')
                 ->setHelp('Titre de l\'onglet et du lien dans les résultats Google : activité + lieu, 60 caractères max. Si vide : « Nom - Directicimes ».')
                 ->setMaxLength(70)
@@ -56,8 +66,14 @@ class DisciplineCrudController extends AbstractCrudController
             TextField::new('seoTitleEn', 'Titre Google en anglais')
                 ->setHelp('Si vide, le titre Google FR est utilisé.')
                 ->onlyOnForms(),
-            TextEditorField::new('content', 'Description de l\'activité'),
-            TextEditorField::new('englishContent', 'Description en anglais'),
+            TextEditorField::new('content', 'Présentation de l\'activité')
+                ->setHelp('Texte d\'introduction de la page, au-dessus de la liste des sorties.')
+                ->onlyOnForms(),
+            TextEditorField::new('englishContent', 'Présentation en anglais')->onlyOnForms(),
+
+            FormField::addFieldset('Infos générales (facultatif)')
+                ->setHelp('Résumé affiché à côté de la présentation. Les détails (prix, durée…) se renseignent désormais dans chaque sortie.')
+                ->collapsible()->renderCollapsed(),
             TextEditorField::new('persNumber', 'Nombre de participants')->onlyOnForms(),
             TextEditorField::new('englishNbPers', 'Nombre de participants en anglais')->onlyOnForms(),
             TextField::new('duration', 'Durée')->onlyOnForms(),
@@ -72,14 +88,11 @@ class DisciplineCrudController extends AbstractCrudController
             TextField::new('imageFile', 'Image pour la liste')
                 ->onlyOnForms()
                 ->setFormType(VichImageType::class),
-            ImageField::new('image', 'Image de fond')
-                ->onlyOnIndex()
-                ->setBasePath('/uploads'),
             TextField::new('imageDetailFile', 'image de fond de la page de détails')
                 ->onlyOnForms()
                 ->setFormType(VichImageType::class),
 
-            FormField::addFieldset('Carte produit (accueil et « autres activités »)')
+            FormField::addFieldset('Carte (accueil, page Activités)')
                 ->setHelp('Chiffres seuls, le texte et la traduction anglaise sont ajoutés automatiquement. Laisser vide pour ne pas afficher la ligne.'),
             IntegerField::new('maxPeopleBeginner', 'Pers. max en initiation')
                 ->setHelp('Si aucun itinéraire technique n\'est renseigné, affiché simplement « X pers. max ».')
@@ -110,8 +123,13 @@ class DisciplineCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        return $actions
+        $view = Action::new('view', 'Voir sur le site', 'fa fa-external-link-alt')
+            ->linkToUrl(fn (Discipline $discipline) => $this->generateUrl('discipline', ['slug' => $discipline->getSlug('fr'), 'id' => $discipline->getId()]))
+            ->setHtmlAttributes(['target' => '_blank']);
 
+        return $actions
+            ->add(Crud::PAGE_INDEX, $view)
+            ->add(Crud::PAGE_EDIT, $view)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
             // ...
             ->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) {

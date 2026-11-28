@@ -45,7 +45,9 @@ class LocaleExtension extends AbstractExtension
 
         $urls = [];
         foreach ($this->locales as $locale) {
-            $localeParams = ['_locale' => $locale] + (isset($slugs[$locale]) ? ['slug' => $slugs[$locale]] : []);
+            // un slug seul, ou tous les paramètres traduits de la route (sortie : slug de la discipline + slug de la sortie)
+            $localeSlugs = $slugs[$locale] ?? [];
+            $localeParams = ['_locale' => $locale] + (is_array($localeSlugs) ? $localeSlugs : ['slug' => $localeSlugs]);
             $urls[$locale] = $this->urlGenerator->generate($route, $localeParams + $params);
         }
 

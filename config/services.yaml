@@ -9,6 +9,7 @@ parameters:
   app.path.blog_images: /uploads
   app.path.discipline_images: /uploads
   app.path.discipline_images_detail: /uploads
+  app.path.outing_images: /uploads
   # expéditeur des mails du formulaire : doit être le compte du MAILER_DSN (SPF/DMARC)
   env(MAILER_FROM): contact@directicimes.com
   # sujet ntfy.sh qui reçoit une alerte si un mail (contact, newsletter) ne part pas (vide = pas d'alerte)

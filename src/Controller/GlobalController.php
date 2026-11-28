@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Repository\DisciplineRepository;
+use App\Repository\OutingRepository;
 use App\Service\ContactFormHandler;
+use App\Service\SeasonResolver;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +16,8 @@ class GlobalController extends AbstractController
 {
     public function __construct(
         private DisciplineRepository $disciplineRepo,
+        private OutingRepository $outingRepo,
+        private SeasonResolver $seasons,
         private ContactFormHandler $contactForm,
     ) {
     }
@@ -29,11 +33,13 @@ class GlobalController extends AbstractController
             return $contact;
         }
 
-        // return every disciplines on home page
-        $disciplines = $this->disciplineRepo->findAll();
+        // mise en avant de la saison en cours (hiver : ski, cascade… ; été : alpinisme, escalade…)
+        $season = $this->seasons->current();
 
         return $this->render('global/index.html.twig', [
-            'disciplines' => $disciplines,
+            'season' => $season,
+            'disciplines' => $this->disciplineRepo->findFeatured($season),
+            'outings' => $this->outingRepo->findFeatured($season),
             'displayBtn' => true,
         ] + $contact);
     }

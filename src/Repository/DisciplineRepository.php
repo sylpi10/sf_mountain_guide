@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Discipline;
+use App\Enum\PricingSeason;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,32 +20,32 @@ class DisciplineRepository extends ServiceEntityRepository
         parent::__construct($registry, Discipline::class);
     }
 
-    // /**
-    //  * @return Discipline[] Returns an array of Discipline objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Discipline[] disciplines publiées, dans l'ordre des groupes puis de l'admin
+     */
+    public function findPublished(): array
     {
         return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('d.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+            ->leftJoin('d.activityGroup', 'g')
+            ->andWhere('d.isPublished = true')
+            ->orderBy('g.position', 'ASC')->addOrderBy('d.position', 'ASC')->addOrderBy('d.id', 'ASC')
+            ->getQuery()->getResult();
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Discipline
+    /**
+     * Disciplines mises en avant sur l'accueil pour la saison donnée ; à défaut, toutes celles de la saison.
+     *
+     * @return Discipline[]
+     */
+    public function findFeatured(PricingSeason $season): array
     {
-        return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $qb = $this->createQueryBuilder('d')
+            ->join('d.activityGroup', 'g')
+            ->andWhere('d.isPublished = true AND g.season = :season')->setParameter('season', $season)
+            ->orderBy('g.position', 'ASC')->addOrderBy('d.position', 'ASC')->addOrderBy('d.id', 'ASC');
+
+        $featured = (clone $qb)->andWhere('d.featuredOnHome = true')->getQuery()->getResult();
+
+        return $featured ?: $qb->getQuery()->getResult();
     }
-    */
 }

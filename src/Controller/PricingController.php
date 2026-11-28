@@ -7,6 +7,7 @@ use App\Repository\DisciplineRepository;
 use App\Repository\PricingPageRepository;
 use App\Repository\PricingSectionRepository;
 use App\Service\ContactFormHandler;
+use App\Service\SeasonResolver;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class PricingController extends AbstractController
 {
     #[Route(path: ['fr' => '/tarifs', 'en' => '/en/prices'], name: 'pricing')]
-    public function index(Request $request, PricingPageRepository $pricingRepo, PricingSectionRepository $sectionRepo, DisciplineRepository $disciplineRepo, ContactFormHandler $contactForm): Response
+    public function index(Request $request, PricingPageRepository $pricingRepo, PricingSectionRepository $sectionRepo, DisciplineRepository $disciplineRepo, ContactFormHandler $contactForm, SeasonResolver $seasons): Response
     {
         $contact = $contactForm->handle($request, $this->generateUrl('pricing', ['_fragment' => 'contact-form']));
         if ($contact instanceof RedirectResponse) {
@@ -33,13 +34,13 @@ class PricingController extends AbstractController
             }
         }
         $pricing = $pricingRepo->findPage();
-        $active = ($pricing ? PricingSeason::current($pricing->getWinterFromMonth(), $pricing->getSummerFromMonth()) : PricingSeason::current())->value;
+        $active = $seasons->current()->value;
 
         return $this->render('pricing/index.html.twig', [
             'pricing' => $pricing,
             'tabs' => $tabs,
             'activeTab' => isset($tabs[$active]) ? $active : array_key_first($tabs),
-            'disciplines' => $disciplineRepo->findAll(),
+            'disciplines' => $disciplineRepo->findPublished(),
             'displayBtn' => true,
         ] + $contact);
     }

@@ -5,11 +5,16 @@ namespace App\Entity;
 use App\Enum\PriceUnit;
 use App\Repository\DisciplineRepository;
 use Cocur\Slugify\Slugify;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Attribute as Vich;
 
+/**
+ * Activité « parente » (Ski de rando, Alpinisme…) : page catégorie listant ses sorties.
+ */
 #[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: DisciplineRepository::class)]
 class Discipline
@@ -31,7 +36,7 @@ class Discipline
     #[ORM\Column(type: 'text')]
     private $content;
 
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column(type: 'text', nullable: true)]
     private $persNumber;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
@@ -40,7 +45,7 @@ class Discipline
     #[ORM\Column(type: 'text', nullable: true)]
     private $location;
 
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column(type: 'text', nullable: true)]
     private $price;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -53,19 +58,19 @@ class Discipline
     #[ORM\Column(type: 'string', length: 70, nullable: true)]
     private $seoTitleEn;
 
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column(type: 'text', nullable: true)]
     private $englishContent;
 
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column(type: 'text', nullable: true)]
     private $englishNbPers;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $englishDuration;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private $englishLocation;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $englishPrice;
 
     // infos courtes de la carte produit (accueil, autres activités) : chiffres seuls,
@@ -97,6 +102,28 @@ class Discipline
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $teaserEn = null;
 
+    // groupe du menu (Hiver, Été…) : sans groupe, la discipline n'apparaît pas dans le menu
+    #[ORM\ManyToOne(inversedBy: 'disciplines')]
+    #[ORM\JoinColumn(onDelete: 'SET NULL')]
+    private ?ActivityGroup $activityGroup = null;
+
+    #[ORM\Column(options: ['default' => 0])]
+    private int $position = 0;
+
+    #[ORM\Column(options: ['default' => false])]
+    private bool $isPublished = false;
+
+    // mise en avant sur l'accueil quand la saison de son groupe est en cours
+    #[ORM\Column(options: ['default' => false])]
+    private bool $featuredOnHome = false;
+
+    /**
+     * @var Collection<int, Outing>
+     */
+    #[ORM\OneToMany(targetEntity: Outing::class, mappedBy: 'discipline')]
+    #[ORM\OrderBy(['position' => 'ASC', 'id' => 'ASC'])]
+    private Collection $outings;
+
     /**
      * @var \DateTime
      */
@@ -120,6 +147,12 @@ class Discipline
 
     #[Vich\UploadableField(mapping: 'discipline_images_detail', fileNameProperty: 'imageDetail')]
     private $imageDetailFile;
+
+    public function __construct()
+    {
+        $this->outings = new ArrayCollection();
+        $this->updatedAt = new \DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -155,7 +188,7 @@ class Discipline
         return $this->persNumber;
     }
 
-    public function setPersNumber(string $persNumber): self
+    public function setPersNumber(?string $persNumber): self
     {
         $this->persNumber = $persNumber;
 
@@ -191,7 +224,7 @@ class Discipline
         return $this->price;
     }
 
-    public function setPrice(string $price): self
+    public function setPrice(?string $price): self
     {
         $this->price = $price;
 
@@ -239,7 +272,7 @@ class Discipline
         return $this->englishContent;
     }
 
-    public function setEnglishContent(string $englishContent): self
+    public function setEnglishContent(?string $englishContent): self
     {
         $this->englishContent = $englishContent;
 
@@ -251,7 +284,7 @@ class Discipline
         return $this->englishNbPers;
     }
 
-    public function setEnglishNbPers(string $englishNbPers): self
+    public function setEnglishNbPers(?string $englishNbPers): self
     {
         $this->englishNbPers = $englishNbPers;
 
@@ -263,7 +296,7 @@ class Discipline
         return $this->englishDuration;
     }
 
-    public function setEnglishDuration(string $englishDuration): self
+    public function setEnglishDuration(?string $englishDuration): self
     {
         $this->englishDuration = $englishDuration;
 
@@ -287,7 +320,7 @@ class Discipline
         return $this->englishPrice;
     }
 
-    public function setEnglishPrice(string $englishPrice): self
+    public function setEnglishPrice(?string $englishPrice): self
     {
         $this->englishPrice = $englishPrice;
 
@@ -480,5 +513,74 @@ class Discipline
         $this->teaserEn = $teaserEn;
 
         return $this;
+    }
+
+    public function getTitleFor(?string $locale): ?string
+    {
+        return 'en' === $locale && $this->englishTitle ? $this->englishTitle : $this->title;
+    }
+
+    public function getActivityGroup(): ?ActivityGroup
+    {
+        return $this->activityGroup;
+    }
+
+    public function setActivityGroup(?ActivityGroup $activityGroup): self
+    {
+        $this->activityGroup = $activityGroup;
+
+        return $this;
+    }
+
+    public function getPosition(): int
+    {
+        return $this->position;
+    }
+
+    public function setPosition(?int $position): self
+    {
+        $this->position = (int) $position;
+
+        return $this;
+    }
+
+    public function isPublished(): bool
+    {
+        return $this->isPublished;
+    }
+
+    public function setIsPublished(bool $isPublished): self
+    {
+        $this->isPublished = $isPublished;
+
+        return $this;
+    }
+
+    public function isFeaturedOnHome(): bool
+    {
+        return $this->featuredOnHome;
+    }
+
+    public function setFeaturedOnHome(bool $featuredOnHome): self
+    {
+        $this->featuredOnHome = $featuredOnHome;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Outing>
+     */
+    public function getOutings(): Collection
+    {
+        return $this->outings;
+    }
+
+    /**
+     * @return Outing[] sorties visibles sur le site
+     */
+    public function getPublishedOutings(): array
+    {
+        return array_values($this->outings->filter(fn (Outing $o) => $o->isPublished())->toArray());
     }
 }

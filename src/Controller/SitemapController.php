@@ -47,12 +47,19 @@ class SitemapController extends AbstractController
 
         // add dynamic urls
         foreach (
-            $this->managerRegistry->getRepository(Discipline::class)->findAll() as $discipline
+            $this->managerRegistry->getRepository(Discipline::class)->findBy(['isPublished' => true]) as $discipline
         ) {
-            $this->addLocalized($urls, 'detail', fn ($locale) => [
+            $this->addLocalized($urls, 'discipline', fn ($locale) => [
                 'slug' => $discipline->getSlug($locale),
                 'id' => $discipline->getId(),
             ]);
+            foreach ($discipline->getPublishedOutings() as $outing) {
+                $this->addLocalized($urls, 'outing', fn ($locale) => [
+                    'disciplineSlug' => $discipline->getSlug($locale),
+                    'slug' => $outing->getSlug($locale),
+                    'id' => $outing->getId(),
+                ], ['lastmod' => $outing->getUpdatedAt()->format('Y-m-d')]);
+            }
         }
 
         foreach (
